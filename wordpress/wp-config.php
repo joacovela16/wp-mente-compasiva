@@ -77,8 +77,10 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define( 'WP_DEBUG', false );
-
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+//define( 'SCRIPT_DEBUG', true );
+//define( 'WP_DEBUG_DISPLAY', true );
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
@@ -88,3 +90,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
