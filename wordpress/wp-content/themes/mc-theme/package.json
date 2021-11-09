@@ -4,13 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "watch": "postcss css/windi.css -o css/style.prod.css -w",
-    "prod": "postcss css/windi.css -o css/windi.prod.css"
+    "prod": "windicss './**/*.php' './assets/javascript/app/**/*.js' -d -to assets/styles/windi.css",
+    "watch": "windicss  './**/*.php' './assets/javascript/app/**/*.js' -d -to assets/styles/windi.css"
   },
   "devDependencies": {
-    "postcss-cli": "^9.0.1",
-    "postcss": "^8.3.9",
-    "postcss-windicss": "^1.0.0",
-    "windicss": "^3.1.9"
+    "windicss": "3.2.1"
   }
 }
