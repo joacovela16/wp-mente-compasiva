@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 w-full z-index-10 shadow-md text-gray-700">
+<div class="fixed top-0 left-0 w-full z-index-20 shadow-md">
     <div class="flex flex-col bg-white">
         <div class="flex flex-row p-3 font-bold items-center ">
             <div class="flex-grow-0 cursor-pointer flex flex-row space-x-2">
@@ -42,14 +42,8 @@
                 <dropdown-item>Support</dropdown-item>
                 <dropdown-item>License</dropdown-item>
             </dropdown>
-            <!--{#if showFilters}
-			<MultiDropdown>
-				<DropdownItem>Account settings</DropdownItem>
-				<DropdownItem>Support</DropdownItem>
-				<DropdownItem>License</DropdownItem>
-			</MultiDropdown>
-			{/if}-->
             <div class="flex-1"></div>
         </div>
     </div>
 </div>
+<main-layout></main-layout>

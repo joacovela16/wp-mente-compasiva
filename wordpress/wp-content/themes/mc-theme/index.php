@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="!m-0 !p-0">
+<html lang="en" class="!m-0 !p-0 h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,14 +8,11 @@
     <title>Mente Compasiva</title>
 	<?php wp_head(); ?>
 </head>
-<body class="m-0 p-0">
-<?= get_header() ?>
-<?php get_template_part( "template-parts/header/navbar" ); ?>
-
-{{message}}
-<todo>
-    <todo></todo>
-</todo>
-
+<body class="m-0 p-0 h-full overflow-hidden text-gray-700">
+<div class="h-full overflow-auto">
+	<?= get_header() ?>
+	<?php get_template_part( "template-parts/header/navbar" ); ?>
+</div>
+<footer-component></footer-component>
 </body>
 </html>
