@@ -1,0 +1,13 @@
+{
+  "name": "mentecompasiva-theme",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prod": "windicss './**/*.php' -d -to assets/styles/windi.css",
+    "watch": "windicss  './**/*.php' -d -to assets/styles/windi.css"
+  },
+  "devDependencies": {
+    "windicss": "3.2.1"
+  }
+}
