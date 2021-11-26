@@ -6,16 +6,20 @@
     import moment from "moment";
     import GoBack from "./GoBack.svelte";
     import Container from "./Container.svelte";
+    import {queryBus} from "./lib";
 
     let queryResult;
 
-    querystring.subscribe(query => {
+    function doQuery(query) {
         queryResult = Axios
             .get(`index.php?${query}`, {params: {rest_route: '/mcplugin/v1/search'}})
             .then(x => {
                 return x.data;
             });
+    }
 
+    queryBus.subscribe(query => {
+        doQuery(query);
     })
 </script>
 
@@ -41,7 +45,7 @@
                     </div>
                 {:else}
                     <div class="flex flex-col items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg"  width="128" height="128"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"
                              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                              stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

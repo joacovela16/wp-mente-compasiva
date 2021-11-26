@@ -10,6 +10,7 @@
     import Loader from "./Loader.svelte";
     import {default as Axios} from "axios";
     import Footer from "./Footer.svelte";
+    import SlideBar from "./SlideBar.svelte";
 
     export let appConf = {};
     export let readyCallback = () => {
@@ -57,8 +58,11 @@
 
     })
 </script>
+
 <Loader/>
 <Navbar/>
 <Router {routes}/>
+<SlideBar/>
 <Footer/>
+
 
