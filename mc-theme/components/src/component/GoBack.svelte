@@ -2,7 +2,7 @@
 
     import {pop} from "svelte-spa-router";
 </script>
-<div class="cursor-pointer font-bold flex flex-row text-blue-500" on:click={()=> pop() }>
+<div class="cursor-pointer font-bold flex flex-row underline" on:click={()=> pop() }>
     <span>
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left"
              width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

@@ -2,11 +2,11 @@
     import {push, querystring} from "svelte-spa-router";
 
     import {default as Axios} from "axios";
-    import {waitFor} from "./loader";
+    import {waitFor} from "../loader";
     import moment from "moment";
     import GoBack from "./GoBack.svelte";
     import Container from "./Container.svelte";
-    import {queryBus} from "./lib";
+    import {queryBus} from "../core";
 
     let queryResult;
 

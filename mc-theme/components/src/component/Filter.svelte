@@ -5,7 +5,6 @@
     import Animate from "./Animate.svelte";
     import moment from "moment";
     import {querystring, replace} from "svelte-spa-router";
-    import {showSlideBar} from "./lib";
 
     const {filterOptions} = getContext("mc-context");
     const countries = filterOptions.countries || [];

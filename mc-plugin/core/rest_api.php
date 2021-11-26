@@ -28,7 +28,7 @@ class MCRestAPI extends WP_REST_Controller
 
     public function do_search(WP_REST_Request $request): array
     {
-        $query_result = ["post_type" => DIRECTORY_CATALOG];
+        $query_result = ["post_type" => DIRECTORY_CATALOG, "posts_per_page" => 2];
 
         if (!is_null($request->get_param("s"))) {
             $query_result = array_merge($query_result, ["s" => $request->get_param("s")]);
@@ -48,10 +48,12 @@ class MCRestAPI extends WP_REST_Controller
             };
             $args = array_map($func, explode(",", $request->get_param("tag")));
             $query_result = array_merge($query_result, [
-                "tax_query" => [
-                    'relation' => 'OR',
+                "tax_query" => array_merge(
+                    [
+                        'relation' => 'OR',
+                    ],
                     $args
-                ]
+                )
             ]);
         }
 

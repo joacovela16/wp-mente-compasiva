@@ -1,6 +1,6 @@
 <script>
     import Filter from "./Filter.svelte";
-    import {showSlideBar} from "./lib";
+    import {showSlideBar} from "../core";
 
     let openFilters = false;
 </script>

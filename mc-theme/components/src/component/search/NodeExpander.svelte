@@ -4,7 +4,7 @@
 
     export let node = {};
     export let expand = true;
-    export let isRoot = true;
+    export const isRoot = true;
     export let goBack;
     const {setRegistry, pushItem, buildItem} = getContext("search-ctx");
 

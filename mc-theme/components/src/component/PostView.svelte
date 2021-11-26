@@ -2,7 +2,7 @@
     import Animate from "./Animate.svelte";
     import {getContext} from "svelte";
     import {default as Axios} from "axios";
-    import {waitFor} from "./loader";
+    import {waitFor} from "../loader";
     import GoBack from "./GoBack.svelte";
     import Container from "./Container.svelte";
 

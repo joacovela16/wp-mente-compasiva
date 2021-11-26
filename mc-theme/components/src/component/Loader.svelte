@@ -1,7 +1,7 @@
 <script>
     import {fade} from "svelte/transition";
 
-    import LoaderState from "./loader";
+    import LoaderState from "../loader";
 
     const S_STEP_SIZE = 2;
     const L_STEP_SIZE = 5;

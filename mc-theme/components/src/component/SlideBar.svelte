@@ -1,6 +1,6 @@
 <script>
     import {fly} from "svelte/transition";
-    import {filterBuilder, showSlideBar} from "./lib";
+    import {filterBuilder, showSlideBar} from "../core";
     import SearchExplorer from "./search/SearchExplorer.svelte";
     import {setContext} from "svelte";
 

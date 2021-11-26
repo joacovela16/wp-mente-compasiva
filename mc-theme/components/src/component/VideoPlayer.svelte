@@ -1,5 +1,5 @@
 <script>
-    import {waitFor} from "./loader";
+    import {waitFor} from "../loader";
     import {onMount} from "svelte";
 
     const initial = randVideo();

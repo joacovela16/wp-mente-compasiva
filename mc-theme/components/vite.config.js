@@ -5,7 +5,7 @@ import WindiCSS from 'vite-plugin-windicss';
 export default defineConfig({
     build: {
         lib: {
-            entry: './src/lib.js',
+            entry: './src/main.js',
             name: 'mc-lib',
             formats: ["es"],
             fileName: (format) => `mc-lib.${format}.js`

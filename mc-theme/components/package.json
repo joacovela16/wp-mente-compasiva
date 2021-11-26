@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "watch": "vite build -w --base='wp-content/themes/mc-theme/components/dist'",
+    "watch": "vite build -w --base='/wp-content/themes/mc-theme/components/dist/'",
     "serve": "vite preview"
   },
   "devDependencies": {

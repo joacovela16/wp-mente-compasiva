@@ -1,5 +1,5 @@
 <script>
-    import {filterBuilder, queryBus} from "../lib";
+    import {queryBus} from "../../core";
     import Explorer from "./Explorer.svelte";
     import {getContext, setContext} from "svelte";
     import {push} from "svelte-spa-router";
