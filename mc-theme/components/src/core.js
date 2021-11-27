@@ -1,14 +1,24 @@
-import {writable} from "svelte/store";
-
+import {get, writable} from "svelte/store";
+import {t} from "svelte-i18n"
 export const showSlideBar = new writable(false);
 export const queryBus = new writable(undefined);
+
+export function i18n(key) {
+    return get(t)(key);
+}
+
+export function setScrollTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For
+}
+
 export function filterBuilder(values) {
     return [
         {
             id: "cft",
             children: [
                 {
-                    id: "releaseDate",
+                    id: "release_date",
                     children: [
                         {id: "gte", type: "date", queryTag: 'after'},
                         {id: "lte", type: "date", queryTag: 'before'},
@@ -48,7 +58,7 @@ export function filterBuilder(values) {
                     ]
                 },
                 {
-                    id: "publish-date",
+                    id: "publish_date",
                     children: [
                         {id: "gte", type: "date", multiple: false, queryTag: 'after'},
                         {id: "lte", type: "date", multiple: false, queryTag: 'before'},

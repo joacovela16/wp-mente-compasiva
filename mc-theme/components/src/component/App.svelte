@@ -4,7 +4,7 @@
     import Navbar from "./Navbar.svelte";
     import MainView from "./MainView.svelte";
     import {onMount, setContext} from "svelte";
-    import SearchView from "./SearchView.svelte";
+    import SearchView from "./search/SearchView.svelte";
     import NotFound from "./404.svelte";
     import PostView from "./PostView.svelte";
     import Loader from "./Loader.svelte";

@@ -8,17 +8,16 @@
 
     const {mainContent} = getContext("mc-context")
 </script>
-<Animate>
-    <div class="relative max-h-200 overflow-hidden">
-        <VideoPlayer/>
-        <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
+<div class="relative max-h-200 overflow-hidden">
+    <VideoPlayer/>
+    <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
-        <DecorationSVG/>
-        <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
-            <div class="text-6xl text-white text-shadow-lg lg:-mt-30">MENTE COMPASIVA</div>
-        </div>
+    <DecorationSVG/>
+    <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
+        <div class="text-6xl text-white text-shadow-lg lg:-mt-30">MENTE COMPASIVA</div>
     </div>
-    <Container>
-        {@html mainContent}
-    </Container>
-</Animate>
+</div>
+<Container>
+    {@html mainContent}
+
+</Container>

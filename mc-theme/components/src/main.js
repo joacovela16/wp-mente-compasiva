@@ -1,5 +1,7 @@
 import 'virtual:windi.css';
 import './assets/theme.scss';
+import {init, isLoading, register} from "svelte-i18n";
+
 import App from "./component/App.svelte";
 
 const task = [];
@@ -25,14 +27,27 @@ export function renderPostResume(id, title, content) {
 export function renderApp(id, appConf) {
     const elementById = document.getElementById(id);
     if (elementById) {
-        new App({
-            target: elementById, props: {
-                appConf, readyCallback() {
-                    appInstanced = true;
-                    runTask();
-                }
+
+        register("es", () => import("./i18n/es.json"));
+        register("en", () => import("./i18n/en.json"));
+        init({fallbackLocale: "en", initialLocale: "en"});
+        let appRendered = false;
+
+        isLoading.subscribe(loaded => {
+            if (!loaded && !appRendered) {
+                appRendered = true;
+
+                new App({
+                    target: elementById, props: {
+                        appConf, readyCallback() {
+                            appInstanced = true;
+                            runTask();
+                        }
+                    }
+                });
             }
-        });
+        })
+        ;
     } else {
         console.warn(`Can't find element ${id}`)
     }

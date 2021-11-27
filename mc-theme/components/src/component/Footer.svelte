@@ -1,24 +1,26 @@
 <script>
 
     import moment from "moment";
+    import {t} from "svelte-i18n";
+
     import FooterItem from "./FooterItem.svelte";
     import Icon from "./Icon.svelte";
 </script>
 <footer>
     <div class="bg-dark-700 w-full">
         <div class="container mx-auto flex flex-col md:(flex-row space-x-5 space-y-0) space-y-5 text-light-50  py-3">
-            <FooterItem label="About us">
+            <FooterItem label={$t("about_us")}>
                 It is a long established fact that a reader will be distracted by the readable content of a page when
                 looking
                 at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of
                 letters,
                 as opposed to using 'Content here, content here', making it look like readable English.
             </FooterItem>
-            <FooterItem label="Cultivar la Mente">
+            <FooterItem label={$t("clm")}>
                 <div class="flex flex-col space-y-2">
                     <div>
                         <a href="#!">
-                            <Icon label="Web site">
+                            <Icon label={$t("web_site")}>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link"
                                      width="24"
                                      height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -61,15 +63,15 @@
                 </div>
             </FooterItem>
             <div class="flex-1"></div>
-            <FooterItem label="Subscribe">
+            <FooterItem label={$t("subscribe")}>
                 <div class="flex flex-col space-y-2">
                     <div>
-                        <input type="email" class="appearance-none rounded p-2" placeholder="Email">
+                        <input type="email" class="appearance-none rounded p-2" placeholder={$t("email")}>
                     </div>
                     <div>
                         <button type="submit"
                                 class="p-2 appearance-none rounded bg-blue-500 text-white hover:(bg-white text-gray-700) transition-all">
-                            Submit
+                            {$t("submit")}
                         </button>
                     </div>
                 </div>
@@ -79,6 +81,5 @@
     <div class="bg-dark-900 w-full p-3 text-light-50 flex flex-row">
         <div>© Copyright {moment().get("year")}</div>
         <div class="flex-1"></div>
-        <!--        <div>Made by Bridge</div>-->
     </div>
 </footer>

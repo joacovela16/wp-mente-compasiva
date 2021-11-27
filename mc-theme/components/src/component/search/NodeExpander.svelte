@@ -1,5 +1,7 @@
 <script>
     import {getContext, onMount} from "svelte";
+    import {t} from "svelte-i18n";
+
     import moment from "moment";
 
     export let node = {};
@@ -93,7 +95,7 @@
     {#if hasType(node)}
         {#if isMultiple(node) || isUndefined(node.selected) || node.selected === false}
             <div class="flex flex-row items-center">
-                <div class="font-bold">{node.id}</div>
+                <div class="font-bold">{$t(node.id)}</div>
                 <div class="flex-1"></div>
                 <div>
 
@@ -115,13 +117,13 @@
     {:else}
         <div class="flex flex-row">
             <div class="cursor-pointer font-bold" on:click={()=>expand=!expand}>
-                {node.id}
+                {$t(node.id)}
             </div>
             <div class="flex-1"></div>
             {#if goBack}
                 <div class="font-bold cursor-pointer underline"
                      on:click={()=>goBack()}>
-                    Back
+                    {$t('back')}
                 </div>
             {/if}
         </div>
@@ -143,7 +145,7 @@
                         <label class="cursor-pointer">
                             <input type="checkbox" bind:checked={item.selected}
                                    on:click={()=>itemCheckedHandler( item , idx)}/>
-                            <span>{item.key}</span>
+                            <span>{$t(item.key)}</span>
                         </label>
                     </div>
                 {/if}

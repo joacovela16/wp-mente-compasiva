@@ -3,6 +3,7 @@
     import Explorer from "./Explorer.svelte";
     import {getContext, setContext} from "svelte";
     import {push} from "svelte-spa-router";
+    import {t} from "svelte-i18n";
 
     const slideBar = getContext("slide-bar");
     const filter = slideBar.filter;
@@ -72,7 +73,7 @@
     {#each filter.items as item, idx}
         <div class="font-bold text-sm space-x-1 flex flex-row ring-1 ring-blue-500 rounded-full shadow shadow-dark-800 overflow-hidden cursor-pointer px-2 py-1 m-1"
              on:click={()=>removeItem(item, idx)}>
-            {item.label}: {item.value}
+            {$t(item.label)}: {$t(item.value)}
         </div>
     {/each}
 </div>

@@ -60,19 +60,12 @@
 </script>
 
 {#if progress > 0}
+
     <div out:fade
-         class="absolute top-0 left-0 h-full w-full z-index-30 flex justify-center items-center bg-white"
-         style="box-shadow: 0px 0px 50px rgba(0,0,0,0.2) inset;">
-        <!-- <div class="pace pace-active">
-             <div
-                     class="pace-progress"
-                     data-progress={progress}
-                     data-progress-text="{progress}%"
-                     style="-webkit-transform: translate3d({progress}%, 0px, 0px); -ms-transform: translate3d({progress}%, 0px, 0px); transform: translate3d({progress}%, 0px, 0px);">
-                 <div class="pace-progress-inner"></div>
-             </div>
-         </div>-->
-        <div>
+         class="fixed top-0 left-0 h-full w-full z-index-30 flex justify-center items-center bg-white"
+         style="box-shadow: 0 0 50px rgba(0,0,0,0.2) inset;">
+        <div class="triple-spinner"></div>
+        <!--<div>
             <div class="infinity">
                 <div>
                     <span></span>
@@ -95,11 +88,73 @@
                     </filter>
                 </defs>
             </svg>
-        </div>
+        </div>-->
     </div>
 {/if}
 
 <style lang="scss">
 
+  .triple-spinner {
+    display: block;
+    position: relative;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    border-top: 4px solid #2563eb;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+  .triple-spinner::before,
+  .triple-spinner::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 4px solid transparent;
+  }
+  .triple-spinner::before {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-top-color: #059669;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3.5s linear infinite;
+  }
+  .triple-spinner::after {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-top-color: #dc2626;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.75s linear infinite;
+  }
+
+
+
+  @-webkit-keyframes spin {
+    from {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+
+  @keyframes spin {
+    from {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
 
 </style>

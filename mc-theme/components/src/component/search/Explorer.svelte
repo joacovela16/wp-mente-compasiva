@@ -3,6 +3,8 @@
     import NodeExpander from "./NodeExpander.svelte";
     import Animate from "../Animate.svelte";
     import {getContext, onMount} from "svelte";
+    import {t} from "svelte-i18n";
+
 
     const {cleanAll} = getContext("search-ctx");
     const slideBar = getContext("slide-bar");
@@ -30,7 +32,7 @@
         {#each data as item, idx(item.id)}
             <div class="flex flex-row hover:bg-gray-100 p-2 transition-all rounded cursor-pointer"
                  on:click={()=>selectNode(idx)}>
-                <div class="font-bold text-lg">{item.id}</div>
+                <div class="font-bold text-lg">{$t(item.id)}</div>
                 <div class="flex-1"></div>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right"

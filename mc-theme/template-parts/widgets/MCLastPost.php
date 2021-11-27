@@ -26,7 +26,7 @@ class MC_Last_Post extends WP_Widget
         ?>
 
         <div class="">
-            <div class="flex flex-row">
+            <div class="flex flex-row border-b-blue-500 border-b-width-2">
                 <div class="flex-grow-0 text-3xl font-bold">
                     <?= $title ?>
                 </div>
@@ -35,11 +35,12 @@ class MC_Last_Post extends WP_Widget
 
                 </div>
             </div>
-            <div class="space-x-2 flex flex-row h-50 overflow-auto p-4">
+            <div class="flex flex-row flex-wrap overflow-auto p-4">
 
                 <?php foreach ($posts as $post) { ?>
                     <div
-                            class="transition-all shadow-dark-500 ring-1 ring-gray-100 shadow-lg p-4 rounded-lg overflow-hidden relative w-100 hover:ring-blue-500 cursor-pointer"
+                            class="transition-all m-2 h-50 shadow-dark-500 ring-1 ring-gray-100 shadow-lg p-4 rounded-lg
+                            overflow-hidden relative w-50 md:w-80 lg:w-100 hover:ring-blue-500 cursor-pointer"
                             onclick="location.hash='#/post/<?= $source ?>/<?= $post->ID ?>'"
                     >
                         <div class="absolute left-0 top-0 w-full h-full bg-gradient-to-t to-transparent from-white via-transparent z-index-0"></div>

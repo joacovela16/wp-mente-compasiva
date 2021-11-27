@@ -28,7 +28,13 @@ class MCRestAPI extends WP_REST_Controller
 
     public function do_search(WP_REST_Request $request): array
     {
-        $query_result = ["post_type" => DIRECTORY_CATALOG, "posts_per_page" => 2];
+        $maybePage = $request->get_param("page");
+        if (is_null($maybePage)) {
+            $page = 1;
+        } else {
+            $page = intval($maybePage);
+        }
+        $query_result = ["post_type" => DIRECTORY_CATALOG, "posts_per_page" => 2, "paged" => $page];
 
         if (!is_null($request->get_param("s"))) {
             $query_result = array_merge($query_result, ["s" => $request->get_param("s")]);
