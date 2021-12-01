@@ -14,7 +14,7 @@
 {#if open}
     <div class="flex justify-center items-center fixed top-0 left-0 w-full h-full z-index-30"
          transition:fade>
-        <div class="rounded-lg w-2/3 md:w-1/2 lg:w-1/3 h-4/5 bg-white ring-2 ring-cool-gray-100 shadow-xl flex flex-col overflow-hidden">
+        <div class="rounded-lg w-auto max-h-4/5 bg-white overflow-hidden shadow-md flex flex-col">
 
             <div class="flex flex-row py-5 px-2 bg-cool-gray-100 relative">
                 <div class="font-bold z-index-10">
@@ -33,7 +33,7 @@
                 </div>
 
             </div>
-            <div class="flex-1 p-2 container mx-auto flex">
+            <div class="flex-1 p-2 container mx-auto flex overflow-auto">
                 <slot name="content"></slot>
             </div>
             {#if $$slots.footer}

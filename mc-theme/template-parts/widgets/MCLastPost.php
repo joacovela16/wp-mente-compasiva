@@ -106,9 +106,9 @@ class MC_Last_Post extends WP_Widget
         $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
 
         ?>
-        <div class="rounded-lg ring-1  ring-cool-gray-200 m-3 overflow-hidden bg-white flex flex-col md:flex-row lg:w-110 w-full h-auto h-auto md:h-50">
+        <div class="rounded-lg shadow-md m-3 overflow-hidden bg-white flex flex-col md:flex-row lg:w-110 w-full h-auto h-auto md:h-50">
             <?php if (!empty($image_url)) { ?>
-                <div class="md:max-w-1/3 mx-auto">
+                <div class="md:max-w-1/3 mx-auto mt-1 md:m-0">
                     <img src="<?= $image_url ?>" alt="" class="w-32 h-32 object-cover w-full  md:h-full rounded-full md:rounded-none">
                 </div>
             <?php } ?>
@@ -119,7 +119,7 @@ class MC_Last_Post extends WP_Widget
                     </div>
                 </div>
                 <div class="relative overflow-hidden flex-grow-0 md:flex-1">
-                    <div class="px-2 text-xs">
+                    <div class="px-2 text-sm">
                         <?= $abstract ?>
                     </div>
                     <div class="absolute left-0 top-0 w-full h-full bg-gradient-to-t to-transparent from-white via-transparent z-index-0"></div>

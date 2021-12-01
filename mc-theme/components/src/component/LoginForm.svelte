@@ -26,7 +26,7 @@
                 </label>
             </div>
             <div class="flex-1"></div>
-            <input type="submit" name="wp-submit" class="appearance-none rounded-lg bg-blue-500 p-3 text-white cursor-pointer" value="Log In"/>
+            <input type="submit" name="wp-submit" class="appearance-none rounded-lg bg-blue-500 px-3 py-2 text-white cursor-pointer" value="Log In"/>
             <input type="hidden" name="redirect_to" value={homeUrl}/>
         </form>
     </div>

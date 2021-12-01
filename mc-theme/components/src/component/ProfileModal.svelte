@@ -121,7 +121,7 @@
         <div>{profile.display_name}</div>
     </div>
     <div slot="content" class="space-y-5 flex flex-col">
-        <div class="flex flex-row space-x-5">
+        <div class="flex flex-col md:flex-row md:space-x-5">
             <Field label={$t("name")}>
                 <input type="text"
                        class="appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg"
@@ -133,7 +133,7 @@
                        bind:value={userData.email}>
             </Field>
         </div>
-        <div class="flex flex-row space-x-5">
+        <div class="flex flex-col md:flex-row md:space-x-5">
             <Field label={$t("website")}>
                 <input type="url"
                        class="appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg"
