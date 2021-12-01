@@ -36,12 +36,12 @@
     }
 
     function keydownHandler(e) {
-        if (e.key==="Enter"){
+        if (e.key === "Enter") {
             updateQuery();
         }
     }
 </script>
-<div class="flex flex-row md:(flex-col) flex-grow-0 w-full md:w-auto">
+<div class="flex flex-row flex-col  w-1/2">
     <div class="flex flex-row items-center border-b-gray-300 border-b-width-2 bg-white px-2 bg-white w-full">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
              class="flex-grow-0"
@@ -53,7 +53,7 @@
         </svg>
         <input
                 type="text"
-                class="h-13 sm:w-full md:w-96 focus:outline-none"
+                class="h-13 w-full  focus:outline-none"
                 placeholder="{$t('search')}..."
                 bind:value={freeSearch}
                 on:keydown={e=> keydownHandler(e)}

@@ -30,9 +30,9 @@
 <div class="flex flex-col">
     {#if selection === undefined}
         {#each data as item, idx(item.id)}
-            <div class="flex flex-row hover:bg-gray-100 p-2 transition-all rounded cursor-pointer"
+            <div class="flex flex-row hover:(bg-blue-500 text-white) p-2 transition-all cursor-pointer m-1"
                  on:click={()=>selectNode(idx)}>
-                <div class="font-bold text-lg">{$t(item.id)}</div>
+                <div class="">{$t(item.id)}</div>
                 <div class="flex-1"></div>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right"

@@ -6,7 +6,7 @@
     import FooterItem from "./FooterItem.svelte";
     import Icon from "./Icon.svelte";
 </script>
-<footer>
+<div>
     <div class="bg-dark-700 w-full">
         <div class="container mx-auto flex flex-col md:(flex-row space-x-5 space-y-0) space-y-5 text-light-50  py-3">
             <FooterItem label={$t("about_us")}>
@@ -82,4 +82,4 @@
         <div>© Copyright {moment().get("year")}</div>
         <div class="flex-1"></div>
     </div>
-</footer>
+</div>

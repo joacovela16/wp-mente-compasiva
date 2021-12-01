@@ -1,4 +1,4 @@
-import 'virtual:windi.css';
+// import 'virtual:windi.css';
 import './assets/theme.scss';
 import {init, isLoading, register} from "svelte-i18n";
 

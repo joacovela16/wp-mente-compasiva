@@ -122,3 +122,22 @@ $colorLeft: #16a34a;
     transform: translate(32px, -8px) scale(0);
   }
 }
+.custom-shape-divider-bottom-1638327578 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-bottom-1638327578 svg {
+  position: relative;
+  display: block;
+  width: calc(223% + 1.3px);
+  height: 111px;
+}
+
+.custom-shape-divider-bottom-1638327578 .shape-fill {
+  fill: #FFFFFF;
+}

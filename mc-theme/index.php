@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="!m-0 !p-0">
+<html lang="en" class="!m-0 !p-0 ">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,7 +9,7 @@
     <?php wp_head(); ?>
 </head>
 
-<body class="m-0 p-0 text-gray-700">
+<body class="m-0 p-0">
 <?php get_template_part("template-parts/header/navbar"); ?>
 <?php wp_footer() ?>
 </body>

@@ -1,18 +1,25 @@
 import {get, writable} from "svelte/store";
 import {t} from "svelte-i18n"
-export const showSlideBar = new writable(false);
-export const queryBus = new writable(undefined);
+
+export const showSidebar = writable(false);
+export const queryBus = writable(undefined);
+export const showProfileModal = writable(false);
+export const showLoginModal = writable(false);
+export const avatarUrl = writable(undefined);
 
 export function i18n(key) {
     return get(t)(key);
 }
+
 
 export function setScrollTop() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For
 }
 
-export function filterBuilder(values) {
+/*
+export function filterBuilder(appConf) {
+
     return [
         {
             id: "cft",
@@ -68,3 +75,4 @@ export function filterBuilder(values) {
         }
     ];
 }
+*/

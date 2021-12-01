@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "prod": "windicss './**/*.php' -d -to assets/styles/windi.css",
-    "watch": "windicss  './**/*.php' -d -to assets/styles/windi.css"
+    "prod": "windicss './**/*.{php,svelte}' -d -to assets/styles/windi.css",
+    "watch": "windicss  './**/*.{php,svelte}' -d -to assets/styles/windi.css"
   },
   "devDependencies": {
     "windicss": "3.2.1"

@@ -10,11 +10,16 @@
     import Loader from "./Loader.svelte";
     import {default as Axios} from "axios";
     import Footer from "./Footer.svelte";
-    import SlideBar from "./SlideBar.svelte";
+    import SlideBar from "./Sidebar.svelte";
+    import {showLoginModal, showProfileModal, showSidebar} from "../core";
+    import ProfileModal from "./ProfileModal.svelte";
+    import {isDefined} from "../utils";
+    import LoginForm from "./LoginForm.svelte";
 
-    export let appConf = {};
     export let readyCallback = () => {
     };
+    export let appConf = {};
+    const {profile} = appConf;
 
     const defaults = {
         filterOptions: {
@@ -60,9 +65,14 @@
 </script>
 
 <Loader/>
-<Navbar/>
-<Router {routes}/>
+<div class="{$showProfileModal || $showSidebar || $showLoginModal ?  'filter blur-md':'' }">
+    <Navbar/>
+    <Router restoreScrollState={true} {routes}/>
+    <Footer/>
+</div>
+{#if isDefined(profile)}
+    <ProfileModal/>
+{:else}
+    <LoginForm/>
+{/if}
 <SlideBar/>
-<Footer/>
-
-

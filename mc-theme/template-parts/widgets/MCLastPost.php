@@ -17,53 +17,40 @@ class MC_Last_Post extends WP_Widget
     {
         $title = $instance['title'];
         $source = $instance['source'];
-        $query = new WP_Query([
+        $is_logged = is_user_logged_in();
+        $query = [
             'post_type' => $source,
             'post_status' => 'publish',
-            'posts_per_page' => 5
-        ]);
+            'posts_per_page' => 10
+        ];
+        if (!$is_logged){
+            $query = array_merge($query, [
+                "meta_query"=>[
+                    ["key"=>"kind", "compare"=> "NOT EXISTS"]
+                ]
+            ]);
+        }
+        $query = new WP_Query($query);
         $posts = $query->get_posts();
         ?>
 
         <div class="">
-            <div class="flex flex-row border-b-blue-500 border-b-width-2">
+            <div class="border-b-blue-500 border-b-width-2">
                 <div class="flex-grow-0 text-3xl font-bold">
                     <?= $title ?>
-                </div>
-                <div class="flex-1"></div>
-                <div class="flex-grow-0 cursor-pointer hover:underline font-bold">
-
                 </div>
             </div>
             <div class="flex flex-row flex-wrap overflow-auto p-4">
 
-                <?php foreach ($posts as $post) { ?>
-                    <div
-                            class="transition-all m-2 h-50 shadow-dark-500 ring-1 ring-gray-100 shadow-lg p-4 rounded-lg
-                            overflow-hidden relative w-50 md:w-80 lg:w-100 hover:ring-blue-500 cursor-pointer"
-                            onclick="location.hash='#/post/<?= $source ?>/<?= $post->ID ?>'"
-                    >
-                        <div class="absolute left-0 top-0 w-full h-full bg-gradient-to-t to-transparent from-white via-transparent z-index-0"></div>
-                        <div class="flex flex-row z-index-20">
-                            <div class="text-lg font-bold"><?= $post->post_title ?></div>
-                            <div class="flex-1"></div>
-                            <a class="cursor-pointer z-index-10" href="#/post/<?= $source ?>/<?= $post->ID ?>">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     stroke-width="2"
-                                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"></path>
-                                    <line x1="10" y1="14" x2="20" y2="4"></line>
-                                    <polyline points="15 4 20 4 20 9"></polyline>
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="overflow-hidden p-1">
-                            <?= $post->post_content ?>
-                        </div>
-
-                    </div>
-                <?php } ?>
+                <?php foreach ($posts as $post) {
+                    $kind = get_post_meta($post->ID, "kind", true);
+                    if ($kind === "person") {
+                        $this->render_common_entry($post);
+                    } else {
+                        $this->render_common_entry($post);
+                    }
+                }
+                ?>
 
             </div>
         </div>
@@ -109,6 +96,45 @@ class MC_Last_Post extends WP_Widget
         $instance['text'] = (!empty($new_instance['text'])) ? $new_instance['text'] : '';
         $instance['source'] = (!empty($new_instance['source'])) ? $new_instance['source'] : '';
         return $instance;
+    }
+
+    public function render_common_entry(WP_Post $post)
+    {
+        $source = $post->post_type;
+        $author = get_user_by("ID", $post->post_author);
+        $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE . "_id", true);
+        $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+
+        ?>
+        <div class="rounded-lg ring-1  ring-cool-gray-200 m-3 overflow-hidden bg-white flex flex-col md:flex-row lg:w-110 w-full h-auto h-auto md:h-50">
+            <?php if (!empty($image_url)) { ?>
+                <div class="md:max-w-1/3 mx-auto">
+                    <img src="<?= $image_url ?>" alt="" class="w-32 h-32 object-cover w-full  md:h-full rounded-full md:rounded-none">
+                </div>
+            <?php } ?>
+            <div class="flex-1 flex flex-col">
+                <div class="font-bold bg-cool-gray-50">
+                    <div class="p-3 text-center md:text-left">
+                        <?= $post->post_title ?>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden flex-grow-0 md:flex-1">
+                    <div class="px-2 text-xs">
+                        <?= $abstract ?>
+                    </div>
+                    <div class="absolute left-0 top-0 w-full h-full bg-gradient-to-t to-transparent from-white via-transparent z-index-0"></div>
+                </div>
+                <span class="p-2">
+                    <a href='#/post/<?= $source ?>/<?= $post->ID ?>' class=" cursor-pointer text-sm underline"> <?= __("Read more") ?> ... </a>
+                </span>
+                <div class="flex flex-row bg-cool-gray-50 text-sm">
+                    <div class="p-2"><?= __("By $author->display_name") ?></div>
+                    <div class="flex-1"></div>
+                    <div class="p-2"><?= get_the_time("F j, Y g:i a", $post) ?></div>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 
 }

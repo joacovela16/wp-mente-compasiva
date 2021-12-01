@@ -95,10 +95,9 @@
     {#if hasType(node)}
         {#if isMultiple(node) || isUndefined(node.selected) || node.selected === false}
             <div class="flex flex-row items-center">
-                <div class="font-bold">{$t(node.id)}</div>
+                <div class="">{$t(node.id)}</div>
                 <div class="flex-1"></div>
                 <div>
-
                     {#if node.type === "string"}
                         <input type="text"
                                class="appearance-none w-40 py-1 px-2 ring-2 ring-gray-200 focus:ring-blue-500 rounded"
@@ -115,13 +114,13 @@
             </div>
         {/if}
     {:else}
-        <div class="flex flex-row">
-            <div class="cursor-pointer font-bold" on:click={()=>expand=!expand}>
+        <div class="flex flex-row {goBack && 'bg-cool-gray-50 py-1 px-2'}">
+            <div class="font-bold">
                 {$t(node.id)}
             </div>
             <div class="flex-1"></div>
             {#if goBack}
-                <div class="font-bold cursor-pointer underline"
+                <div class="cursor-pointer underline"
                      on:click={()=>goBack()}>
                     {$t('back')}
                 </div>

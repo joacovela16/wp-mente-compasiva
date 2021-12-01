@@ -24,13 +24,14 @@ function mc_user_register_interceptor( int $user_id ) {
 			error_log( $post_linked_to_user->get_error_message() );
 		} else {
 
-			error_log( "Post created for user " . $maybe_user->user_email );
 			$term   = get_term_by( 'slug', TERM_PERSON, CLASSIFICATION_TAXONOMY );
 			$result = wp_set_post_terms( $post_linked_to_user, $term->term_id, CLASSIFICATION_TAXONOMY );
 
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
-			}
+			}else{
+                update_user_meta($user_id, "user_post_id", $post_linked_to_user);
+            }
 		}
 
 	} else {

@@ -14,6 +14,9 @@ include_once "core/post_lib.php";
 include_once "core/rest_api.php";
 $restController = new MCRestAPI();
 
+add_filter( 'send_email_change_email', '__return_false' );
+add_filter( 'send_password_change_email', '__return_false' );
+
 add_action( "init", "mc_do_post" );
 add_action( "init", "mc_register_taxonomy" );
 add_action( "rest_api_init", function () use ( $restController ) {

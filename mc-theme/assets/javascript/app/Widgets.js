@@ -21,7 +21,4 @@ function mountApp() {
     app.mount(main);*/
 }
 
-window.addEventListener("load", () => {
-    mountApp()
-});
 
