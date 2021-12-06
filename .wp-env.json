@@ -1,14 +1,14 @@
 {
-    "core": "WordPress/WordPress#master",
-    "phpVersion": "8.0",
-    "plugins": [
-        "./mc-plugin"
-    ],
-    "themes": [
-        "./mc-theme"
-    ],
-    "config": {
-        "WP_DEBUG": true,
-        "SCRIPT_DEBUG": true
-    }
+  "core": "WordPress/WordPress#master",
+  "phpVersion": "8.0",
+  "plugins": [
+    "./mc_plugin"
+  ],
+  "themes": [
+    "./mc_application"
+  ],
+  "config": {
+    "WP_DEBUG": true,
+    "SCRIPT_DEBUG": true
+  }
 }

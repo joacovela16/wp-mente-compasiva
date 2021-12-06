@@ -1,0 +1,24 @@
+{
+  "name": "vite-project",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build -w --base='/wp-content/themes/mc-theme/components/dist/'",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "1.0.0-next.30",
+    "axios": "0.24.0",
+    "sass": "1.43.5",
+    "svelte": "3.44.2",
+    "query-string": "7.0.1",
+    "moment": "2.29.1",
+    "svelte-i18n": "3.3.13",
+    "svelte-spa-router": "3.2.0",
+    "vite": "2.6.14",
+    "vite-plugin-windicss": "1.5.1",
+    "windicss": "3.2.1"
+  }
+}

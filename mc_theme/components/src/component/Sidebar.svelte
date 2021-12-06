@@ -1,0 +1,44 @@
+<script>
+    import {t} from "svelte-i18n";
+
+    import {fade, fly} from "svelte/transition";
+    import {showSidebar} from "../core";
+    import SearchExplorer from "./search/SearchExplorer.svelte";
+    import {getContext, setContext} from "svelte";
+
+    const {filter} = getContext("mc-context");
+
+    setContext("slide-bar", {
+        filter: {
+            filterSpec: filter,
+            items: [],
+            registry: {}
+        }
+    });
+
+</script>
+{#if $showSidebar}
+    <div transition:fade class="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-index-30"
+         on:click={()=>showSidebar.set(false)}></div>
+    <div class="fixed top-0 left-0 w-full md:w-1/2 lg:w-1/3 h-full z-index-30" transition:fly={{x: -500, opacity: 1}}>
+        <div class="h-full w-full bg-white shadow-lg shadow-dark-900">
+            <div class="bg-cool-gray-100 flex flex-row items-center">
+                <div class="p-5 font-bold">MENU</div>
+                <div class="flex-1"></div>
+                <div class="p-5 font-bold cursor-pointer underline" on:click={()=>showSidebar.set(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="font-bold">{$t("advanced_search")}</div>
+                <SearchExplorer/>
+            </div>
+        </div>
+
+    </div>
+{/if}
