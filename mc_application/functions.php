@@ -7,14 +7,22 @@ include_once "template-parts/user_lib.php";
 
 add_action('wp_enqueue_scripts', 'mc_install_assets');
 add_action('widgets_init', 'mc_widgets_init');
-//add_action("wp_footer", "svelte_installer");
 add_filter('show_admin_bar', '__return_false');
+add_action('login_form_logout', "mc_logout");
 
-add_action('login_form_logout', function () {
+
+add_action("init", function () {
+    add_rewrite_rule("^about\/?", "index.php?pagename=mc_about", 'top');
+    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+    add_rewrite_rule("^contact\/?", "index.php?pagename=mc_contact", 'top');
+});
+
+function mc_logout(): void
+{
     wp_logout();
     wp_safe_redirect(home_url());
-    exit;
-});
+    wp_die();
+}
 
 function mc_list_term($id, $pure = null): array
 {
@@ -173,6 +181,6 @@ function mc_install_assets()
 {
     wp_enqueue_style('mc_windicss', get_template_directory_uri() . "/assets/styles/theme.css");
     wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/windi.css");
-    wp_enqueue_script("mc_alpinejs", "https://unpkg.com/alpinejs@3.7.0/dist/cdn.min.js", [],false , true);
+    wp_enqueue_script("mc_alpinejs", "https://unpkg.com/alpinejs@3.7.0/dist/cdn.min.js", [], false, true);
     wp_enqueue_script('mc_app', get_template_directory_uri() . "/assets/javascript/app.js");
 }

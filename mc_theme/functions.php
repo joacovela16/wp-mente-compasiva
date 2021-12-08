@@ -9,12 +9,14 @@ add_action('wp_enqueue_scripts', 'mc_install_assets');
 add_action('widgets_init', 'mc_widgets_init');
 add_action("wp_footer", "svelte_installer");
 add_filter('show_admin_bar', '__return_false');
+add_action('login_form_logout', "mc_logout");
 
-add_action( 'login_form_logout', function() {
+function mc_logout():void
+{
     wp_logout();
     wp_safe_redirect(home_url());
-    exit;
-} );
+    wp_die();
+}
 
 function mc_list_term($id, $pure = null): array
 {
