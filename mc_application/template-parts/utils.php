@@ -88,39 +88,3 @@ function mc_get_user_avatar_url()
 
     return $user_avatar_url;
 }
-function context($data, $inner) {
-    return $inner((object)$data);
-}
-function div($attr, $inner = null)
-{
-    el("div", $attr, $inner);
-}
-
-function el(string $tag, $attr, $inner = null)
-{
-    $finalAttr = [];
-    if (is_array($attr)) {
-        foreach ($attr as $key => $value) {
-            if (is_null($value)) {
-                $finalAttr[] = "$key";
-            } else {
-                $finalAttr[] = "$key=\"$value\"";
-            }
-        }
-    } elseif (is_string($attr)) {
-        $inner = $attr;
-    }
-
-    $attrs = join(" ", $finalAttr);
-
-    echo "<$tag $attrs>";
-
-    if (!is_null($inner)) {
-        if (is_callable($inner))
-            $inner();
-        elseif (is_string($inner))
-            echo $inner;
-    }
-
-    echo "</$tag>";
-}
