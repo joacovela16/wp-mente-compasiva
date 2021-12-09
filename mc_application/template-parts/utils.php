@@ -25,7 +25,7 @@ function modal(array $config, string $handler)
 {
     ?>
     <div class="flex justify-center items-center fixed top-0 left-0 w-full h-full z-index-20" x-show="<?= $handler ?>">
-        <div class="absolute top-0 left-0 bg-black opacity-80 w-full h-full"></div>
+        <div class="absolute top-0 left-0 bg-black opacity-90 w-full h-full"></div>
         <div class="rounded-lg w-auto max-h-4/5 bg-white overflow-hidden shadow-md flex flex-col z-index-10">
 
             <div class="flex flex-row py-5 px-2 bg-cool-gray-100 relative">
@@ -61,22 +61,24 @@ function modal(array $config, string $handler)
 }
 
 
-function render(array $data, $field){
-    if (isset($data[$field])){
+function render(array $data, $field)
+{
+    if (isset($data[$field])) {
         $fieldValue = $data[$field];
-        if (is_string($fieldValue)){
-            if (function_exists($fieldValue)){
+        if (is_string($fieldValue)) {
+            if (function_exists($fieldValue)) {
                 ($fieldValue)();
-            }else{
+            } else {
                 echo $fieldValue;
             }
-        }else if (is_callable($fieldValue)){
+        } else if (is_callable($fieldValue)) {
             $fieldValue();
         }
     }
 }
 
-function mc_get_user_avatar_url(){
+function mc_get_user_avatar_url()
+{
     $currentUser = wp_get_current_user();
     $user_avatar_url = get_user_meta($currentUser->ID, "user_avatar_url", true);
 
@@ -85,4 +87,40 @@ function mc_get_user_avatar_url(){
     }
 
     return $user_avatar_url;
+}
+function context($data, $inner) {
+    return $inner((object)$data);
+}
+function div($attr, $inner = null)
+{
+    el("div", $attr, $inner);
+}
+
+function el(string $tag, $attr, $inner = null)
+{
+    $finalAttr = [];
+    if (is_array($attr)) {
+        foreach ($attr as $key => $value) {
+            if (is_null($value)) {
+                $finalAttr[] = "$key";
+            } else {
+                $finalAttr[] = "$key=\"$value\"";
+            }
+        }
+    } elseif (is_string($attr)) {
+        $inner = $attr;
+    }
+
+    $attrs = join(" ", $finalAttr);
+
+    echo "<$tag $attrs>";
+
+    if (!is_null($inner)) {
+        if (is_callable($inner))
+            $inner();
+        elseif (is_string($inner))
+            echo $inner;
+    }
+
+    echo "</$tag>";
 }

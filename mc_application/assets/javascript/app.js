@@ -2,7 +2,13 @@ document.addEventListener("alpine:init", () => {
     Alpine.data("mc_app", () => {
         return {
             loaderOn: true,
-            profileOn: false,
+            profileOn: true,
+            profile: {
+            },
+            submitProfile(){
+                console.log(this.profile.name)
+
+            },
             goBack() {
                 history.back();
             }
