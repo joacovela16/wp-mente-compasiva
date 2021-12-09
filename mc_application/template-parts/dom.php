@@ -22,8 +22,8 @@ function el(string $tag, $attr, $inner = null, $closable = true)
     }
 
     $attrs = join(" ", $finalAttr);
-
-    $html= "<$tag $attrs>";
+    $closeSlash = $closable ? "": "/";
+    $html= "<$tag $attrs $closeSlash>";
 
     if (!is_null($inner)) {
         if (is_callable($inner))
@@ -32,6 +32,7 @@ function el(string $tag, $attr, $inner = null, $closable = true)
         $html.= $inner;
     }
 
-    $html.= "</$tag>";
+    if ($closable) $html.= "</$tag>";
+
     return $html;
 }
