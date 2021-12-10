@@ -4,6 +4,7 @@ include_once "template-parts/widgets/MCLastPost.php";
 include_once "constants.php";
 include_once "template-parts/widgets/MC_Meta_Box.php";
 include_once "template-parts/user_lib.php";
+include_once "template-parts/dom.php";
 
 add_action('wp_enqueue_scripts', 'mc_install_assets');
 add_action('widgets_init', 'mc_widgets_init');
