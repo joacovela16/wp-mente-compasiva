@@ -5,11 +5,12 @@ if (is_user_logged_in()) {
     $display_name = $current_user->display_name;
     $user_email = $current_user->user_email;
     $user_url = $current_user->user_url;
+    $description = $current_user->description;
 
     echo modal([
         "header" =>
             div(["class" => "flex flex-row space-x-2 items-center"],
-                el("img", ["src" => $url, "class" => "w-32px h-32px rounded-full items-center shadow-lg object-cover"]),
+                img( ["src" => $url, "class" => "w-32px h-32px rounded-full items-center shadow-lg object-cover", "x-ref"=>"profileAvatar"]),
                 div([], $current_user->display_name)
             ),
         "content" =>
@@ -61,8 +62,9 @@ if (is_user_logged_in()) {
                                 input([
                                     'class' => 'hidden',
                                     'type' => 'file',
-                                    'accept' => 'image/png, image/jpeg',
-                                    'x-model' => 'profile.file'
+                                    'x-ref'=> 'profileFile',
+                                    'accept' => 'image/png,image/jpeg',
+                                    '@change' => 'profile.file=$refs.profileFile.files[0]'
                                 ]),
                                 __("Select image")
                             )
@@ -74,16 +76,50 @@ if (is_user_logged_in()) {
                     "content" =>
                         textarea([
                             'class' => 'appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg',
-                            'x-model' => "profile.about"
+                            'x-init'=> "profile.description='$description'",
+                            'x-model' => "profile.description"
                         ])
                 ]),
                 details(
-                    summary(['class'=>'font-bold'], __("Security")),
-                    div(['class'=>'space-y-3 mt-5'],
-
+                    summary(['class' => 'font-bold'], __("Security")),
+                    div(['class' => 'space-y-3 mt-5'],
+                        field([
+                            "label" => __("Current password"),
+                            "content" =>
+                                input([
+                                    'type' => 'password',
+                                    'class' => 'appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg',
+                                    'x-model' => 'profile.current_pwd'
+                                ])
+                        ]),
+                        div(['class' => 'flex flex-row space-x-5'],
+                            field([
+                                "label" => __("New password"),
+                                "content" =>
+                                    input([
+                                        'type' => 'password',
+                                        'class' => 'appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg',
+                                        'x-model' => 'profile.new_password'
+                                    ])
+                            ]),
+                            field([
+                                "label" => __("Confirm password"),
+                                "content" =>
+                                    input([
+                                        'type' => 'password',
+                                        'class' => 'appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg',
+                                        'x-model' => 'profile.confirm_password'
+                                    ])
+                            ])
+                        )
                     )
                 )
-            )
+            ),
+        'footer' => div(['class' => 'flex flex-row space-x-2 font-bold items-center'],
+            div(['class' => 'cursor-pointer', '@click' => 'profileOn=false'], __('Cancel')),
+            div(['class' => 'flex-1']),
+            div(['class' => 'transition-all bg-blue-500 text-white p-2 rounded shadow-lg inline-block w-35 text-center cursor-pointer', '@click' => 'submitProfile()'], __("Apply changes"))
+        )
     ],
         "profileOn"
     );

@@ -6,7 +6,8 @@ include_once "template-parts/widgets/MC_Meta_Box.php";
 include_once "template-parts/user_lib.php";
 include_once "template-parts/dom.php";
 
-add_action('wp_enqueue_scripts', 'mc_install_assets');
+add_action("wp_head", "mc_wp_head");
+add_action('wp_enqueue_scripts', "mc_install_assets");
 add_action('widgets_init', 'mc_widgets_init');
 add_filter('show_admin_bar', '__return_false');
 add_action('login_form_logout', "mc_logout");
@@ -68,7 +69,7 @@ function buildFilter(): array
         $languages = mc_list_term("Language", $tagger);
         $countries = mc_list_term("Country", $tagger);
 
-        array_push($result, [
+        $result[] = [
             "id" => "cft",
             "children" => [
                 [
@@ -81,10 +82,10 @@ function buildFilter(): array
                 ["id" => "language", "multiple" => true, "enum" => $languages],
                 ["id" => "country", "multiple" => true, "enum" => $countries]
             ]
-        ]);
+        ];
     }
 
-    array_push($result, [
+    $result[] = [
         "id" => "resource",
         "children" => [
             ["id" => "author", "type" => "string", "multiple" => true, "queryTag" => 'author'],
@@ -99,7 +100,7 @@ function buildFilter(): array
                 ]
             ],
         ]
-    ]);
+    ];
 
     return $result;
 }
@@ -184,4 +185,18 @@ function mc_install_assets()
     wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/windi.css");
     wp_enqueue_script("mc_alpinejs", "https://unpkg.com/alpinejs@3.7.0/dist/cdn.min.js", [], false, true);
     wp_enqueue_script('mc_app', get_template_directory_uri() . "/assets/javascript/app.js");
+}
+
+
+function mc_wp_head()
+{
+    $nonce = wp_create_nonce('wp_rest');
+    ?>
+    <script>
+        window.MCApp = window.MCApp || {
+            nonce: "<?= $nonce ?>",
+            baseUrl: "<?= get_rest_url() ?>",
+        };
+    </script>
+    <?php
 }

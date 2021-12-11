@@ -29,7 +29,6 @@
     function handleApplyChanges() {
         if (isUnlocked) {
 
-            Axios
             // validate
             validationType = "invalid_field";
             validationMessage = undefined;

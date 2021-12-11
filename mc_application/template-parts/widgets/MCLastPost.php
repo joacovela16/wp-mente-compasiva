@@ -106,14 +106,14 @@ class MC_Last_Post extends WP_Widget
         $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
 
         ?>
-        <div class="rounded-lg shadow-md m-3 overflow-hidden bg-white flex flex-col md:flex-row lg:w-110 w-full h-auto h-auto md:h-50">
+        <div class="rounded-lg shadow-black shadow-md m-3 overflow-hidden bg-white flex flex-col md:flex-row lg:w-110 w-full h-auto h-auto md:h-50 ">
             <?php if (!empty($image_url)) { ?>
                 <div class="md:max-w-1/3 mx-auto mt-1 md:m-0">
                     <img src="<?= $image_url ?>" alt="" class="w-32 h-32 object-cover w-full  md:h-full rounded-full md:rounded-none">
                 </div>
             <?php } ?>
             <div class="flex-1 flex flex-col">
-                <div class="font-bold bg-cool-gray-50">
+                <div class="font-bold bg-cool-gray-100">
                     <div class="p-3 text-center md:text-left">
                         <?= $post->post_title ?>
                     </div>
@@ -127,7 +127,7 @@ class MC_Last_Post extends WP_Widget
                 <span class="p-2">
                     <a href='<?= get_permalink($post) ?>' class=" cursor-pointer text-sm underline"> <?= __("Read more") ?> ... </a>
                 </span>
-                <div class="flex flex-row bg-cool-gray-50 text-sm">
+                <div class="flex flex-row bg-cool-gray-100 text-sm">
                     <div class="p-2"><?= __("By $author->display_name") ?></div>
                     <div class="flex-1"></div>
                     <div class="p-2"><?= get_the_time("F j, Y g:i a", $post) ?></div>
