@@ -32,12 +32,17 @@ class MC_Last_Post extends WP_Widget
         }
         $query = new WP_Query($query);
         $posts = $query->get_posts();
+
         ?>
 
         <div class="">
-            <div class="border-b-blue-500 border-b-width-2">
+            <div class="border-b-blue-500 border-b-width-2 flex items-center">
                 <div class="flex-grow-0 text-3xl font-bold">
                     <?= $title ?>
+                </div>
+                <div class="flex-1"></div>
+                <div class="font-bold underline">
+                    <a href="?s=&post_type=<?= $source ?>"><?= __('Explore') ?></a>
                 </div>
             </div>
             <div class="flex flex-row flex-wrap overflow-auto p-4">
@@ -100,7 +105,7 @@ class MC_Last_Post extends WP_Widget
 
     public function render_common_entry(WP_Post $post)
     {
-        $source = $post->post_type;
+        $post_type = $post->post_type;
         $author = get_user_by("ID", $post->post_author);
         $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE . "_id", true);
         $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);

@@ -5,7 +5,7 @@ module.exports = defineConfig({
         extractors: [
             {
                 extractor: (content) => {
-                    return {classes: content.match(/[\"']class[\"']\s*=>\s*[\"']([\w\d\s\-!:]*)[\"']/g) || []}
+                    return {classes: content.match(/[\"']class[\"']\s*=>\s*[\"']([\w\d\s\-!:\/]*)[\"']/g) || []}
                 },
                 extensions: ["php"]
             }

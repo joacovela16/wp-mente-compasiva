@@ -22,7 +22,7 @@ if (empty($user_avatar_url)) {
                     <line x1="4" y1="18" x2="20" y2="18"></line>
                 </svg>
             </span>
-            <span class="font-bold"><?= __("menu") ?></span>
+            <span class="font-bold"><?= __("Menu") ?></span>
         </div>
         <div class="flex-1"></div>
 

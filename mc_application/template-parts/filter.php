@@ -11,6 +11,6 @@
         <input
             type="text"
             class="h-13 w-full  focus:outline-none"
-            placeholder="<?= __("search") ?>...">
+            placeholder="<?= __("Search") ?>...">
     </div>
 </div>

@@ -1,7 +1,6 @@
 <?php
 get_header();
 get_template_part("template-parts/loader");
-$link = home_url("/user")
 ?>
 
 <?php if (is_home()): ?>

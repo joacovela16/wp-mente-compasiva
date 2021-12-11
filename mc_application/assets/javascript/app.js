@@ -20,7 +20,7 @@ document.addEventListener("alpine:init", () => {
     Alpine.data("mc_app", () => {
         return {
             loaderOn: true,
-            profileOn: true,
+            profileOn: false,
             profile: {},
             validation: {
                 validationType: undefined,
