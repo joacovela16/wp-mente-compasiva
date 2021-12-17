@@ -24,9 +24,9 @@ add_filter('template_include', 'mc_template_chooser');
 function mc_template_chooser($template)
 {
     $post_type = get_query_var('post_type');
-    if( is_search() && $post_type===DIRECTORY_CATALOG)
-    {
-        return locate_template("${post_type}_search.php");  //  redirect to archive-search.php
+    if (is_search() && $post_type === DIRECTORY_CATALOG) {
+        $locate_template = locate_template("${post_type}_search.php");
+        return empty($locate_template) ? $template : $locate_template;  //  redirect to archive-search.php
     }
     return $template;
 }
@@ -37,7 +37,6 @@ function mc_logout(): void
     wp_safe_redirect(home_url());
     wp_die();
 }
-
 
 
 function mc_build_user_info()

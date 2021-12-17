@@ -26,6 +26,9 @@ document.addEventListener("alpine:init", () => {
                 validationType: undefined,
                 validationMessage: undefined,
             },
+            invokeUrl(tagName, value, baseUrl) {
+                window.location.href = `${baseUrl}&k=${tagName}&v=${value}&c=add`;
+            },
             submitProfile() {
                 const me = this,
                     profile = me.profile,

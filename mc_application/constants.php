@@ -40,6 +40,7 @@ function buildFilter(): array
     };
     $multimedia = mc_list_term("Multimedia", $tagger);
     $journal = mc_list_term("Journal", $tagger);
+    $authors = mc_get_authors();
 
     if (is_user_logged_in()) {
 
@@ -65,7 +66,7 @@ function buildFilter(): array
     $result[] = [
         "id" => "resource",
         "children" => [
-            ["id" => "author", "type" => "string", "multiple" => true, "queryTag" => 'author'],
+            ["id" => "author", "multiple" => true, "queryTag" => 'author', 'enum' => $authors],
             ["id" => "multimedia", "multiple" => true, "enum" => $multimedia],
             ["id" => "journal", "multiple" => true, "enum" => $journal],
             [
@@ -80,4 +81,19 @@ function buildFilter(): array
     ];
 
     return $result;
+}
+
+function mc_get_authors(): array
+{
+    global $wpdb;
+    $authors = [];
+    $result = $wpdb->get_results(
+        "SELECT DISTINCT post_author, COUNT(ID) AS count FROM $wpdb->posts WHERE " . get_private_posts_cap_sql('post') . ' GROUP BY post_author'
+    );
+    foreach ($result as $row) {
+        $user = get_userdata($row->post_author);
+        $display_name = $user->display_name;
+        $authors[] = ['key' => 'author', 'value' => $display_name];
+    }
+    return $authors;
 }
