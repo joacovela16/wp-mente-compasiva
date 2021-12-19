@@ -70,13 +70,14 @@ class MCRestAPI extends WP_REST_Controller
         }
 
         if ($user->ID !== 0) {
-            $post_id = get_user_meta($user->ID, "user_post_id", true);
+            $post_id = get_user_meta($user->ID, MC_USER_REF, true);
 
-            wp_update_post([
+            $update_result = wp_update_post([
                 "ID" => intval($post_id),
-                "post_content" => empty($_POST["description"]) ? "" : $_POST["description"],
+                "post_content" => $_POST["description"],
                 "meta_input" => [
-                    "user_avatar_url" => $avatarURL
+                    "user_avatar_url" => $avatarURL,
+                    MC_METABOX_ABSTRACT => $_POST["description"]
                 ]
             ]);
 
@@ -162,10 +163,10 @@ class MCRestAPI extends WP_REST_Controller
             ]);
         }
 
-        if (!$is_logged){
+        if (!$is_logged) {
             $query_result = array_merge($query_result, [
-                "meta_query"=>[
-                    ["key"=>"kind", "compare"=> "NOT EXISTS"]
+                "meta_query" => [
+                    ["key" => "kind", "compare" => "NOT EXISTS"]
                 ]
             ]);
         }

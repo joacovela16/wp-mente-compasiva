@@ -1,6 +1,6 @@
 <?php
 include_once "template-parts/utils.php";
-include_once "template-parts/widgets/MCLastPost.php";
+include_once "template-parts/widgets/MCPostExplorer.php";
 include_once "constants.php";
 include_once "template-parts/widgets/MC_Meta_Box.php";
 include_once "template-parts/user_lib.php";
@@ -8,6 +8,7 @@ include_once "template-parts/dom.php";
 
 add_action("wp_head", "mc_wp_head");
 add_action('wp_enqueue_scripts', "mc_install_assets");
+//add_action('admin_enqueue_scripts', "mc_install_admin_assets");
 add_action('widgets_init', 'mc_widgets_init');
 add_filter('show_admin_bar', '__return_false');
 add_action('login_form_logout', "mc_logout");
@@ -97,7 +98,7 @@ function svelte_installer()
 
 function mc_widgets_init()
 {
-    register_widget("MC_Last_Post");
+    register_widget("MCPostExplorer");
     add_theme_support('customize-selective-refresh-widgets');
 
     // Add support for Block Styles.

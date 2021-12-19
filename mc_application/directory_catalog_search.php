@@ -48,24 +48,6 @@ if (isset($query['c']) && isset($query['k']) && isset($query['v'])) {
 
 $removeLink = mc_build_remove_links($query);
 
-function _iterator($item): array
-{
-    if (isset($item['children'])) {
-        return mc_get_allowed($item['children']);
-    } else {
-        return [$item['queryTag'] ?? $item['id']];
-    }
-}
-
-function mc_get_allowed($filterSpec)
-{
-    $result = [];
-    foreach ($filterSpec as $item) {
-        $result = array_merge($result, _iterator($item));
-    }
-    return $result;
-}
-
 function mc_build_remove_links($query): array
 {
 
@@ -86,7 +68,7 @@ function mc_render_filter(array $filter, string $category, $query)
 {
     $findResult = array_filter($filter, fn($x) => $x['id'] == $category);
     if (!empty($findResult)) {
-        $first = $findResult[0];
+        $first = array_values($findResult)[0];
         mc_renderer($first, $query);
     }
 }
@@ -132,7 +114,9 @@ function mc_renderer($item, $query)
     $has_type = isset($item['type']);
     $type = $item['type'] ?? '';
     $is_selected = $has_type && array_exists($_SESSION[SEARCH_SELECTION], fn($x) => $x['key'] === $queryTag);
+
     if ($is_selected) return;
+
     if (empty($children) && empty($enum) && !$has_type) return;
 
     ?>
@@ -178,80 +162,126 @@ function mc_renderer($item, $query)
 
 function mc_render_content($query)
 {
+    $selections = $_SESSION[SEARCH_SELECTION];
     $is_logged = is_user_logged_in();
-    $maybePage = $query["page"];
+    $maybePage = $query["page"] ?? 1;
+    $post_type = $query['post_type'];
     if (is_null($maybePage)) {
         $page = 1;
     } else {
         $page = intval($maybePage);
     }
-    $query_result = ["post_type" => DIRECTORY_CATALOG, "posts_per_page" => 10, "paged" => $page];
+    $query_result = ["post_type" => $post_type, "posts_per_page" => 10, "paged" => $page];
 
     if (!is_null($query["s"])) {
         $query_result = array_merge($query_result, ["s" => $query["s"]]);
     }
 
-    if (!is_null($query["writer"])) {
-        $query_result = array_merge($query_result, ["author_name" => $query["writer"]]);
+    $author = array_find($selections, fn($x) => $x['key'] === 'author');
+    if (!is_null($author)) {
+        $query_result = array_merge($query_result, ["author_name" => $author["value"]]);
     }
 
-    /*    if (!is_null($request->get_param("tag"))) {
-            $func = function ($v) {
-                return [
-                    'taxonomy' => CLASSIFICATION_TAXONOMY,
-                    "field" => "slug",
-                    "terms" => $v
-                ];
-            };
-            $args = array_map($func, explode(",", $request->get_param("tag")));
-            $query_result = array_merge($query_result, [
-                "tax_query" => array_merge(
-                    [
-                        'relation' => 'OR',
-                    ],
-                    $args
-                )
-            ]);
-        }
+    $tags = array_map(fn($x) => $x['value'], array_filter($selections, fn($x) => $x['key'] === 'tag'));
+    if (!empty($tags)) {
+        $func = function ($v) {
+            return [
+                'taxonomy' => CLASSIFICATION_TAXONOMY,
+                "field" => "slug",
+                "terms" => $v
+            ];
+        };
+        $args = array_map($func, $tags);
+        $query_result = array_merge($query_result, [
+            "tax_query" => array_merge(
+                [
+                    'relation' => 'OR',
+                ],
+                $args
+            )
+        ]);
+    }
 
-        $date_query = [];
+    $date_query = [];
 
-        if (!is_null($request->get_param("before"))) {
-            $date = explode('/', $request->get_param("before"));
-            $date_query = array_merge($date_query, [
-                "before" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
-            ]);
-        }
+    $before = array_find($selections, fn($x) => $x['key'] === "before");
+    if (!is_null($before)) {
+        $date = explode('/', $before);
+        $date_query = array_merge($date_query, [
+            "before" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
+        ]);
+    }
 
-        if (!is_null($request->get_param("after"))) {
-            $date = explode('/', $request->get_param("after"));
-            $date_query = array_merge($date_query, [
-                "after" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
-            ]);
-        }
+    $after = array_find($selections, fn($x) => $x['key'] === "after");
+    if (!is_null($after)) {
+        $date = explode('/', $after);
+        $date_query = array_merge($date_query, [
+            "after" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
+        ]);
+    }
 
-        if (!$is_logged){
-            $query_result = array_merge($query_result, [
-                "meta_query"=>[
-                    ["key"=>"kind", "compare"=> "NOT EXISTS"]
-                ]
-            ]);
-        }
+    if (!$is_logged) {
+        $query_result = array_merge($query_result, [
+            "meta_query" => [
+                ["key" => "kind", "compare" => "NOT EXISTS"]
+            ]
+        ]);
+    }
 
-        if (count($date_query) > 0) {
-            $query_result = array_merge($query_result, ["date_query" => $date_query]);
-        }
+    if (count($date_query) > 0) {
+        $query_result = array_merge($query_result, ["date_query" => $date_query]);
+    }
 
-        $query = new WP_Query($query_result);
-        $posts = $query->get_posts();
-    */
+    $query = new WP_Query($query_result);
+    $posts = $query->get_posts();
+
+    foreach ($posts as $post) {
+        $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+        ?>
+
+        <div>
+            <div><?= $post->post_title ?></div>
+            <div>
+                <?= $post->post_content ?>
+                <div class="p-4 lg:w-1/2">
+                    <div class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left">
+                        <img alt="team" class="flex-shrink-0 rounded-lg w-48 h-48 object-cover object-center sm:mb-0 mb-4" src="https://dummyimage.com/200x200">
+                        <div class="flex-grow sm:pl-8">
+                            <h2 class="title-font font-medium text-lg text-gray-900"><?= $post->post_title ?></h2>
+                            <h3 class="text-gray-500 mb-3">UI Developer</h3>
+                            <p class="mb-4"><?= $abstract ?></p>
+                            <span class="inline-flex">
+                                <a class="text-gray-500">
+                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                                    </svg>
+                                </a>
+                                <a class="ml-2 text-gray-500">
+                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                                    </svg>
+                                </a>
+                                <a class="ml-2 text-gray-500">
+                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                                        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
+                                    </svg>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    $a = 1;
 }
 
 ?>
     <div x-init="loaderOn=false" class="container mx-auto py-5">
         <?php goBack() ?>
         <div class="flex ">
-            <div class="w-1/3">
+            <div class="flex-grow-0 min-w-50">
                 <?php if (empty($category)): ?>
                     <div class="text-lg font-bold"><?= __('Category') ?></div>
 
@@ -284,6 +314,9 @@ function mc_render_content($query)
                             </a>
                         </div>
                     <?php endforeach; ?>
+                </div>
+                <div>
+                    <?php mc_render_content($query); ?>
                 </div>
             </div>
         </div>

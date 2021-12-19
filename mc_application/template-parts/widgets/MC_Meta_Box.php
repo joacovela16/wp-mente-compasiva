@@ -60,7 +60,7 @@ abstract class MC_Meta_Box
         <div class="space-y-3">
             <div class="flex flex-col">
                 <div class="font-bold"><?= __("Abstract") ?></div>
-                <textarea name="<?= MC_METABOX_ABSTRACT ?>" class="w-full" value="<?= $value ?>"></textarea>
+                <textarea name="<?= MC_METABOX_ABSTRACT ?>" class="w-full" ><?= $value ?></textarea>
             </div>
             <div class="flex flex-col">
                 <div class="font-bold"><?= __("Decorate with image") ?></div>

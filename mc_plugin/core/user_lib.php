@@ -15,7 +15,7 @@ function mc_user_register_interceptor( int $user_id ) {
 				"post_type"   => DIRECTORY_CATALOG,
 				"meta_input"  => [
 					"kind"       => "person",
-					"entity_ref" => $user_id,
+                    MC_USER_REF => $user_id,
 				]
 			]
 		);
@@ -30,7 +30,7 @@ function mc_user_register_interceptor( int $user_id ) {
 			if ( is_wp_error( $result ) ) {
 				error_log( $result->get_error_message() );
 			}else{
-                update_user_meta($user_id, "user_post_id", $post_linked_to_user);
+                update_user_meta($user_id, MC_USER_POST_ID, $post_linked_to_user);
             }
 		}
 

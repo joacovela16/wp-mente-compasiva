@@ -5,7 +5,7 @@ $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
 
 ?>
 
-<div class="relative max-h-200 overflow-hidden">
+<div class="relative max-h-screen overflow-hidden">
     <video x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
@@ -22,7 +22,7 @@ $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
     </div>
 
 
-    <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
+    <div class="absolute top-0 left-0 h-auto w-full flex items-center justify-center">
         <div class="text-6xl text-white text-shadow-lg lg:-mt-30">MENTE COMPASIVA</div>
     </div>
 </div>

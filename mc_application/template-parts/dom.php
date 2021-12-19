@@ -4,6 +4,10 @@ function div(...$args): string
 {
     return el("div", ...$args);
 }
+function span(...$args): string
+{
+    return el("span", ...$args);
+}
 
 function input(...$args): string
 {
