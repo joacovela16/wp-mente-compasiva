@@ -9,7 +9,7 @@ function mc_search_dc()
     $selections = [
         "post_type" => DIRECTORY_CATALOG,
         'paged' => $page,
-        "posts_per_page" => 10,
+        "posts_per_page" => 12,
     ];
     if ($mode === TERM_PERSON) {
         $selections['tax_query'] = [

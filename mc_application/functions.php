@@ -8,7 +8,7 @@ include_once "template-parts/dom.php";
 
 add_action("wp_head", "mc_wp_head");
 add_action('wp_enqueue_scripts', "mc_install_assets");
-//add_action('admin_enqueue_scripts', "mc_install_admin_assets");
+add_action('admin_enqueue_scripts', "mc_install_assets");
 add_action('widgets_init', 'mc_widgets_init');
 add_filter('show_admin_bar', '__return_false');
 add_action('login_form_logout', "mc_logout");

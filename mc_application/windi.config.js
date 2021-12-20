@@ -1,4 +1,5 @@
 const {defineConfig} = require('windicss/helpers');
+const {plugin} = require('windicss/plugin');
 
 module.exports = defineConfig({
     extract: {
@@ -12,4 +13,5 @@ module.exports = defineConfig({
         ],
         include: ["./**/*.{php}"],
     },
+    plugins: []
 })

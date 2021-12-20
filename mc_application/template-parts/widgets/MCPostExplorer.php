@@ -15,30 +15,28 @@ class MCPostExplorer extends WP_Widget
 
     public function widget($args, $instance)
     {
-//        $selections = $instance['selections'] ?? [];
         $is_logged = is_user_logged_in();
         $tab_items = $is_logged ? ['All', 'Resource', 'Person'] : ['All'];
         ?>
         <div x-data="$store.explorer_widget('<?= admin_url('admin-ajax.php') ?>')" x-init="doCall(0,'All')" class="space-y-10">
-            <div class="flex">
-                <div class="flex-1"></div>
-                <div class="flex flex-row rounded-full overflow-hidden rounded shadow  ">
+
+            <div class="flex justify-center">
+                <div class="flex flex-row rounded-full overflow-hidden rounded shadow">
                     <?php foreach ($tab_items as $key => $item): ?>
                         <div
                                 :class="selectedItem===<?= $key ?> ? 'text-white bg-blue-500': 'hover:bg-gray-300 hover:font-bold'"
-                                class="p-2 cursor-pointer w-50 text-center"
+                                class="p-2 cursor-pointer min-w-30 text-center"
                                 @click="select(<?= $key ?>, '<?= $item ?>')"
                         >
                             <span><?= $item ?></span>
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <div class="flex-1"></div>
             </div>
-            <div class="grid lg:grid-cols-3 gap-3" x-html="contents">
+            <div class="grid lg:grid-cols-3 gap-10" x-html="contents">
             </div>
             <div class="flex justify-center">
-                <div x-show="hasNext" class="bg-blue-500 p-2 rounded text-white cursor-pointer" @click="showMore()">
+                <div x-show="hasNext" class="ring-1 ring-blue-500 p-2 rounded-full cursor-pointer shadow" @click="showMore()">
                     <?= __('Show more') ?>
                 </div>
                 <div x-show="!hasNext"><?= __('No more results') ?></div>
@@ -58,6 +56,11 @@ class MCPostExplorer extends WP_Widget
         $selections = $instance['selections'] ?? [];
         $selectionAsJson = esc_html(wp_json_encode($selections));
         $fieldName = esc_attr($this->get_field_name('selections'));
+
+        $taxonomies = get_taxonomies([], 'objects');
+        $terms = get_terms(['taxonomy' => CLASSIFICATION_TAXONOMY, 'get' => 'all']);
+        $widget_settings = get_option($this->option_name);
+        $a = 1;
         ?>
         <?=
         div(['x-data' => "\$store.explorer_widget_editor($selectionAsJson, '$fieldName')", 'class' => 'space-y-3'],
