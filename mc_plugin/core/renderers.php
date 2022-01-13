@@ -6,7 +6,6 @@ function mc_render_post_item(WP_Post $post)
     $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
     $terms = wp_get_post_terms($post->ID, CLASSIFICATION_TAXONOMY);
     $is_person = array_exists($terms, fn($x) => $x->name === TERM_PERSON);
-    $a = 1;
 
     ?>
     <div class="flex flex-col">

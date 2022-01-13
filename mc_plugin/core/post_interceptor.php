@@ -1,7 +1,7 @@
 <?php
 
-require_once 'metadata_lib.php';
-
+//require_once 'metadata_lib.php';
+/*
 function mc_metadata_builder( $post_id ) {
 	$post = get_post( $post_id );
 	if ( ! is_null( $post ) && $post->post_type == DIRECTORY_CATALOG ) {
@@ -10,4 +10,4 @@ function mc_metadata_builder( $post_id ) {
 			mc_process_post( $post, $user );
 		}
 	}
-}
+}*/

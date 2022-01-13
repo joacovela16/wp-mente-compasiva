@@ -1,7 +1,31 @@
 <?php
-include_once "constants.php";
+//include_once "constants.php";
 
-function mc_register_taxonomy()
+/*function mc_taxonomy_tree(): array
+{
+    $terms = get_terms(['taxonomy' => CLASSIFICATION_TAXONOMY, 'get' => 'all']);
+    $tree = mc_builder_taxonomy_tree(0, $terms);
+    return $tree;
+}*/
+
+/*function mc_builder_taxonomy_tree($parent, array $nodes): array
+{
+    $elems = array_filter($nodes, fn($x) => $x->parent === $parent);
+    $children = array_filter($nodes, fn($x) => $x->parent !== $parent);
+    $result = [];
+    foreach ($elems as $item) {
+        $result[] = [
+            'id' => $item->name,
+            'queryTag' => 'tax',
+            'multiple' => true,
+            'children' => mc_builder_taxonomy_tree($item->term_id, $children)
+        ];
+
+    }
+    return $result;
+}*/
+
+/*function mc_register_taxonomy()
 {
     $labels = array(
         'name' => _x('Classification', 'taxonomy general name'),
@@ -27,49 +51,49 @@ function mc_register_taxonomy()
     );
     register_taxonomy(CLASSIFICATION_TAXONOMY, [DIRECTORY_CATALOG], $args);
     mc_terms_builder();
-}
+}*/
 
-function mc_unregister_taxonomy()
+/*function mc_unregister_taxonomy()
 {
     clean_taxonomy_cache(CLASSIFICATION_TAXONOMY);
     mc_terms_cleaner();
     unregister_taxonomy(CLASSIFICATION_TAXONOMY);
-}
+}*/
 
-function mc_terms_builder()
-{
-    function iterator(int $parent, array $term)
-    {
-        foreach ($term as $term_item) {
-            $id = $term_item["id"];
-            $children = $term_item["children"];
-            $term_query = term_exists($id, CLASSIFICATION_TAXONOMY);
+//function mc_terms_builder()
+//{
+//    function iterator(int $parent, array $term)
+//    {
+//        foreach ($term as $term_item) {
+//            $id = $term_item["id"];
+//            $children = $term_item["children"];
+//            $term_query = term_exists($id, CLASSIFICATION_TAXONOMY);
+//
+//            if (is_null($term_query)) {
+//                // don't exists
+//                wp_insert_term($id, CLASSIFICATION_TAXONOMY, array("parent" => $parent));
+//            } else {
+//                // term exists
+//                $local_parent = intval($term_query["term_id"]);
+//                iterator($local_parent, $children);
+//            }
+//        }
+//    }
+//
+//    iterator(0, mc_main_terms());
+//}
 
-            if (is_null($term_query)) {
-                // don't exists
-                $term_result = wp_insert_term($id, CLASSIFICATION_TAXONOMY, array("parent" => $parent));
-            } else {
-                // term exists
-                $local_parent = intval($term_query["term_id"]);
-                iterator($local_parent, $children);
-            }
-        }
-    }
-
-    iterator(0, mc_main_terms());
-}
-
-function mc_terms_cleaner()
-{
-
-    $taxonomy_name = CLASSIFICATION_TAXONOMY;
-
-    $terms = get_terms(array(
-        'taxonomy' => $taxonomy_name,
-        'hide_empty' => false
-    ));
-    foreach ($terms as $term) {
-        wp_delete_term($term->term_id, $taxonomy_name);
-    }
-}
+//function mc_terms_cleaner()
+//{
+//
+//    $taxonomy_name = CLASSIFICATION_TAXONOMY;
+//
+//    $terms = get_terms(array(
+//        'taxonomy' => $taxonomy_name,
+//        'hide_empty' => false
+//    ));
+//    foreach ($terms as $term) {
+//        wp_delete_term($term->term_id, $taxonomy_name);
+//    }
+//}
 

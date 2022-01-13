@@ -1,18 +1,13 @@
 <?php
 include_once "template-parts/utils.php";
-include_once "template-parts/widgets/MCPostExplorer.php";
 include_once "constants.php";
-include_once "template-parts/widgets/MC_Meta_Box.php";
-include_once "template-parts/user_lib.php";
 include_once "template-parts/dom.php";
+include_once "template-parts/assets_installer.php";
 
 add_action("wp_head", "mc_wp_head");
-add_action('wp_enqueue_scripts', "mc_install_assets");
-add_action('admin_enqueue_scripts', "mc_install_assets");
 add_action('widgets_init', 'mc_widgets_init');
 add_filter('show_admin_bar', '__return_false');
 add_action('login_form_logout', "mc_logout");
-
 
 add_action("init", function () {
     add_rewrite_rule("^about\/?", "index.php?pagename=mc_about", 'top');
@@ -21,6 +16,17 @@ add_action("init", function () {
 });
 
 add_filter('template_include', 'mc_template_chooser');
+add_filter('query_vars', function ($qvars){
+    $qvars[] = 'cmd';
+    $qvars[] = 'before';
+    $qvars[] = 'after';
+    $qvars[] = 'tax';
+    return $qvars;
+});
+//add_action('pre_get_posts', function (WP_Query $query){
+//    return $query;
+//});
+
 
 function mc_template_chooser($template)
 {
@@ -38,7 +44,6 @@ function mc_logout(): void
     wp_safe_redirect(home_url());
     wp_die();
 }
-
 
 function mc_build_user_info()
 {
@@ -65,37 +70,6 @@ function mc_build_user_info()
 
 }
 
-function svelte_installer()
-{
-
-    $uri = get_template_directory_uri() . "/components/dist/mc-lib.es.js";
-    $import = "import {renderApp} from '$uri';";
-
-    $nonce = is_user_logged_in() ? wp_create_nonce('wp_rest') : null;
-    $filter = wp_json_encode(buildFilter());
-    $profile = wp_json_encode(mc_build_user_info());
-
-    ?>
-    <script type='module'>
-        <?=  $import  ?>
-        renderApp(
-            'mc-app',
-            {
-                mainContent: `<?php dynamic_sidebar('sidebar-1') ?>`,
-                adminUrl: '<?= admin_url('admin-ajax.php') ?>',
-                homeUrl: '<?= home_url() ?>',
-                logoutUrl: `<?= wp_logout_url(home_url()) ?>`,
-                loginUrl: `<?= wp_login_url(home_url()) ?>`,
-                profile: <?= $profile ?>,
-                nonce: '<?= $nonce ?>',
-                filter: <?= $filter ?>,
-            }
-        );
-    </script>
-    <?php
-
-}
-
 function mc_widgets_init()
 {
     register_widget("MCPostExplorer");
@@ -113,15 +87,6 @@ function mc_widgets_init()
         'after_title' => '</h3>',
     ));
 }
-
-function mc_install_assets()
-{
-    wp_enqueue_style('mc_windicss', get_template_directory_uri() . "/assets/styles/theme.css");
-    wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/windi.css");
-    wp_enqueue_script("mc_alpinejs", "https://unpkg.com/alpinejs@3.7.0/dist/cdn.min.js", [], false, true);
-    wp_enqueue_script('mc_app', get_template_directory_uri() . "/assets/javascript/app.js");
-}
-
 
 function mc_wp_head()
 {

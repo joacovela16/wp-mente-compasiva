@@ -1,7 +1,7 @@
 <?php
-include_once 'constants.php';
+//include_once 'constants.php';
 
-function mc_process_post( WP_Post $post, WP_User $user ) {
+/*function mc_process_post( WP_Post $post, WP_User $user ) {
 	global $wpdb;
 	$result = $wpdb->get_results( "select * from " . TABLE_RESOURCE . " where entity_ref = " . $post->ID );
 	$terms  = wp_get_post_terms( $post->ID , "course");
@@ -10,9 +10,9 @@ function mc_process_post( WP_Post $post, WP_User $user ) {
 	} else {
 		mc_update_md_from_post( $post, $user );
 	}
-}
+}*/
 
-function mc_create_md_from_post( WP_Post $post, WP_User $user ) {
+/*function mc_create_md_from_post( WP_Post $post, WP_User $user ) {
 	global $wpdb;
 	$datetime = mc_get_datetime();
 
@@ -27,10 +27,10 @@ function mc_create_md_from_post( WP_Post $post, WP_User $user ) {
 
 	$result = $wpdb->insert( TABLE_RESOURCE, $data );
 	error_log( $result );
-}
+}*/
 
 
-function mc_update_md_from_post( WP_Post $post, WP_User $user ) {
+/*function mc_update_md_from_post( WP_Post $post, WP_User $user ) {
 	global $wpdb;
 	$datetime = mc_get_datetime();
 	$result   = $wpdb->update(
@@ -44,5 +44,5 @@ function mc_update_md_from_post( WP_Post $post, WP_User $user ) {
 	);
 
 	error_log( $result );
-}
+}*/
 

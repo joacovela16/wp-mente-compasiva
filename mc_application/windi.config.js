@@ -13,5 +13,6 @@ module.exports = defineConfig({
         ],
         include: ["./**/*.{php}"],
     },
-    plugins: []
+    plugins: [
+    ]
 })

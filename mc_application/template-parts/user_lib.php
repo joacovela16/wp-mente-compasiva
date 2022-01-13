@@ -1,6 +1,7 @@
 <?php
 add_action("edit_user_profile_update", "mc_edit_user_profile_update");
 add_action("edit_user_profile", "mc_edit_user_profile");
+
 function mc_edit_user_profile()
 {
     $user_id = $_GET["user_id"];
