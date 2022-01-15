@@ -1,5 +1,7 @@
 <?php
 
+
+
 class MCAssetLib
 {
     public function init()
@@ -8,6 +10,12 @@ class MCAssetLib
         add_action('wp_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
         add_action('admin_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
         add_action('admin_footer', [$this, "mc_plugin_install_app"]);
+        add_action("widgets_init",[$this, "register_widgets"]);
+    }
+
+    public function register_widgets()
+    {
+
     }
 
     public function mc_plugin_install_assets()
@@ -24,7 +32,8 @@ class MCAssetLib
             "postUrl" => menu_page_url('mc_panel', false),
             "defaultPermission" => MC_DEFAULT_PERMISSION,
             "post_types" => $post_types,
-            "permissions" => $permissions['permissions'],
+            "permissions" => $permissions['permissions'] ?? [],
+            "defaults" => $permissions['defaults'] ?? null,
             "i18n" => [
                 "Permissions" => __("Permissions"),
                 "Name" => __("Name"),

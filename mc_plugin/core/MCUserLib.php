@@ -12,6 +12,8 @@ class MCUserLib
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
         add_action('admin_footer', [$this, "render_user_permissions"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
+
+
     }
 
     function render_user_permissions()
@@ -25,7 +27,6 @@ class MCUserLib
         }
 
         $config = [
-            //'post_types' => array_values(get_post_types(["public" => true])),
             'permissions' => $settings['permissions'],
             'selections' => $permissionSelection === "" ? null : $permissionSelection,
             'i18n' => []
@@ -43,7 +44,8 @@ class MCUserLib
     function addExtraFields(WP_User $user)
     {
         $this->user = $user;
-
+       // $r = MCPermissionLib::get_permissions($user->ID);
+        //$a=1;
         $permissionSelection = get_user_meta($user->ID, MC_METABOX_PERMISSION, true);
         $settings = get_option(MC_SETTING);
 
@@ -54,8 +56,6 @@ class MCUserLib
         $settings['selection'] = $permissionSelection === "" ? [] : $permissionSelection;
         $settingsEsc = htmlspecialchars(wp_json_encode($settings));
 
-        $posts = get_post_types(["public" => true]);
-        $posts_name = array_values($posts);
         ?>
         <h3>It's Your Birthday</h3>
         <table class="form-table">
@@ -98,7 +98,7 @@ class MCUserLib
                     "post_name" => "person: " . $maybe_user->display_name,
                     "post_title" => $maybe_user->display_name . " " . $maybe_user->user_email,
                     "post_status" => "publish",
-                    "post_type" => DIRECTORY_CATALOG,
+                    "post_type" => PROFESSIONAL_CATALOG,
                     "meta_input" => [
                         "kind" => "person",
                         MC_USER_REF => $user_id,
@@ -108,18 +108,7 @@ class MCUserLib
 
             if (is_wp_error($post_linked_to_user)) {
                 error_log($post_linked_to_user->get_error_message());
-            } else {
-
-                $term = get_term_by('slug', TERM_PERSON, CLASSIFICATION_TAXONOMY);
-                $result = wp_set_post_terms($post_linked_to_user, $term->term_id, CLASSIFICATION_TAXONOMY);
-
-                if (is_wp_error($result)) {
-                    error_log($result->get_error_message());
-                } else {
-                    update_user_meta($user_id, MC_USER_POST_ID, $post_linked_to_user);
-                }
             }
-
         } else {
             error_log("Can't found user " . $user_id);
         }
@@ -128,7 +117,16 @@ class MCUserLib
     function mc_user_profile_updated($user_id)
     {
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
-            update_user_meta($user_id, MC_METABOX_PERMISSION, $_POST[MC_METABOX_PERMISSION]);
+            $permissions = $_POST[MC_METABOX_PERMISSION];
+
+            $result = [];
+            foreach ($permissions as $k =>$v){
+                foreach ($v[MC_CAPABILITIES]  ?? [] as $datum){
+                    $result[] = $k . "::" . $datum;
+                }
+            }
+            update_user_meta($user_id, MC_METABOX_PERMISSION, $permissions);
+            update_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
         }
     }
 

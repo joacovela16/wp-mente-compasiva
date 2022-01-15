@@ -16,7 +16,7 @@
         selections: {},
         i18n: {}
     };
-
+    console.log(config)
     const finalConfig = {...defaultConfig, ...(config || {})};
 
     if (!finalConfig.selections) {
@@ -49,32 +49,36 @@
 
     </div>
     {#each permissions as item, index(item.name)}
-        <div class="p-2" class:hidden={item.name !== currentTab.name}>
-            <input type="hidden" value={item.name} name="{finalConfig.names.permission}[{item.name}][name]">
-            <div>{ __('Contents') }</div>
-            <div class="space-x-2">
+        <input type="hidden" value={item.name} name="{finalConfig.names.permission}[{item.name}][name]">
+        <div class="p-2 flex flex-row" class:hidden={item.name !== currentTab.name}>
+            <div class="flex-1">
+                <div>{ __('Post types') }</div>
                 {#each item.post_types as pt}
-                    <label>
-                        <input type="checkbox"
-                               value={pt}
-                               name="{finalConfig.names.permission}[{item.name}][post_types][]"
-                               bind:group={selections[item.name].post_types}
-                        >
-                        <span>{pt}</span>
-                    </label>
+                    <div>
+                        <label>
+                            <input type="checkbox"
+                                   value={pt}
+                                   name="{finalConfig.names.permission}[{item.name}][post_types][]"
+                                   bind:group={selections[item.name].post_types}
+                            >
+                            <span>{pt}</span>
+                        </label>
+                    </div>
                 {/each}
             </div>
-            <div>{ __('Capabilities') }</div>
-            <div class="space-x-2">
-                {#each item.capabilities as pt}
-                    <label>
-                        <input type="checkbox"
-                               value={pt}
-                               name="{finalConfig.names.permission}[{item.name}][capabilities][]"
-                               bind:group={selections[item.name].capabilities}
-                        >
-                        <span>{pt}</span>
-                    </label>
+            <div class="flex-1">
+                <div>{ __('Capabilities') }</div>
+                {#each (item.capabilities || []) as pt}
+                    <div>
+                        <label>
+                            <input type="checkbox"
+                                   value={pt}
+                                   name="{finalConfig.names.permission}[{item.name}][capabilities][]"
+                                   bind:group={selections[item.name].capabilities}
+                            >
+                            <span>{pt}</span>
+                        </label>
+                    </div>
                 {/each}
             </div>
         </div>

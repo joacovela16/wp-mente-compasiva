@@ -36,7 +36,11 @@ class MCSettingPanel
     public function mc_options_page_submit()
     {
         if (!empty($_POST)) {
-            update_option(MC_SETTING, $_POST);
+            $options = [
+                    'permissions'=> $_POST['permissions'] ?? [],
+                    'defaults'=> $_POST['defaults'] ?? [],
+            ];
+            update_option(MC_SETTING, $options);
         }
     }
 

@@ -106,6 +106,15 @@ function mc_obtain_model(): array
                 "slug" => "catalog"
             ]
         ],
+        PROFESSIONAL_CATALOG => [
+            'labels' => ["name" => 'Prof. Catalog', 'singular_name' => 'Prof. Catalog'],
+            'public' => true,
+            'has_archive' => true,
+            'show_in_rest' => true,
+            'rewrite' => [
+                "slug" => "pro_catalog"
+            ]
+        ],
         "news" => [
             "labels" => ["name" => "News", "singular_name" => "news"],
             "public" => true,

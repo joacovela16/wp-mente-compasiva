@@ -8,7 +8,7 @@ class MCPostExplorer extends WP_Widget
     {
         parent::__construct(
             'mc_post_explorer',  // Base ID
-            'Mente Compasiva - Explorador de catálogo'
+            'MC - Explorador de catálogo'
         );
     }
 

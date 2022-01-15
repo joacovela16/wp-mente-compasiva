@@ -16,7 +16,7 @@ add_action("init", function () {
 });
 
 add_filter('template_include', 'mc_template_chooser');
-add_filter('query_vars', function ($qvars){
+add_filter('query_vars', function ($qvars) {
     $qvars[] = 'cmd';
     $qvars[] = 'before';
     $qvars[] = 'after';
@@ -72,20 +72,30 @@ function mc_build_user_info()
 
 function mc_widgets_init()
 {
-    register_widget("MCPostExplorer");
+
     add_theme_support('customize-selective-refresh-widgets');
 
     // Add support for Block Styles.
     add_theme_support('wp-block-styles');
 
-    register_sidebar(array(
-        'name' => __('Main content', 'mc_theme'),
+    register_sidebars(2, [[
+        'name' => __('Navbar Zone', 'mc_theme'),
         'id' => 'sidebar-1',
-        'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-        'after_widget' => '</aside>',
+        'before_widget' => '',
+        'after_widget' => '',
         'before_title' => '<h3 class="widget-title">',
         'after_title' => '</h3>',
-    ));
+    ], [
+        'name' => __('Main content', 'mc_theme'),
+        'id' => 'sidebar-2',
+        'before_widget' => '',
+        'after_widget' => '',
+        'before_title' => '<h3 class="widget-title">',
+        'after_title' => '</h3>',
+    ]]);
+
+    register_widget("MCPermissionNavbar");
+    register_widget("MCPostExplorer");
 }
 
 function mc_wp_head()

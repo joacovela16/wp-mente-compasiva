@@ -9,15 +9,18 @@ include_once "core/utils.php";
 include_once "core/taxonomy_lib.php";
 include_once "core/metadata_lib.php";
 include_once "core/post_interceptor.php";
-include_once "core/MCUserLib.php";
 include_once "core/post_lib.php";
 include_once "core/MCRestAPI.php";
 include_once "core/ajax_actions.php";
 include_once "core/search_engine.php";
 include_once "core/renderers.php";
-include_once "core/permission_lib.php";
-include_once "widgets/MCPostExplorer.php";
+
 include_once "widgets/MCMetaPost.php";
+include_once "widgets/MCPostExplorer.php";
+include_once "widgets/MCPermissionNavbar.php";
+
+include_once "core/MCPermissionLib.php";
+include_once "core/MCUserLib.php";
 include_once "core/MCAssetLib.php";
 include_once "core/MCSettingPanel.php";
 
@@ -39,6 +42,7 @@ add_action("init", "mc_do_post");
 register_activation_hook(__FILE__, "mc_plugin_activated");
 register_deactivation_hook(__FILE__, 'mc_plugin_deactivated');
 register_deactivation_hook(__FILE__, 'mc_undo_pages');
+
 
 function mc_plugin_activated()
 {

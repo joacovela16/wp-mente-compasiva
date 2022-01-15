@@ -5,6 +5,10 @@ class MCMetaPost
 
     private WP_Post $post;
 
+    public function __constructor()
+    {
+    }
+
     public function init()
     {
 
@@ -47,11 +51,21 @@ class MCMetaPost
                 wp_delete_attachment($last_attachment);
             }
 
-            $avatarURL = wp_get_attachment_url($attachmentID);
+//            $avatarURL = wp_get_attachment_url($attachmentID);
             update_post_meta($post_id, MC_METABOX_IMAGE, $attachmentID);
         }
+
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
-            update_post_meta($post_id, MC_METABOX_PERMISSION, $_POST[MC_METABOX_PERMISSION]);
+            $permissions = $_POST[MC_METABOX_PERMISSION];
+
+            $result = [];
+            foreach ($permissions as $k => $v) {
+                foreach ($v[MC_CAPABILITIES] as $datum){
+                    $result[] = $k . "::" . $datum;
+                }
+            }
+            update_post_meta($post_id, MC_METABOX_PERMISSION, $permissions);
+            update_post_meta($post_id, MC_METABOX_PERMISSION_RULE, $result);
         }
     }
 
@@ -71,6 +85,7 @@ class MCMetaPost
 
     public function prepareScript()
     {
+
         if (!isset($this->post)) return;
 
         $post = $this->post;
@@ -82,17 +97,21 @@ class MCMetaPost
             $settings = ["permissions" => []];
         }
 
-        if ($permissionSelection=== ""){
-            $permissionSelection= [];
+        if ($permissionSelection === "") {
+            $permissionSelection = [];
         }
 
+        $post_type = $post->post_type;
+        $permissions = array_values(
+            array_filter($settings['permissions'], fn($x) => array_exists($x[MC_POST_TYPES], fn($y) => $post_type === $y))
+        );
+
         $config = [
-            'permissions' => $settings['permissions'],
+            'permissions' => $permissions,
             'selections' => $permissionSelection,
             'abstract' => $abstractValue
         ];
         ?>
-
         <script id="jvc" type="module">
             import {renderMetaPost} from "<?= plugins_url() . "/mc_plugin/assets/mc_svelte_lib.es.js" ?>";
 
