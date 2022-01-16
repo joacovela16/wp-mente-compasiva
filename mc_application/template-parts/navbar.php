@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 w-full z-index-20 shadow-lg bg-white border-b-gray-300 border-b-width-2">
+<div class="fixed top-0 left-0 w-full z-index-20 shadow-lg bg-white text-gray-700">
     <?php
     dynamic_sidebar("sidebar-1");
     ?>

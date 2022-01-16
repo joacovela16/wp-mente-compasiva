@@ -16,9 +16,21 @@ class MCPermissionLib
         if ($query->is_search()) {
             if (isset($_GET['ptype'])) {
                 $ptypes = isset($_GET['ptype']) ? explode(",", $_GET['ptype'] ?? "") : [];
-                $query->set("post_type", $ptypes);
+                $settings = get_option(MC_SETTING);
+                if ($settings) {
+
+                    $query->set("post_type", $ptypes);
+                } else {
+                    wp_redirect("/");
+                    wp_die();
+                }
             }
+            $query->set("posts_per_page", 4);
+            $query->set("post_status", "publish");
+
+
         }
+
     }
 
     public static function get_permissions($user): array

@@ -1123,8 +1123,8 @@ function create_if_block$1(ctx) {
   };
 }
 function create_each_block$1(ctx) {
-  let div15;
-  let div10;
+  let div16;
+  let div11;
   let div4;
   let p0;
   let t1;
@@ -1155,9 +1155,10 @@ function create_each_block$1(ctx) {
   let t13;
   let div1;
   let t14;
-  let div9;
+  let div10;
   let p1;
   let t16;
+  let div9;
   let div6;
   let p2;
   let t18;
@@ -1168,13 +1169,13 @@ function create_each_block$1(ctx) {
   let t21;
   let div7;
   let t22;
-  let div14;
-  let div11;
+  let div15;
+  let div12;
   let t23;
   let t24;
-  let div12;
-  let t25;
   let div13;
+  let t25;
+  let div14;
   let t27;
   let mounted;
   let dispose;
@@ -1208,8 +1209,8 @@ function create_each_block$1(ctx) {
   }
   return {
     c() {
-      div15 = element("div");
-      div10 = element("div");
+      div16 = element("div");
+      div11 = element("div");
       div4 = element("div");
       p0 = element("p");
       p0.textContent = `${ctx[5]("Configuration")}`;
@@ -1245,10 +1246,11 @@ function create_each_block$1(ctx) {
         each_blocks_2[i].c();
       }
       t14 = space();
-      div9 = element("div");
+      div10 = element("div");
       p1 = element("p");
       p1.textContent = `${ctx[5]("Default user registry behavior")}`;
       t16 = space();
+      div9 = element("div");
       div6 = element("div");
       p2 = element("p");
       p2.textContent = `${ctx[5]("Default posts")}`;
@@ -1267,18 +1269,18 @@ function create_each_block$1(ctx) {
         each_blocks[i].c();
       }
       t22 = space();
-      div14 = element("div");
-      div11 = element("div");
+      div15 = element("div");
+      div12 = element("div");
       if (if_block0)
         if_block0.c();
       t23 = space();
       if (if_block1)
         if_block1.c();
       t24 = space();
-      div12 = element("div");
-      t25 = space();
       div13 = element("div");
-      div13.textContent = `${ctx[5]("Delete")}`;
+      t25 = space();
+      div14 = element("div");
+      div14.textContent = `${ctx[5]("Delete")}`;
       t27 = space();
       attr(p0, "class", "font-bold");
       attr(input0, "type", "text");
@@ -1295,18 +1297,19 @@ function create_each_block$1(ctx) {
       attr(div3, "class", "flex flex-col space-y-1");
       attr(div4, "class", "flex-1");
       attr(p1, "class", "font-bold");
-      attr(div9, "class", "flex-1");
-      attr(div10, "class", "flex space-x-2");
-      attr(div11, "class", "flex flex-col ");
-      attr(div12, "class", "flex-1");
-      attr(div13, "class", "p-2 bg-red-500 rounded text-white ");
-      attr(div14, "class", "flex items-center ");
-      attr(div15, "class", "rounded bg-white p-2");
+      attr(div9, "class", "flex flex-row space-x-2");
+      attr(div10, "class", "flex-1 ");
+      attr(div11, "class", "flex space-x-2");
+      attr(div12, "class", "flex flex-col ");
+      attr(div13, "class", "flex-1");
+      attr(div14, "class", "p-2 bg-red-500 rounded text-white ");
+      attr(div15, "class", "flex items-center ");
+      attr(div16, "class", "rounded bg-white p-2");
     },
     m(target, anchor) {
-      insert(target, div15, anchor);
-      append(div15, div10);
-      append(div10, div4);
+      insert(target, div16, anchor);
+      append(div16, div11);
+      append(div11, div4);
       append(div4, p0);
       append(div4, t1);
       append(div4, div3);
@@ -1336,10 +1339,11 @@ function create_each_block$1(ctx) {
       for (let i = 0; i < each_blocks_2.length; i += 1) {
         each_blocks_2[i].m(div1, null);
       }
-      append(div10, t14);
+      append(div11, t14);
+      append(div11, div10);
+      append(div10, p1);
+      append(div10, t16);
       append(div10, div9);
-      append(div9, p1);
-      append(div9, t16);
       append(div9, div6);
       append(div6, p2);
       append(div6, t18);
@@ -1355,23 +1359,23 @@ function create_each_block$1(ctx) {
       for (let i = 0; i < each_blocks.length; i += 1) {
         each_blocks[i].m(div7, null);
       }
-      append(div15, t22);
-      append(div15, div14);
-      append(div14, div11);
+      append(div16, t22);
+      append(div16, div15);
+      append(div15, div12);
       if (if_block0)
-        if_block0.m(div11, null);
-      append(div11, t23);
+        if_block0.m(div12, null);
+      append(div12, t23);
       if (if_block1)
-        if_block1.m(div11, null);
-      append(div14, t24);
-      append(div14, div12);
-      append(div14, t25);
-      append(div14, div13);
-      append(div15, t27);
+        if_block1.m(div12, null);
+      append(div15, t24);
+      append(div15, div13);
+      append(div15, t25);
+      append(div15, div14);
+      append(div16, t27);
       if (!mounted) {
         dispose = [
           listen(input2, "keypress", keypress_handler),
-          listen(div13, "click", click_handler_5)
+          listen(div14, "click", click_handler_5)
         ];
         mounted = true;
       }
@@ -1464,7 +1468,7 @@ function create_each_block$1(ctx) {
         } else {
           if_block1 = create_if_block$1(ctx);
           if_block1.c();
-          if_block1.m(div11, null);
+          if_block1.m(div12, null);
         }
       } else if (if_block1) {
         if_block1.d(1);
@@ -1473,7 +1477,7 @@ function create_each_block$1(ctx) {
     },
     d(detaching) {
       if (detaching)
-        detach(div15);
+        detach(div16);
       destroy_each(each_blocks_3, detaching);
       destroy_each(each_blocks_2, detaching);
       destroy_each(each_blocks_1, detaching);
@@ -1611,7 +1615,7 @@ function instance$1($$self, $$props, $$invalidate) {
   config.defaults = config.defaults || {};
   config.defaults.permissions = config.defaults.permissions || [...config.permissions];
   const perTmp = config.defaults.permissions;
-  for (let i = 0; i < perTmp.length; i++) {
+  for (let i = 0; i < config.permissions.length; i++) {
     perTmp[i] = perTmp[i] || config.permissions[i];
     perTmp[i].post_types = perTmp[i].post_types || [];
     perTmp[i].capabilities = perTmp[i].capabilities || [];

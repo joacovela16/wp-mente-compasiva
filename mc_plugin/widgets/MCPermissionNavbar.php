@@ -47,14 +47,14 @@ class MCPermissionNavbar extends WP_Widget
                     <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
                         <?php if ($item[MC_NAME] === $pname): ?>
                             <a
-                                    class="bg-blue-500 px-3 py-5 text-white cursor-pointer"
+                                    class="bg-blue-600 px-3 py-5 text-white cursor-pointer"
                                     href="<?= ("?s=&ptype=" . join(",", $item[MC_POST_TYPES] ?? [])) . "&pname=" . $item[MC_NAME] ?>"
                             >
                                 <?= $item[MC_NAME] ?>
                             </a>
                         <?php else: ?>
                             <a
-                                    class="hover:bg-blue-500 px-3 py-5 hover:text-white cursor-pointer transition"
+                                    class="hover:bg-blue-600 px-3 py-5 hover:text-white cursor-pointer transition"
                                     href="<?= ("?s=&ptype=" . join(",", $item[MC_POST_TYPES] ?? [])) . "&pname=" . $item[MC_NAME] ?>"
                             >
                                 <?= $item[MC_NAME] ?>

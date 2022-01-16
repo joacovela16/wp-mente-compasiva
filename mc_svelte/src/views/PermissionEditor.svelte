@@ -20,7 +20,8 @@
     config.defaults.permissions = config.defaults.permissions || [...config.permissions];
 
     const perTmp = config.defaults.permissions;
-    for (let i = 0; i < perTmp.length; i++) {
+
+    for (let i = 0; i < config.permissions.length; i++) {
         perTmp[i] = perTmp[i] || config.permissions[i];
         perTmp[i].post_types = perTmp[i].post_types || [];
         perTmp[i].capabilities = perTmp[i].capabilities || [];
@@ -124,33 +125,34 @@
                             </div>
 
                         </div>
-                        <div class="flex-1">
+                        <div class="flex-1 ">
                             <p class="font-bold">{__('Default user registry behavior')}</p>
-                            <div>
-                                <p>{__('Default posts')}</p>
+                            <div class="flex flex-row space-x-2">
                                 <div>
-                                    {#each permission.post_types as pt}
-                                        <label class="flex items-center">
-                                            <input type="checkbox" value={pt} name="defaults[permissions][{index}][post_types][]"
-                                                   checked={config.defaults.permissions[index].post_types.includes(pt)}
-                                            >
-                                            <span>{pt}</span>
-                                        </label>
-                                    {/each}
+                                    <p>{__('Default posts')}</p>
+                                    <div>
+                                        {#each permission.post_types as pt}
+                                            <label class="flex items-center">
+                                                <input type="checkbox" value={pt} name="defaults[permissions][{index}][post_types][]"
+                                                       checked={config.defaults.permissions[index].post_types.includes(pt)}
+                                                >
+                                                <span>{pt}</span>
+                                            </label>
+                                        {/each}
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div>
-                                <p>{__('Default capabilities')}</p>
                                 <div>
-                                    {#each (permission.capabilities || []) as pt}
-                                        <div class="flex items-center">
-                                            <input type="checkbox" value={pt} name="defaults[permissions][{index}][capabilities][]"
-                                                   checked={config.defaults.permissions[index].capabilities.includes(pt)}
-                                            >
-                                            <span>{pt}</span>
-                                        </div>
-                                    {/each}
+                                    <p>{__('Default capabilities')}</p>
+                                    <div>
+                                        {#each (permission.capabilities || []) as pt}
+                                            <div class="flex items-center">
+                                                <input type="checkbox" value={pt} name="defaults[permissions][{index}][capabilities][]"
+                                                       checked={config.defaults.permissions[index].capabilities.includes(pt)}
+                                                >
+                                                <span>{pt}</span>
+                                            </div>
+                                        {/each}
+                                    </div>
                                 </div>
                             </div>
                         </div>
