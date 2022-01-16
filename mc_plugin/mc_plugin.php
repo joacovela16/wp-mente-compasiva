@@ -36,6 +36,7 @@ add_action("rest_api_init", function () {
 (new MCAssetLib())->init();
 (new MCMetaPost())->init();
 (new MCSettingPanel())->init();
+(new MCPermissionLib())->init();
 
 add_action("init", "mc_do_post");
 

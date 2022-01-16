@@ -2,6 +2,25 @@
 
 class MCPermissionLib
 {
+    public function init()
+    {
+        add_action('pre_get_posts', [$this, "pre_get_posts"], 10, 1);
+        add_filter('query_vars', function ($qvars) {
+            $qvars[] = "ptype";
+            return $qvars;
+        });
+    }
+
+    public function pre_get_posts(WP_Query $query)
+    {
+        if ($query->is_search()) {
+            if (isset($_GET['ptype'])) {
+                $ptypes = isset($_GET['ptype']) ? explode(",", $_GET['ptype'] ?? "") : [];
+                $query->set("post_type", $ptypes);
+            }
+        }
+    }
+
     public static function get_permissions($user): array
     {
         $settings = get_option(MC_SETTING);

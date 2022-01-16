@@ -22,7 +22,7 @@ $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
     </div>
 
 
-    <div class="absolute top-0 left-0 h-auto w-full flex items-center justify-center">
+    <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
         <div class="text-6xl text-white text-shadow-lg lg:-mt-30">MENTE COMPASIVA</div>
     </div>
 </div>
