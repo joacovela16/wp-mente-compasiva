@@ -7,7 +7,6 @@ const PBEFORE = "pbefore";
 $search_fields = [PBEFORE, PAFTER, SORTBY];
 
 get_header();
-$a = 1;
 ?>
     <div class="container px-5 py-24 mx-auto">
         <div class="border-b-2 p-2">
@@ -60,7 +59,6 @@ $a = 1;
                     ?>
                     <div class="p-4 md:w-1/3">
                         <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-
                             <?php if (!is_numeric($image_url)): ?>
                                 <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="<?= get_template_directory_uri()."/assets/images/img".random_int(1,3).".svg" ?>" alt="blog">
                             <?php else: ?>

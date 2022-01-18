@@ -8,6 +8,6 @@
     "watch": "windicss  './**/*.{php,svelte}' '../mc_plugin/**/*.{php,svelte}' -d -to assets/styles/windi.css --config windi.config.js "
   },
   "devDependencies": {
-    "windicss": "3.4.2"
+    "windicss": "3.4.3"
   }
 }

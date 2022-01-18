@@ -12,5 +12,5 @@
 <div class="">
 <?php
 get_template_part("template-parts/navbar");
-get_template_part("template-parts/profile");
+//get_template_part("template-parts/profile");
 ?>

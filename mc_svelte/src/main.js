@@ -3,6 +3,7 @@ import UserPermissions from "./views/UserPermissions.svelte";
 import DevApp from "./lib/DevApp.svelte";
 import PermissionEditor from "./views/PermissionEditor.svelte";
 import MetaPost from "./views/MetaPost.svelte";
+import ProfileViewer from "./views/ProfileViewer.svelte";
 
 function applySelection(selector, handler) {
     Array.from(document.getElementsByClassName(selector)).forEach(elem => handler(elem));
@@ -22,4 +23,8 @@ export function renderPermissionEditor(selector, config) {
 
 export function renderMetaPost(selector, config) {
     applySelection(selector, elem => new MetaPost({target: elem, props: {config}}));
+}
+
+export function renderProfile(selector, config) {
+    applySelection(selector, elem => new ProfileViewer({target: elem, props: {config}}));
 }

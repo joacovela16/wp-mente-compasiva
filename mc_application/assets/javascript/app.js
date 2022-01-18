@@ -181,7 +181,7 @@ document.addEventListener("alpine:init", () => {
                             isUnlocked = true;
                             validation.validationType = "unexpected_error";
                             validation.validationMessage = "error_updating_user";
-                        })
+                        });
 
                 }
 

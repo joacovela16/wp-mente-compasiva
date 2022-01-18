@@ -4,7 +4,7 @@
 
     export let config = {
         postUrl: '',
-        defaultPermission: {name: 'New permission', logged_required: true, post_types: [], capabilities: []},
+        defaultPermission: {name: 'New item', logged_required: true, post_types: [], capabilities: []},
         post_types: ['post', 'page', 'attachment'],
         permissions: [
             {name: 'ShowProDir', logged_required: false, post_types: ['attachment'], capabilities: ['CAN_READ', 'CAN_WRITE']},
@@ -29,6 +29,7 @@
 
     const postUrl = config.postUrl;
     const defaultPermission = config.defaultPermission;
+
     const postTypes = config.post_types;
     const permissions = config.permissions;
     const __ = doGetter(config.i18n);
@@ -61,6 +62,16 @@
         const tmp = config.permissions[index + 1];
         config.permissions[index + 1] = config.permissions[index];
         config.permissions[index] = tmp;
+    }
+
+    function isPostTypeChecked(index, pt) {
+        const tmp = config.defaults.permissions[index];
+        return tmp && tmp.post_types.includes(pt)
+    }
+
+    function isCapabilityChecked(index, pt) {
+        const tmp = config.defaults.permissions[index];
+        return tmp && tmp.capabilities.includes(pt)
     }
 </script>
 <div class="space-y-2">
@@ -134,7 +145,7 @@
                                         {#each permission.post_types as pt}
                                             <label class="flex items-center">
                                                 <input type="checkbox" value={pt} name="defaults[permissions][{index}][post_types][]"
-                                                       checked={config.defaults.permissions[index].post_types.includes(pt)}
+                                                       checked={isPostTypeChecked(index, pt)}
                                                 >
                                                 <span>{pt}</span>
                                             </label>
@@ -147,7 +158,7 @@
                                         {#each (permission.capabilities || []) as pt}
                                             <div class="flex items-center">
                                                 <input type="checkbox" value={pt} name="defaults[permissions][{index}][capabilities][]"
-                                                       checked={config.defaults.permissions[index].capabilities.includes(pt)}
+                                                       checked={isCapabilityChecked(index, pt)}
                                                 >
                                                 <span>{pt}</span>
                                             </div>
