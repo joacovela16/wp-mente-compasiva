@@ -1,5 +1,19 @@
 <?php
 
+function get_post_views()
+{
+    $id = get_the_ID();
+    $count = get_post_meta($id, "mc_count_views", true);
+    if (!$count) $count = 0;
+    update_post_meta($id, "mc_count_views", $count);
+
+//    if($count>1000000000000) return round(($count/1000000000000),1).' trillion';
+//    else if($count>1000000000) return round(($count/1000000000),1).' billion';
+    if ($count > 1000000) return round(($count / 1000000), 1) . ' M';
+    else if ($count > 1000) return round(($count / 1000), 1) . ' K';
+    return $count;
+}
+
 function goBack()
 {
     echo div(["class" => "cursor-pointer font-bold underline", "@click" => "goBack()"], __("Back"));

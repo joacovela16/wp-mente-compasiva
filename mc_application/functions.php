@@ -15,59 +15,11 @@ add_action("init", function () {
     add_rewrite_rule("^contact\/?", "index.php?pagename=mc_contact", 'top');
 });
 
-//add_filter('template_include', 'mc_template_chooser');
-//add_filter('query_vars', function ($qvars) {
-//    $qvars[] = 'cmd';
-//    $qvars[] = 'before';
-//    $qvars[] = 'after';
-//    $qvars[] = 'tax';
-//    return $qvars;
-//});
-//add_action('pre_get_posts', function (WP_Query $query){
-//    return $query;
-//});
-
-
-function mc_template_chooser($template)
-{
-    $post_type = get_query_var('post_type');
-    if (is_search() && $post_type === DIRECTORY_CATALOG) {
-        $locate_template = locate_template("${post_type}_search.php");
-        return empty($locate_template) ? $template : $locate_template;  //  redirect to archive-search.php
-    }
-    return $template;
-}
-
 function mc_logout(): void
 {
     wp_logout();
     wp_safe_redirect(home_url());
     wp_die();
-}
-
-function mc_build_user_info()
-{
-    if (is_user_logged_in()) {
-
-        $currentUser = wp_get_current_user();
-        $user_avatar_url = get_user_meta($currentUser->ID, "user_avatar_url", true);
-
-        if (empty($user_avatar_url)) {
-            $user_avatar_url = get_avatar_url($currentUser->ID);
-        }
-
-        $usrData = $currentUser->data;
-        return [
-            "ID" => $currentUser->ID,
-            "user_avatar_url" => $user_avatar_url,
-            "display_name" => $usrData->display_name,
-            "user_email" => empty($usrData->user_email) ? $usrData->user_login : $usrData->user_email,
-            "user_url" => get_user_meta($currentUser->ID, "description", true)
-        ];
-    } else {
-        return null;
-    }
-
 }
 
 function mc_widgets_init()
@@ -77,8 +29,6 @@ function mc_widgets_init()
 
     // Add support for Block Styles.
     add_theme_support('wp-block-styles');
-
-
 
     register_widget("MCPermissionNavbar");
     register_widget("MCPostExplorer");

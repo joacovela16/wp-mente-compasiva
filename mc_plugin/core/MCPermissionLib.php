@@ -9,7 +9,17 @@ class MCPermissionLib
             $qvars[] = "ptype";
             return $qvars;
         });
+
+
+//        add_filter("previous_posts_link_attributes", [$this, "linksAttr"]);
+//        add_filter("next_posts_link_attributes", [$this, "linksAttr"]);
     }
+
+
+    public function linksAttr($attrs){
+        return 'class="text-red-500"';
+    }
+
 
     public function pre_get_posts(WP_Query $query)
     {

@@ -5,9 +5,15 @@
   "license": "MIT",
   "scripts": {
     "prod": "windicss './**/*.{php,svelte}' -d -to assets/styles/windi.css",
-    "watch": "windicss  './**/*.{php,svelte}' '../mc_plugin/**/*.{php,svelte}' -d -to assets/styles/windi.css --config windi.config.js "
+    "pwatch": "windicss  './**/*.{php,scss}' './theme.css' '../mc_plugin/**/*.php' -b -d -to assets/styles/windi.css --config windi.config.js ",
+    "watch": "tailwindcss  -i ./theme.scss -o assets/styles/windi.css --watch "
   },
   "devDependencies": {
-    "windicss": "3.4.3"
+    "daisyui": "1.24.3",
+    "autoprefixer": "10.4.2",
+    "postcss": "8.4.5",
+    "tailwindcss": "3.0.15",
+    "windicss": "3.4.3",
+    "tailwindcss-textshadow": "2.1.3"
   }
 }

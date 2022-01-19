@@ -8,6 +8,7 @@
 
     <?php wp_head(); ?>
 </head>
+
 <body x-data="mc_app" class="text-dark-500">
 <div class="">
 <?php
