@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "prod": "windicss './**/*.{php,svelte}' -d -to assets/styles/windi.css",
-    "pwatch": "windicss  './**/*.{php,scss}' './theme.css' '../mc_plugin/**/*.php' -b -d -to assets/styles/windi.css --config windi.config.js ",
     "watch": "tailwindcss  -i ./theme.scss -o assets/styles/windi.css --watch "
   },
   "devDependencies": {

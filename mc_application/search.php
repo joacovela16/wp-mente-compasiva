@@ -55,6 +55,8 @@ get_header();
                     $post = get_post();
                     $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
                     $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
+                    $tags = get_the_tag_list();
+                    $a=1;
                     ?>
                     <div class="p-4 md:w-1/3">
                         <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -97,14 +99,17 @@ get_header();
                     </div>
                 <?php
                 endwhile;
-
             }
+                $next_link = get_next_posts_link();
             ?>
         </div>
-        <div class="flex flex-row space-x-2 border rounded p-4 bg-zinc-100">
-            <div><?= get_previous_posts_link() ?></div>
-            <div><?= get_next_posts_link() ?></div>
-        </div>
+        <?php if (!is_null($next_link)): ?>
+            <div class="flex flex-row space-x-2 border rounded p-4 bg-zinc-100">
+                <div><?= get_previous_posts_link() ?></div>
+                <div><?= $next_link ?></div>
+            </div>
+        <?php endif; ?>
+
     </div>
 <?php
 get_footer();

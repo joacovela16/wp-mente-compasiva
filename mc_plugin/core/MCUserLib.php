@@ -12,8 +12,6 @@ class MCUserLib
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
         add_action('admin_footer', [$this, "render_user_permissions"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
-
-
     }
 
     function render_user_permissions()
@@ -33,7 +31,7 @@ class MCUserLib
         ];
         ?>
         <script type="module">
-            import {renderUserPermissions} from "<?= plugins_url() . "/mc_plugin/assets/mc_svelte_lib.es.js" ?>";
+            <?= 'import {renderUserPermissions} from "' . plugins_url() . '/mc_plugin/assets/mc_svelte_lib.es.js"' ?>
 
             renderUserPermissions("mc_plugin_user_permission", <?= wp_json_encode($config) ?>);
 
@@ -44,8 +42,6 @@ class MCUserLib
     function addExtraFields(WP_User $user)
     {
         $this->user = $user;
-       // $r = MCPermissionLib::get_permissions($user->ID);
-        //$a=1;
         $permissionSelection = get_user_meta($user->ID, MC_METABOX_PERMISSION, true);
         $settings = get_option(MC_SETTING);
 
@@ -106,6 +102,18 @@ class MCUserLib
                 ]
             );
 
+            $settings = get_option(MC_SETTING);
+            if ($settings) {
+                if (array_key_exists(MC_DEFAULTS, $settings) && array_key_exists(MC_USER, $settings[MC_DEFAULTS])) {
+                    $user_defaults = $settings[MC_DEFAULTS][MC_USER];
+                    $items = [];
+                    foreach ($user_defaults as $item){
+                        $items[$item[MC_NAME]] = $item[MC_CAPABILITIES];
+                    }
+                    $this->update_metadata($items, $user_id);
+                }
+            }
+
             if (is_wp_error($post_linked_to_user)) {
                 error_log($post_linked_to_user->get_error_message());
             }
@@ -119,15 +127,20 @@ class MCUserLib
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
             $permissions = $_POST[MC_METABOX_PERMISSION];
 
-            $result = [];
-            foreach ($permissions as $k =>$v){
-                foreach ($v[MC_CAPABILITIES]  ?? [] as $datum){
-                    $result[] = $k . "::" . $datum;
-                }
-            }
-            update_user_meta($user_id, MC_METABOX_PERMISSION, $permissions);
-            update_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
+            $this->update_metadata($permissions, $user_id);
         }
+    }
+
+    function update_metadata(array $permissions, $user_id)
+    {
+        $result = [];
+        foreach ($permissions as $k => $v) {
+            foreach ($v[MC_CAPABILITIES] ?? [] as $datum) {
+                $result[] = $k . "::" . $datum;
+            }
+        }
+        update_user_meta($user_id, MC_METABOX_PERMISSION, $permissions);
+        update_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
     }
 
 }

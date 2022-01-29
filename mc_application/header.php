@@ -9,7 +9,7 @@
     <?php wp_head(); ?>
 </head>
 
-<body x-data="mc_app" class="text-dark-500">
+<body x-data="mc_app" class="text-gray-600">
 <div class="">
 <?php
 get_template_part("template-parts/navbar");

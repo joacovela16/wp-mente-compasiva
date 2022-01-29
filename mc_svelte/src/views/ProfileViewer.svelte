@@ -119,8 +119,8 @@
 </script>
 {#if config.isLogged}
     <div class="flex flex-row space-x-2 cursor-pointer items-center" on:click={()=>show=true}>
-        <div>{profile.name}</div>
-        <img src={profile.avatarUrl} alt="Avatar" class="w-28px h-28px rounded-full shadow-lg object-cover">
+<!--        <div>{profile.name}</div>-->
+        <img src={profile.avatarUrl} alt="Avatar" class="w-32px h-32px rounded-full shadow-lg object-cover">
     </div>
 {:else}
     <span>{__("Login")}/{__("register")}</span>

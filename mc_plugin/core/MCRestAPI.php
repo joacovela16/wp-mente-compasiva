@@ -7,17 +7,17 @@ class MCRestAPI extends WP_REST_Controller
         $version = "v1";
         $ns = "mcplugin/" . $version;
 
-        register_rest_route($ns, "/resume", [
+       /* register_rest_route($ns, "/resume", [
             "methods" => "GET",
             "permission_callback" => "__return_true",
             "callback" => [$this, "mc_rest_api_resume"]
-        ]);
+        ]);*/
 
-        register_rest_route($ns, "/user", [
+       /* register_rest_route($ns, "/user", [
             "methods" => "PUT",
             "permission_callback" => "__return_true",
             "callback" => [$this, "create_user"]
-        ]);
+        ]);*/
 
         register_rest_route($ns, "/user", [
             "methods" => "POST",
@@ -27,11 +27,11 @@ class MCRestAPI extends WP_REST_Controller
             "callback" => [$this, "do_update_user"]
         ]);
 
-        register_rest_route($ns, "/search", [
+       /* register_rest_route($ns, "/search", [
             "methods" => "GET",
             "permission_callback" => "__return_true",
             "callback" => [$this, "do_search"]
-        ]);
+        ]);*/
 
         add_filter("insert_user_meta", [$this, "mc_insert_user_meta"], 10, 4);
     }

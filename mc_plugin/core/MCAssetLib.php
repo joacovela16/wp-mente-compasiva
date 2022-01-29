@@ -32,6 +32,9 @@ class MCAssetLib
             'before_title' => '<h3 class="widget-title">',
             'after_title' => '</h3>',
         ]);
+
+        register_widget("MCPermissionNavbar");
+        register_widget("MCPostExplorer");
     }
 
     public function mc_plugin_install_assets()
@@ -50,6 +53,7 @@ class MCAssetLib
             "post_types" => $post_types,
             "permissions" => $permissions['permissions'] ?? [],
             "defaults" => $permissions['defaults'] ?? null,
+            "countries" => $permissions['countries'] ?? [],
             "i18n" => [
                 "Permissions" => __("Permissions"),
                 "Name" => __("Name"),

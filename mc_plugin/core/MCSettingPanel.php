@@ -5,8 +5,8 @@ class MCSettingPanel
     public function init()
     {
         add_action('admin_menu', [$this, 'mc_options_page']);
-    }
 
+    }
 
     public function mc_options_page()
     {
@@ -36,9 +36,18 @@ class MCSettingPanel
     public function mc_options_page_submit()
     {
         if (!empty($_POST)) {
+            $perm = $_POST['permissions'] ?? [];
+
+            foreach ($perm as &$item){
+                if (!isset($item["id"])){
+                    $item["id"] = uniqid();
+                }
+            }
+
             $options = [
-                    'permissions'=> $_POST['permissions'] ?? [],
-                    'defaults'=> $_POST['defaults'] ?? [],
+                'permissions' => $perm,
+                'defaults' => $_POST[MC_DEFAULTS] ?? [],
+                'countries' => $_POST[MC_COUNTRIES] ?? [],
             ];
             update_option(MC_SETTING, $options);
         }

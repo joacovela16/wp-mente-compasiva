@@ -5,24 +5,23 @@
         names: {
             abstract: "mc_metabox_abstract",
             image: 'mc_metabox_image',
-            permission: 'mc_metabox_permission'
+            permission: 'mc_metabox_permission',
+            countries: "mc_metabox_countries"
         },
         abstract: "",
-        permissions: [
-            // {name: 'ShowProDir', logged_required: false, post_types: ['attachment'], capabilities: ['CAN_READ', 'CAN_WRITE']},
-            // {name: 'ShowProDir2', logged_required: false, post_types: ['attachment'], capabilities: ['CAN_READ_1', 'CAN_WRITE_1']},
-        ],
+        permissions: [],
         selections: {},
         i18n: {}
     };
 
     export let config = {};
 
-    if (!config.permissions) config.permissions = [];
+    config.permissions || (config.permissions = []);
+    config.base_countries || (config.base_countries = []);
+    config.countries || (config.countries = []);
 
     const finalConfig = {...defaultConfig, ...(config || {})};
     doDefault(finalConfig.permissions, finalConfig.selections || [], x => x.name, src => ({name: src.name, post_types: [], capabilities: []}));
-
     const selections = arrayAsMap(finalConfig.selections, x => x.name);
     const __ = doGetter(finalConfig.i18n);
     let currentTab = finalConfig.permissions[0];
@@ -32,8 +31,8 @@
 <div class="flex flex-row space-x-2">
     <div class="space-y-3 flex-1">
         <div class="flex flex-col">
-            <label>
-                <div>{__("Abstract")} </div>
+            <label class="space-y-1">
+                <p>{__("Abstract")} </p>
                 <textarea name={finalConfig.names.abstract} class="w-full">{finalConfig.abstract}</textarea>
             </label>
         </div>
@@ -87,8 +86,8 @@
                                     <input
                                             type="checkbox"
                                             value={subItem}
-                                            name="{finalConfig.names.permission}[{item.name}][capabilities][]"
-                                            bind:group={selections[item.name].capabilities}
+                                            name="{finalConfig.names.permission}[{item.id}][capabilities][]"
+                                            bind:group={selections[item.id].capabilities}
                                     >
                                     <span>{subItem}</span>
                                 </label>
@@ -101,5 +100,16 @@
     {/if}
 </div>
 
+<div>
+    <p>{__('Countries')}</p>
+    <div class="flex flex-row flex-wrap space-x-2">
+        {#each finalConfig.base_countries as c, index}
+            <label >
+                <input type="checkbox" value={c} name="{finalConfig.names.countries}[]" bind:group={finalConfig.countries}>
+                {c}
+            </label>
+        {/each}
+    </div>
+</div>
 <style lang="scss">
 </style>

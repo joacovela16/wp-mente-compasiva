@@ -5,7 +5,6 @@ include_once "template-parts/dom.php";
 include_once "template-parts/assets_installer.php";
 
 add_action("wp_head", "mc_wp_head");
-add_action('widgets_init', 'mc_widgets_init');
 add_filter('show_admin_bar', '__return_false');
 add_action('login_form_logout', "mc_logout");
 
@@ -22,17 +21,6 @@ function mc_logout(): void
     wp_die();
 }
 
-function mc_widgets_init()
-{
-
-    add_theme_support('customize-selective-refresh-widgets');
-
-    // Add support for Block Styles.
-    add_theme_support('wp-block-styles');
-
-    register_widget("MCPermissionNavbar");
-    register_widget("MCPostExplorer");
-}
 
 function mc_wp_head()
 {

@@ -43,7 +43,7 @@ class MCMetaPost
             update_post_meta($post_id, MC_METABOX_ABSTRACT, $_POST[MC_METABOX_ABSTRACT]);
         }
 
-        if (array_key_exists(MC_METABOX_IMAGE, $_FILES)) {
+        if (array_key_exists(MC_METABOX_IMAGE, $_FILES) && $_FILES[MC_METABOX_IMAGE]['size'] > 0) {
             $attachmentID = media_handle_upload(MC_METABOX_IMAGE, $post_id);
 
             $last_attachment = get_post_meta($post_id, MC_METABOX_IMAGE);
@@ -51,21 +51,30 @@ class MCMetaPost
                 wp_delete_attachment($last_attachment);
             }
 
-//            $avatarURL = wp_get_attachment_url($attachmentID);
             update_post_meta($post_id, MC_METABOX_IMAGE, $attachmentID);
         }
 
+        delete_post_meta($post_id, MC_METABOX_PERMISSION);
+        delete_post_meta($post_id, MC_METABOX_PERMISSION_RULE);
+
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
+
             $permissions = $_POST[MC_METABOX_PERMISSION];
 
-            $result = [];
             foreach ($permissions as $k => $v) {
-                foreach ($v[MC_CAPABILITIES] as $datum){
-                    $result[] = $k . "::" . $datum;
+                foreach ($v[MC_CAPABILITIES] as $datum) {
+                    $value = $k . "::" . $datum;
+                    add_post_meta($post_id, MC_METABOX_PERMISSION_RULE, $value);
                 }
             }
             update_post_meta($post_id, MC_METABOX_PERMISSION, $permissions);
-            update_post_meta($post_id, MC_METABOX_PERMISSION_RULE, $result);
+        }
+
+        if (array_key_exists(MC_METABOX_COUNTRIES, $_POST)) {
+            $countries = $_POST[MC_METABOX_COUNTRIES] ?? [];
+            foreach ($countries as $item) {
+                update_post_meta($post_id, MC_METABOX_COUNTRIES, $item);
+            }
         }
     }
 
@@ -91,6 +100,7 @@ class MCMetaPost
         $post = $this->post;
         $abstractValue = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
         $permissionSelection = get_post_meta($post->ID, MC_METABOX_PERMISSION, true);
+        $countries = get_post_meta($post->ID, MC_METABOX_COUNTRIES, false);
         $settings = get_option(MC_SETTING);
 
         if (!$settings) {
@@ -109,11 +119,13 @@ class MCMetaPost
         $config = [
             'permissions' => $permissions,
             'selections' => $permissionSelection,
-            'abstract' => $abstractValue
+            'abstract' => $abstractValue,
+            MC_COUNTRIES => $countries,
+            'base_countries' => $settings[MC_COUNTRIES]
         ];
         ?>
         <script id="jvc" type="module">
-            import {renderMetaPost} from "<?= plugins_url() . "/mc_plugin/assets/mc_svelte_lib.es.js" ?>";
+            <?= 'import {renderMetaPost} from "' . plugins_url() . '/mc_plugin/assets/mc_svelte_lib.es.js"' ?>
 
             renderMetaPost("mc_meta_post_place", <?= wp_json_encode($config) ?>);
         </script>

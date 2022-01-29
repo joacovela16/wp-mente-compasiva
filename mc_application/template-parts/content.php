@@ -2,8 +2,10 @@
 $post = get_post();
 setup_postdata($post);
 
+$tags = get_the_tags();
+$a=1;
 ?>
-<div class="mx-auto container py-3">
+<div class="mx-auto container py-3 h-screen">
     <article x-init="loaderOn=false" class="space-y-10">
         <?php goBack(); ?>
         <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center">
