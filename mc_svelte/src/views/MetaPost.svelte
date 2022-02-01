@@ -21,8 +21,8 @@
     config.countries || (config.countries = []);
 
     const finalConfig = {...defaultConfig, ...(config || {})};
-    doDefault(finalConfig.permissions, finalConfig.selections || [], x => x.name, src => ({name: src.name, post_types: [], capabilities: []}));
-    const selections = arrayAsMap(finalConfig.selections, x => x.name);
+    doDefault(finalConfig.permissions, finalConfig.selections || [], x => x.id, src => ({id: src.id, name: src.name, post_types: [], capabilities: []}));
+    const selections = arrayAsMap(finalConfig.selections, x => x.id);
     const __ = doGetter(finalConfig.i18n);
     let currentTab = finalConfig.permissions[0];
 
@@ -81,7 +81,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <span>{__("Capabilities")}</span>
-                            {#each (item.capabilities || []) as subItem}
+                            {#each (item.capabilities || []) as subItem, subIndex}
                                 <label>
                                     <input
                                             type="checkbox"

@@ -77,6 +77,7 @@
 
     function isPostTypeChecked(index, pt, items) {
         const tmp = items[index];
+        console.log(tmp)
         return tmp && tmp.post_types.includes(pt)
     }
 
@@ -84,20 +85,27 @@
         const tmp = items[index];
         return tmp && tmp.capabilities.includes(pt)
     }
+
+    function addNew() {
+        config.permissions = [defaultPermission, ...config.permissions];
+        doDefault(config.defaults.user);
+    }
 </script>
 <div class="space-y-2 text-gray-600">
 
 
     <div class="flex flex-row space-x-2 mt-2">
         <button on:click={()=>formRef.submit()} class="bg-blue-500 text-white rounded p-1">{ __('Save settings') }</button>
-        <button class="border-1 border-blue-500 rounded p-1 bg-white" on:click={()=>config.permissions = [defaultPermission, ...config.permissions]}>{ __('Add new') }</button>
+        <button class="border-1 border-blue-500 rounded p-1 bg-white" on:click={()=>addNew()}>{ __('Add new') }</button>
     </div>
     <form action={postUrl} method="post" class="space-y-2" bind:this={formRef}>
         <details open>
             <summary>{ __('Permissions') }</summary>
             {#each config.permissions as permission, index}
                 <div class="rounded bg-white p-2">
-                    <input type="hidden" name="permissions[{index}][id]" value={permission.id}>
+                    {#if permission.id}
+                        <input type="hidden" name="permissions[{index}][id]" value={permission.id}>
+                    {/if}
                     <div class="flex space-x-2">
                         <div class="flex-1">
                             <p class="font-bold text-sm mb-2">{__("Configuration")}</p>
@@ -115,7 +123,7 @@
                                     <div>
                                         {#each postTypes as pt}
                                             <label class=" items-center">
-                                                <input type="checkbox" value={pt} name="permissions[{index}][post_types][]" checked={permission.post_types.includes(pt)}>
+                                                <input type="checkbox" value={pt} name="permissions[{index}][post_types][]" bind:group={permission.post_types}>
                                                 <span>{pt}</span>
                                             </label>
                                         {/each}
@@ -162,7 +170,7 @@
                                             {#each permission.post_types as pt}
                                                 <label class="flex items-center">
                                                     <input type="checkbox" value={pt} name="defaults[user][{index}][post_types][]"
-                                                           checked={isPostTypeChecked(index, pt, config.defaults.user)}
+                                                           checked={config.defaults.user[index].post_types.includes(pt)}
                                                     >
                                                     <span>{pt}</span>
                                                 </label>
@@ -218,27 +226,27 @@
             <summary>{__('Countries')}</summary>
             <div class="rounded bg-white p-2 ">
                 <input type="text" on:change={e=> {if (e.target.value.length>0) {config.countries.push(e.target.value); config.countries=config.countries;}}}
-                placeholder={__('Add country')}
+                       placeholder={__('Add country')}
                 >
                 <div class="flex flex-wrap">
-                {#each config.countries as country, countryIndex}
-                    <input type="hidden" name="countries[]" value={country}>
-                    <div class="flex shadow items-center bg-blue-500 text-white fill-white rounded mr-1 px-1 mt-1">
-                        <span>{country}</span>
-                        <span
-                                class="ml-2 font-bold"
-                                on:click={()=>{config.countries.splice(countryIndex, 1); config.countries = config.countries;}}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </span>
-                    </div>
-                {/each}
-            </div>
+                    {#each config.countries as country, countryIndex}
+                        <input type="hidden" name="countries[]" value={country}>
+                        <div class="flex shadow items-center bg-blue-500 text-white fill-white rounded mr-1 px-1 mt-1">
+                            <span>{country}</span>
+                            <span
+                                    class="ml-2 font-bold"
+                                    on:click={()=>{config.countries.splice(countryIndex, 1); config.countries = config.countries;}}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </span>
+                        </div>
+                    {/each}
+                </div>
             </div>
         </details>
     </form>

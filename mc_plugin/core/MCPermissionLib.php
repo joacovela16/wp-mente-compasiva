@@ -28,7 +28,7 @@ class MCPermissionLib
                     $user_perm = $prm;
 
                     foreach ($prm ?? [] as $item) {
-                        foreach ($item[MC_CAPABILITIES] as $cap) {
+                        foreach ($item[MC_CAPABILITIES] ??[] as $cap) {
                             $user_rules[] = $pbase[MC_ID] . "::" . $cap;
                         }
                     }
@@ -54,7 +54,6 @@ class MCPermissionLib
             $query->set("posts_per_page", 4);
             $query->set("post_status", "publish");
         }
-
     }
 
     public static function get_permissions(): array

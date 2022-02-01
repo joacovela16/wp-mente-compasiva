@@ -16,18 +16,62 @@ class MCPostExplorer extends WP_Widget
     public function widget($args, $instance)
     {
         $settings = get_option(MC_SETTING);
-        if (!$settings ){
-            $settings = [MC_PERMISSIONS=>[], MC_DEFAULT_PERMISSION];
+        $base = $settings[MC_PERMISSIONS] ?? [];
+
+        if (is_user_logged_in()) {
+            $post_types = array_unique(
+                array_values(
+                    array_merge(
+                        ... array_map(fn($x) => $x[MC_POST_TYPES], $base)
+                    )
+                )
+            );
+        } else {
+            $base = array_filter($base, fn($x) => isset($x[MC_LOGGED_REQUIRED]) && $x[MC_LOGGED_REQUIRED] === 'on');
+            $post_types = array_unique(
+                array_merge(
+                    ...array_map(fn($x) => $x[MC_POST_TYPES], $base)
+                )
+            );
         }
-//        $b = MCPermissionLib::get_permissions();
-//        $a=1;
-        ?>
-        <div class="p-5 flex flex-row space-x-5 bg-zinc-100">
-            <div class="border-b-2 border-blue-500 max-w-xs p-1 font-bold"><?= __('Last posts') ?></div>
-            <div class="max-w-xs p-1"><?= __('Most readed') ?></div>
-            <div class="max-w-xs p-1"><?= __('Most commented') ?></div>
-        </div>
-        <?php
+
+
+        $args = [];
+        $args["post_type"] = $post_types;
+        $args["post_status"] = 'publish';
+        $args["posts_per_page"] = 12;
+        $args['order'] = 'DESC';
+
+        // MODES
+        $mode = $_GET['m'] ?? 'latest';
+        if ($mode === 'most_readed') {
+            $args['orderby'] = 'date';
+        } elseif ($mode === 'most_commented') {
+            $args['orderby'] = 'comment_count';
+        } else {
+            $args['orderby'] = 'date';
+        }
+        $query = new WP_Query($args);
+
+        if ($query->have_posts()) {
+            ?>
+            <div class="p-5 flex flex-row space-x-5 bg-zinc-100">
+                <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold':'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
+                <a id="most_readed" href="?m=most_readed" class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold':'border-transparent' ?>"><?= __('Most readed') ?></a>
+                <a id="most_commented" href="?m=most_commented" class="max-w-xs p-1 border-b-2 <?= $mode === 'most_commented' ? 'border-blue-500 font-bold':'border-transparent' ?>"><?= __('Most commented') ?></a>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mt-5">
+                <?php
+                while ($query->have_posts()) {
+
+                    $query->the_post();
+                    $post = get_post();
+                    render_post($post);
+                }
+                ?>
+            </div>
+            <?php
+        }
     }
 
     public function form($instance)

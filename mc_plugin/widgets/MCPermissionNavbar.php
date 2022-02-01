@@ -37,35 +37,32 @@ class MCPermissionNavbar extends WP_Widget
                 </div>
 
             </div>
-            <div class="flex-1"></div>
-            <div class="flex flex-row">
-                <?php foreach ($permissions as $item): ?>
-                    <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
-                        <?php if ($item[MC_ID] === $pname): ?>
-                            <div class="flex h-full px-3 py-5 border-b-2  border-blue-500 cursor-pointer text-center items-center font-bold">
-                                <a
-                                        class="w-full"
-                                        href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
-                                >
-                                    <?= $item[MC_NAME] ?>
-                                </a>
-                            </div>
-                        <?php else: ?>
-                            <div class="flex h-full px-3 py-5 border-b-2 border-transparent hover:border-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center
-                            items-center font-bold">
-                                <a
-                                        class="w-full"
-                                        href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
-                                >
-                                    <?= $item[MC_NAME] ?>
-                                </a>
-                            </div>
+            <div class="flex flex-row flex-1 justify-center ">
+                <div class="w-2/3 flex flex-row">
+                    <?php foreach ($permissions as $item): ?>
+                        <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
+                            <?php if ($item[MC_ID] === $pname): ?>
+                                <div class="px-3 py-5 border-b-2 border-blue-500 cursor-pointer text-center items-center font-bold flex-1">
+                                    <a class="w-full" href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>">
+                                        <?= $item[MC_NAME] ?>
+                                    </a>
+                                </div>
+                            <?php else: ?>
+                                <div class="px-3 py-5 border-b-2 border-transparent hover:border-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center
+                            items-center font-bold flex-1">
+                                    <a
+                                            class="w-full"
+                                            href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
+                                    >
+                                        <?= $item[MC_NAME] ?>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <div class="flex-1"></div>
-            <form action="/" method="get" class="flex flex-row items-center border-gray-200 p-1 border-1 rounded-full bg-white m-0">
+            <form action="/" method="get" class="flex flex-row items-center border-gray-200 px-2 py-1 border-1 rounded-full bg-white m-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                      class="flex-grow-0 text-gray-600"
                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
