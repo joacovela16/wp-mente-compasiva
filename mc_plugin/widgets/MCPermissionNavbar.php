@@ -14,7 +14,7 @@ class MCPermissionNavbar extends WP_Widget
 
     public function widget($args, $instance)
     {
-        $pname = $_GET["pname"] ?? "";
+        $ptype = $_GET["ptype"] ?? "";
         $settings = get_option(MC_SETTING);
         $permissions = $settings ? $settings[MC_PERMISSIONS] : [];
 
@@ -41,7 +41,7 @@ class MCPermissionNavbar extends WP_Widget
                 <div class="w-2/3 flex flex-row">
                     <?php foreach ($permissions as $item): ?>
                         <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
-                            <?php if ($item[MC_ID] === $pname): ?>
+                            <?php if ($item[MC_ID] === $ptype): ?>
                                 <div class="px-3 py-5 border-b-2 border-blue-500 cursor-pointer text-center items-center font-bold flex-1">
                                     <a class="w-full" href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>">
                                         <?= $item[MC_NAME] ?>

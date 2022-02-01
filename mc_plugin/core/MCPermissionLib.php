@@ -7,6 +7,7 @@ class MCPermissionLib
         add_action('pre_get_posts', [$this, "pre_get_posts"], 10, 1);
         add_filter('query_vars', function ($qvars) {
             $qvars[] = "ptype";
+            $qvars[] = "country";
             return $qvars;
         });
     }
@@ -28,30 +29,56 @@ class MCPermissionLib
                     $user_perm = $prm;
 
                     foreach ($prm ?? [] as $item) {
-                        foreach ($item[MC_CAPABILITIES] ??[] as $cap) {
+                        foreach ($item[MC_CAPABILITIES] ?? [] as $cap) {
                             $user_rules[] = $pbase[MC_ID] . "::" . $cap;
                         }
                     }
                 }
 
-                $allowed_post_types = array_merge(...array_map(fn($x) => $x[MC_POST_TYPES]??[], $user_perm));
+                $allowed_post_types = array_merge(...array_map(fn($x) => $x[MC_POST_TYPES] ?? [], $user_perm));
 
                 $ptypes = is_null($pbase) ? [] : $pbase[MC_POST_TYPES] ?? [];
                 $is_ok = array_forall($ptypes, fn($x) => in_array($x, $allowed_post_types));
 
                 if ($settings && $is_ok) {
+
                     $query->set("post_type", $ptypes);
+
+                    $countries = $_GET['country'] ?? [];
+                    $country_query = array_map(fn($x) => ['key' => MC_METABOX_COUNTRIES, 'value' => $x, 'compare' => '='], $countries);
+
                     $array_map = array_map(fn($x) => ['key' => MC_METABOX_PERMISSION_RULE, 'value' => $x, 'compare' => '='], $user_rules);
                     $query->set("meta_query", [
-                        'relation' => 'OR',
-                        ...$array_map
+                        'relation' => 'AND',
+                        ['relation' => 'OR', ...$array_map],
+                        ['relation' => 'OR', ...$country_query]
                     ]);
+                    $query->set('order', 'DESC');
+                    $query->set('post_status', 'publish');
+
+                    $has_date = false;
+                    $container = [];
+                    if (!empty($_GET['before'])) {
+                        $has_date = true;
+                        $container['before'] = $_GET['before'];
+                    }
+
+                    if (!empty($_GET['after'])) {
+                        $has_date = true;
+                        $container['after'] = $_GET['after'];
+                    }
+
+                    if ($has_date) {
+                        $container['inclusive'] = true;
+                        $query->set('date_query', [$container]);
+                    }
+
                 } else {
                     wp_redirect("/", 301);
                     wp_die();
                 }
             }
-            $query->set("posts_per_page", 4);
+            $query->set("posts_per_page", 12);
             $query->set("post_status", "publish");
         }
     }

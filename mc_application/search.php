@@ -1,18 +1,26 @@
 <?php
 global $wp_query;
-const SORTBY = "sortby";
-const PAFTER = "pafter";
-const PBEFORE = "pbefore";
+const SORTBY = "orderby";
+const PAFTER = "after";
+const PBEFORE = "before";
 
-$search_fields = [PBEFORE, PAFTER, SORTBY, 'tag'];
+$search_fields = ['tag', 'country'];
+
 $tags = get_tags();
 $selected_tags = $_GET['tag'] ?? [];
+$selected_tags = is_array($selected_tags) ? $selected_tags : [$selected_tags];
+
+$orderby = $_GET[SORTBY] ?? 'date';
+
+$countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRIES] ?? [];
+$selected_countries= $_GET['country'] ?? [];
+$selected_countries = is_array($selected_countries) ? $selected_countries : [$selected_countries];
 
 get_header();
 ?>
     <div class="container py-24 mx-auto flex flex-row">
         <form class="space-y-2" method="get">
-            <?php foreach ($_GET as $k => $v)               : ?>
+            <?php foreach ($_GET as $k => $v): ?>
                 <?php if (!empty(array_filter($search_fields, fn($x) => $x === $k))): continue; endif; ?>
                 <input type="hidden" name="<?= $k ?>" value="<?= get_query_var($k) ?>">
             <?php endforeach; ?>
@@ -34,10 +42,10 @@ get_header();
             </div>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
-                    <div><?= __('Category') ?></div>
+                    <span><?= __('Category') ?></span>
                     <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded focus:outline-none focus:bg-white
                         focus:border-gray-500" name="tag[]" multiple>
-                        <?php if (!is_wp_error($tags)): ?>
+                        <?php if (!is_wp_error($tags) && is_array($tags)): ?>
                             <?php foreach ($tags as $tag): ?>
                                 <option value="<?= $tag->slug ?>" <?= in_array($tag->slug, $selected_tags) ? 'selected' : '' ?> ><?= $tag->name ?></option>
                             <?php endforeach; ?>
@@ -47,13 +55,24 @@ get_header();
             </div>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
-                    <div><?= __('Sort be') ?></div>
-                    <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="<?= SORTBY ?>">
-                        <option><?= __('Published date') ?></option>
-                        <option><?= __('Author name') ?></option>
+                    <span><?= __('Country') ?></span>
+                    <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="country[]" multiple>
+                        <?php foreach ($countries as $c): ?>
+                            <option value="<?= $c ?>" <?= in_array($c, $selected_countries) ?'selected':'' ?> ><?= $c ?></option>
+                        <?php endforeach;  ?>
                     </select>
                 </label>
             </div>
+            <div class="md:mb-0">
+                <label class="uppercase text-gray-700 text-xs font-bold mb-2">
+                    <span><?= __('Sort be') ?></span>
+                    <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="<?= SORTBY ?>">
+                        <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Published date') ?></option>
+                        <option <?= $orderby === 'date' ? '' : 'selected' ?> value="author"><?= __('Author name') ?></option>
+                    </select>
+                </label>
+            </div>
+
             <div>
                 <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?= __('Search') ?></button>
             </div>

@@ -1,6 +1,6 @@
 <?php
 
-$index = random_int(1, 6);
+$index = random_int(1, 7);
 $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
 
 ?>
