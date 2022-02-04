@@ -10,7 +10,8 @@
         display_name: "Joaquin",
         user_email: "joaquinvelazquezcamacho@gmail.com",
         user_url: 'https://google.com.uy',
-        description: "pepe",
+        description: "",
+        login_url: '',
         i18n: {}
     };
 
@@ -119,11 +120,10 @@
 </script>
 {#if config.isLogged}
     <div class="flex flex-row space-x-2 cursor-pointer items-center" on:click={()=>show=true}>
-<!--        <div>{profile.name}</div>-->
         <img src={profile.avatarUrl} alt="Avatar" class="w-32px h-32px rounded-full shadow-lg object-cover">
     </div>
 {:else}
-    <span>{__("Login")}/{__("register")}</span>
+    <a href="/login">{__("Login")}/{__("register")}</a>
 {/if}
 {#if show}
     <div in:fly={{y:-10}} class="flex justify-center items-center fixed top-0 left-0 w-full h-full z-index-20">

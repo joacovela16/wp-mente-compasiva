@@ -42,7 +42,7 @@ function mc_plugin_activated()
 {
 
     mc_do_pages();
-
+    update_option('users_can_register', true);
 
     global $wp_rewrite;
     $wp_rewrite->set_permalink_structure("/%postname%/");
@@ -51,6 +51,7 @@ function mc_plugin_activated()
 function mc_plugin_deactivated()
 {
     mc_undo_post();
+    update_option('users_can_register', false);
 //    mc_unregister_taxonomy();
 //    global $wp_rewrite;
 //    $wp_rewrite->set_permalink_structure("/%postname%/");

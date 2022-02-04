@@ -1,7 +1,5 @@
 <?php
 
-
-
 class MCAssetLib
 {
     public function init()

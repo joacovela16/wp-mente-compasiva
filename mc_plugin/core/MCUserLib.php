@@ -12,6 +12,7 @@ class MCUserLib
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
         add_action('admin_footer', [$this, "render_user_permissions"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
+        add_action("profile_update", [$this, "mc_user_profile_updated"]);
     }
 
     function render_user_permissions()
@@ -133,14 +134,15 @@ class MCUserLib
 
     function update_metadata(array $permissions, $user_id)
     {
-        $result = [];
+        delete_user_meta($user_id, MC_METABOX_PERMISSION_RULE);
+
         foreach ($permissions as $k => $v) {
             foreach ($v[MC_CAPABILITIES] ?? [] as $datum) {
-                $result[] = $k . "::" . $datum;
+                $result = $k . "::" . $datum;
+                add_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
             }
         }
         update_user_meta($user_id, MC_METABOX_PERMISSION, $permissions);
-        update_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
     }
 
 }

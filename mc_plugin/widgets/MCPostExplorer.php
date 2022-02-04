@@ -17,15 +17,18 @@ class MCPostExplorer extends WP_Widget
     {
         $settings = get_option(MC_SETTING);
         $base = $settings[MC_PERMISSIONS] ?? [];
+        $user_id = get_current_user_id();
 
         if (is_user_logged_in()) {
-            $post_types = array_unique(
-                array_values(
-                    array_merge(
-                        ... array_map(fn($x) => $x[MC_POST_TYPES], $base)
+            $user_permissions = get_user_meta($user_id, MC_METABOX_PERMISSION, true);
+            $user_permissions = empty($user_permissions) ? [] : $user_permissions;
+            $allowed_posts = array_unique(
+                array_merge(
+                    ...array_values(array_map(fn($x) => $x[MC_POST_TYPES] ?? [], $user_permissions)
                     )
                 )
             );
+            $post_types = $allowed_posts;
         } else {
             $base = array_filter($base, fn($x) => isset($x[MC_LOGGED_REQUIRED]) && $x[MC_LOGGED_REQUIRED] === 'on');
             $post_types = array_unique(
@@ -56,9 +59,11 @@ class MCPostExplorer extends WP_Widget
         if ($query->have_posts()) {
             ?>
             <div class="p-5 flex flex-row space-x-5 bg-zinc-100">
-                <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold':'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
-                <a id="most_readed" href="?m=most_readed" class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold':'border-transparent' ?>"><?= __('Most readed') ?></a>
-                <a id="most_commented" href="?m=most_commented" class="max-w-xs p-1 border-b-2 <?= $mode === 'most_commented' ? 'border-blue-500 font-bold':'border-transparent' ?>"><?= __('Most commented') ?></a>
+                <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold' : 'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
+                <a id="most_readed" href="?m=most_readed"
+                   class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most readed') ?></a>
+                <a id="most_commented" href="?m=most_commented"
+                   class="max-w-xs p-1 border-b-2 <?= $mode === 'most_commented' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most commented') ?></a>
             </div>
             <div class="grid grid-cols-3 gap-4 mt-5">
                 <?php

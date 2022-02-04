@@ -20,7 +20,7 @@ class MCPermissionLib
                 $ptype = $_GET['ptype'];
                 $user = wp_get_current_user();
                 $settings = get_option(MC_SETTING);
-                $user_perm = get_user_meta($user->ID, MC_METABOX_PERMISSION);
+                $user_perm = get_user_meta($user->ID, MC_METABOX_PERMISSION, true);
                 $user_rules = get_user_meta($user->ID, MC_METABOX_PERMISSION_RULE);
                 $pbase = array_find($settings[MC_PERMISSIONS], fn($x) => $x[MC_ID] === $ptype);
 
@@ -35,14 +35,14 @@ class MCPermissionLib
                     }
                 }
 
-                $allowed_post_types = array_merge(...array_map(fn($x) => $x[MC_POST_TYPES] ?? [], $user_perm));
+                $allowed_post_types = array_unique(array_merge(...array_values(array_map(fn($x) => $x[MC_POST_TYPES] ?? [], $user_perm))));
 
-                $ptypes = is_null($pbase) ? [] : $pbase[MC_POST_TYPES] ?? [];
-                $is_ok = array_forall($ptypes, fn($x) => in_array($x, $allowed_post_types));
+//                $ptypes = is_null($pbase) ? [] : $pbase[MC_POST_TYPES] ?? [];
+//                $is_ok = array_forall($ptypes, fn($x) => in_array($x, $allowed_post_types));
 
-                if ($settings && $is_ok) {
+                if ($settings) {
 
-                    $query->set("post_type", $ptypes);
+                    $query->set("post_type", $allowed_post_types);
 
                     $countries = $_GET['country'] ?? [];
                     $country_query = array_map(fn($x) => ['key' => MC_METABOX_COUNTRIES, 'value' => $x, 'compare' => '='], $countries);

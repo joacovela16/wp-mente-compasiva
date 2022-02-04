@@ -3,7 +3,7 @@ $post = get_post();
 setup_postdata($post);
 
 $tags = get_the_tags();
-$a=1;
+
 ?>
 <div class="mx-auto container py-3 h-screen">
     <article x-init="loaderOn=false" class="space-y-10">

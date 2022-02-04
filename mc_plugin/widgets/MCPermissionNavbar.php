@@ -91,6 +91,7 @@ class MCPermissionNavbar extends WP_Widget
             $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) : $user_avatar_url;
             $config = [
                 "isLogged" => is_user_logged_in(),
+                "login_url"=> wp_login_url(),
                 "user_avatar_url" => $user_avatar_url,
                 "display_name" => $display_name,
                 "user_email" => $user_email,
