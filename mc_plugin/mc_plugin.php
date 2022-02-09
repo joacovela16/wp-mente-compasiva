@@ -17,9 +17,7 @@ include_once "core/MCPermissionLib.php";
 include_once "core/MCUserLib.php";
 include_once "core/MCAssetLib.php";
 include_once "core/MCSettingPanel.php";
-
-add_filter('send_email_change_email', '__return_false');
-add_filter('send_password_change_email', '__return_false');
+include_once "core/MCActions.php";
 
 add_action("rest_api_init", function () {
     (new MCRestAPI())->register_routes();
@@ -30,6 +28,7 @@ add_action("rest_api_init", function () {
 (new MCMetaPost())->init();
 (new MCSettingPanel())->init();
 (new MCPermissionLib())->init();
+(new MCActions())->init();
 
 add_action("init", "mc_do_post");
 
@@ -37,6 +36,13 @@ register_activation_hook(__FILE__, "mc_plugin_activated");
 register_deactivation_hook(__FILE__, 'mc_plugin_deactivated');
 register_deactivation_hook(__FILE__, 'mc_undo_pages');
 
+
+add_action("init", function () {
+//    add_rewrite_rule("^login\/?", "index.php?pagename=mc_login", 'top');
+    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+//    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+//    add_rewrite_rule("^contact\/?", "index.php?pagename=mc_contact", 'top');
+});
 
 function mc_plugin_activated()
 {

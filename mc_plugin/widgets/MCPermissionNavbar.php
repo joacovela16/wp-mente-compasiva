@@ -14,6 +14,10 @@ class MCPermissionNavbar extends WP_Widget
 
     public function widget($args, $instance)
     {
+        $current_user = wp_get_current_user();
+        $user_avatar_url = get_user_meta($current_user->ID, "user_avatar_url", true);
+        $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) : $user_avatar_url;
+
         $ptype = $_GET["ptype"] ?? "";
         $settings = get_option(MC_SETTING);
         $permissions = $settings ? $settings[MC_PERMISSIONS] : [];
@@ -73,51 +77,21 @@ class MCPermissionNavbar extends WP_Widget
                 </svg>
                 <input type="text" class="w-full focus:outline-none" placeholder="<?= __("Search") ?>..." name="s">
             </form>
-            <div class="flex-grow-0 cursor-pointer font-bold px-3 mc_svelte_profile text-gray-600">
-
-            </div>
+            <?php if (is_user_logged_in()): ?>
+                <div class="flex-grow-0 cursor-pointer px-3" title="<?= __('Profile') ?>">
+                    <a href="<?= site_url('/profile') ?>">
+                        <img src="<?= $user_avatar_url ?>" alt="AV" class="w-[48px] h-[48px] rounded-full shadow-lg border-2">
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="flex-grow-0 cursor-pointer px-3">
+                    <a href="<?= wp_login_url() ?>" class="font-bold">
+                        <?= __('Login/Register') ?>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
-
-
         <?php
-
-        add_action("wp_footer", function () {
-            $current_user = wp_get_current_user();
-            $display_name = $current_user->display_name;
-            $user_email = $current_user->user_email;
-            $user_url = $current_user->user_url;
-            $description = $current_user->description;
-            $user_avatar_url = get_user_meta($current_user->ID, "user_avatar_url", true);
-            $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) : $user_avatar_url;
-            $config = [
-                "isLogged" => is_user_logged_in(),
-                "login_url"=> wp_login_url(),
-                "user_avatar_url" => $user_avatar_url,
-                "display_name" => $display_name,
-                "user_email" => $user_email,
-                "user_url" => $user_url,
-                "description" => $description,
-                "i18n" => []
-            ];
-            ?>
-            <script type="module">
-                <?= 'import {renderProfile} from "' . plugins_url() . '/mc_plugin/assets/mc_svelte_lib.es.js"' ?>
-
-                renderProfile("mc_svelte_profile", <?= wp_json_encode($config) ?>);
-                /* const H = "80px";
-                 const H2 = "45px";
-                 document.getElementById("navbar").style.height = H;
-                 window.addEventListener("scroll", () => {
-                     const ref = 110;
-                     if (document.body.scrollTop > ref || document.documentElement.scrollTop > ref) {
-                         document.getElementById("navbar").style.height = H2;
-                     } else {
-                         document.getElementById("navbar").style.height = H;
-                     }
-                 });*/
-            </script>
-            <?php
-        });
     }
 
     public function form($instance)

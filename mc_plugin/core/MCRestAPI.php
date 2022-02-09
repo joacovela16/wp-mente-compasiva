@@ -7,17 +7,17 @@ class MCRestAPI extends WP_REST_Controller
         $version = "v1";
         $ns = "mcplugin/" . $version;
 
-       /* register_rest_route($ns, "/resume", [
-            "methods" => "GET",
-            "permission_callback" => "__return_true",
-            "callback" => [$this, "mc_rest_api_resume"]
-        ]);*/
+        /* register_rest_route($ns, "/resume", [
+             "methods" => "GET",
+             "permission_callback" => "__return_true",
+             "callback" => [$this, "mc_rest_api_resume"]
+         ]);*/
 
-       /* register_rest_route($ns, "/user", [
-            "methods" => "PUT",
-            "permission_callback" => "__return_true",
-            "callback" => [$this, "create_user"]
-        ]);*/
+        /* register_rest_route($ns, "/user", [
+             "methods" => "PUT",
+             "permission_callback" => "__return_true",
+             "callback" => [$this, "create_user"]
+         ]);*/
 
         register_rest_route($ns, "/user", [
             "methods" => "POST",
@@ -27,13 +27,15 @@ class MCRestAPI extends WP_REST_Controller
             "callback" => [$this, "do_update_user"]
         ]);
 
-       /* register_rest_route($ns, "/search", [
-            "methods" => "GET",
-            "permission_callback" => "__return_true",
-            "callback" => [$this, "do_search"]
-        ]);*/
+        /* register_rest_route($ns, "/search", [
+             "methods" => "GET",
+             "permission_callback" => "__return_true",
+             "callback" => [$this, "do_search"]
+         ]);*/
 
         add_filter("insert_user_meta", [$this, "mc_insert_user_meta"], 10, 4);
+
+
     }
 
     public function mc_insert_user_meta($meta, $user, $update, $userdata): array
@@ -75,7 +77,7 @@ class MCRestAPI extends WP_REST_Controller
             $meta = [
                 MC_METABOX_ABSTRACT => $_POST["description"]
             ];
-            if (!$avatarURL == null){
+            if (!$avatarURL == null) {
                 $meta["user_avatar_url"] = $avatarURL;
             }
             $update_result = wp_update_post([
@@ -112,89 +114,6 @@ class MCRestAPI extends WP_REST_Controller
         return ["isSuccess" => false];
     }
 
-    public function do_search(WP_REST_Request $request): array
-    {
-        $is_logged = is_user_logged_in();
-        $maybePage = $request->get_param("page");
-        if (is_null($maybePage)) {
-            $page = 1;
-        } else {
-            $page = intval($maybePage);
-        }
-        $query_result = ["post_type" => DIRECTORY_CATALOG, "posts_per_page" => 10, "paged" => $page];
-
-        if (!is_null($request->get_param("s"))) {
-            $query_result = array_merge($query_result, ["s" => $request->get_param("s")]);
-        }
-
-        if (!is_null($request->get_param("author_name"))) {
-            $query_result = array_merge($query_result, ["author_name" => $request->get_param("author_name")]);
-        }
-
-        if (!is_null($request->get_param("tag"))) {
-            $func = function ($v) {
-                return [
-                    'taxonomy' => CLASSIFICATION_TAXONOMY,
-                    "field" => "slug",
-                    "terms" => $v
-                ];
-            };
-            $args = array_map($func, explode(",", $request->get_param("tag")));
-            $query_result = array_merge($query_result, [
-                "tax_query" => array_merge(
-                    [
-                        'relation' => 'OR',
-                    ],
-                    $args
-                )
-            ]);
-        }
-
-        $date_query = [];
-
-        if (!is_null($request->get_param("before"))) {
-            $date = explode('/', $request->get_param("before"));
-            $date_query = array_merge($date_query, [
-                "before" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
-            ]);
-        }
-
-        if (!is_null($request->get_param("after"))) {
-            $date = explode('/', $request->get_param("after"));
-            $date_query = array_merge($date_query, [
-                "after" => ["day" => $date[0], "month" => $date[1], "year" => $date[2]]
-            ]);
-        }
-
-        if (!$is_logged) {
-            $query_result = array_merge($query_result, [
-                "meta_query" => [
-                    ["key" => "kind", "compare" => "NOT EXISTS"]
-                ]
-            ]);
-        }
-
-        if (count($date_query) > 0) {
-            $query_result = array_merge($query_result, ["date_query" => $date_query]);
-        }
-
-        $query = new WP_Query($query_result);
-        $posts = $query->get_posts();
-
-        $result = [];
-        foreach ($posts as $post) {
-            array_push($result, [
-                "id" => $post->ID,
-                "title" => $post->post_title,
-                "publishDate" => $post->post_date,
-                "author" => get_userdata($post->post_author)->display_name,
-                "postType" => $post->post_type
-            ]);
-        }
-
-        return $result;
-    }
-
     public function create_user(WP_REST_Request $request): array
     {
         $body = json_decode($request->get_body(), true);
@@ -210,11 +129,5 @@ class MCRestAPI extends WP_REST_Controller
         return ["result" => "ok"];
     }
 
-    public function mc_rest_api_resume(WP_REST_Request $request): array
-    {
-        error_log("pepe");
-
-        return array("result" => "test2!!!");
-    }
 }
 

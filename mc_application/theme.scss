@@ -19,10 +19,14 @@ body.login {
 }
 
 #login {
-  @apply z-10 place-content-center mb-0 sm:mb-auto sm:mr-0  mr-[15%] justify-self-end;
+  @apply z-10 place-content-center mb-0 sm:mb-auto  mr-[15%] justify-self-end;
 }
 
-#login > h1{
+#loginform {
+  @apply rounded-lg;
+}
+
+#login > h1 {
   @apply hidden;
 }
 
@@ -74,8 +78,18 @@ body.login {
   }
 }
 
+.field {
+  @apply flex flex-col space-y-2 flex-1 justify-center;
+}
 
+.field > .field-label {
+  @apply font-bold z-10;
+}
 
+.field > .field-content {
+  @apply flex flex-col space-y-2 flex-1 justify-center;
+}
 
-
-
+.field-text{
+  @apply appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg;
+}
