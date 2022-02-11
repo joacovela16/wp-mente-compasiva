@@ -37,8 +37,6 @@ class MCPermissionLib
 
                 $allowed_post_types = array_unique(array_merge(...array_values(array_map(fn($x) => $x[MC_POST_TYPES] ?? [], $user_perm))));
 
-//                $ptypes = is_null($pbase) ? [] : $pbase[MC_POST_TYPES] ?? [];
-//                $is_ok = array_forall($ptypes, fn($x) => in_array($x, $allowed_post_types));
 
                 if ($settings) {
 

@@ -50,6 +50,14 @@ class MCActions
             if (!$avatarURL == null) {
                 $meta["user_avatar_url"] = $avatarURL;
             }
+
+            $mc_country = $_POST["mc_country"];
+
+            if (isset($mc_country)) {
+                update_user_meta($ID, 'country', $mc_country);
+                $meta['country'] = $mc_country;
+            }
+
             $update_result = wp_update_post([
                 "ID" => intval($post_id),
                 "post_content" => $_POST["mc_about"] ?? '',
@@ -65,6 +73,7 @@ class MCActions
             if (isset($_POST["mc_birthday"])) {
                 update_user_meta($ID, 'birthday', $_POST["mc_birthday"]);
             }
+
 
             $new_password = $_POST["mc_password_1"];
             $confirm_password = $_POST["mc_password_2"];

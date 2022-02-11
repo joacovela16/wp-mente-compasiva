@@ -58,7 +58,7 @@ class MCPostExplorer extends WP_Widget
 
         if ($query->have_posts()) {
             ?>
-            <div class="p-5 flex flex-row space-x-5 bg-zinc-100">
+            <div class="p-5 flex flex-row space-x-5 bg-zinc-100 rounded">
                 <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold' : 'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
                 <a id="most_readed" href="?m=most_readed"
                    class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most readed') ?></a>

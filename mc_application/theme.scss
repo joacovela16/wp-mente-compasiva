@@ -93,3 +93,7 @@ body.login {
 .field-text{
   @apply appearance-none p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg;
 }
+
+.field-select{
+  @apply p-2 rounded ring-2 ring-gray-100 focus:ring-blue-500 focus:shadow-lg;
+}
