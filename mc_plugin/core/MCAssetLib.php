@@ -56,11 +56,14 @@ class MCAssetLib
                 "Permissions" => __("Permissions"),
                 "Name" => __("Name"),
                 "Signed required" => __("Signed required"),
-                "Post type" => __("Post type"),
+                "Post types" => __("Post types"),
+                "Posts" => __("Posts"),
+                "Default user settings" => __("Default user settings"),
                 "Capabilities" => __("Capabilities"),
                 "Delete" => __("Delete"),
                 "Save settings" => __("Save settings"),
-                "Add new" => __("Add new"),
+                "Add permission" => __("Add permission"),
+                "permission_desc" => __('permission_desc')
             ]
         ];
 

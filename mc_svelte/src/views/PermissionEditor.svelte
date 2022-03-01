@@ -57,8 +57,7 @@
         }
     }
 
-    function removePermission(index, event) {
-        event.preventDefault();
+    function removePermission(index) {
         config.permissions.splice(index, 1);
         config.permissions = config.permissions;
     }
@@ -76,32 +75,30 @@
     }
 
     function isPostTypeChecked(index, pt, items) {
-        const tmp = items[index];
-        console.log(tmp)
+        // const tmp = items[index];
+        const tmp = items.find(x=>x.id === index);
         return tmp && tmp.post_types.includes(pt)
     }
 
     function isCapabilityChecked(index, pt, items) {
-        const tmp = items[index];
-        return tmp && tmp.capabilities.includes(pt)
+        const tmp = items.find(x=>x.id === index);
+        return tmp && tmp.capabilities.includes(pt);
     }
 
     function addNew() {
-        config.permissions = [defaultPermission, ...config.permissions];
+        config.permissions = [{...defaultPermission, id: Date.now()}, ...config.permissions];
         doDefault(config.defaults.user);
     }
 </script>
 <div class="space-y-2 text-gray-600">
-
-
-    <div class="flex flex-row space-x-2 mt-2">
-        <button on:click={()=>formRef.submit()} class="bg-blue-500 text-white rounded p-1">{ __('Save settings') }</button>
-        <button class="border-1 border-blue-500 rounded p-1 bg-white" on:click={()=>addNew()}>{ __('Add new') }</button>
+    <div class="flex space-x-2 mt-2">
+        <button class="bg-blue-500 text-white rounded p-1 font-bold" on:click={()=>formRef.submit()}>{ __('Save settings') }</button>
+        <button class="bg-blue-500 rounded p-1 text-white shadow font-bold" on:click={()=>addNew()}>{ __('Add permission') }</button>
     </div>
     <form action={postUrl} method="post" class="space-y-2" bind:this={formRef}>
         <details open>
             <summary>{ __('Permissions') }</summary>
-            {#each config.permissions as permission, index}
+            {#each config.permissions as permission, index(permission.id)}
                 <div class="rounded bg-white p-2">
                     {#if permission.id}
                         <input type="hidden" name="permissions[{index}][id]" value={permission.id}>
@@ -112,14 +109,14 @@
                             <div class="flex flex-col space-y-1 px-3">
                                 <label class="flex flex-col">
                                     <span class="font-bold">{__("Name")}</span>
-                                    <input type="text" name="permissions[{index}][name]" value={permission.name} class="w-auto">
+                                    <input type="text" name="permissions[{index}][name]" bind:value={permission.name} class="w-auto">
                                 </label>
                                 <label>
                                     <input type="checkbox" name="permissions[{index}][logged_required]'" checked={permission.logged_required==='on'}>
                                     <span>{__("Signed required")}</span>
                                 </label>
                                 <div>
-                                    <span class="font-bold"> {__("Post type")}</span>
+                                    <span class="font-bold">{__("Post types")}</span>
                                     <div>
                                         {#each postTypes as pt}
                                             <label class=" items-center">
@@ -130,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-1">
-                                    <span>{ __("Capabilities") }</span>
+                                    <span class="font-bold">{ __("Capabilities") }</span>
                                     <input type="text" on:keypress={e=>onKeypress(e, index)}>
                                     <div class="flex flex-wrap">
                                         {#each (permission.capabilities || []) as cap, capIndex}
@@ -140,7 +137,7 @@
                                                     <span>{cap}</span>
                                                     <span
                                                             class="ml-2 font-bold"
-                                                            on:click={()=>{permission.capabilities.splice(capIndex, 1);permission.capabilities  =permission.capabilities;}}
+                                                            on:click={()=>{permission.capabilities.splice(capIndex, 1);permission.capabilities=permission.capabilities;}}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                                              class="cursor-pointer"
@@ -161,12 +158,16 @@
                         </div>
                         <div class="flex-1 space-y-3">
                             <div class="space-y-3">
-                                <p class="font-bold text-sm mb-2">{__('Defaults settings')}</p>
+                                <p class="font-bold text-sm mb-2">{__('Default user settings')}</p>
+                                <div class="ring-1 ring-amber-500 bg-white p-2 rounded">
+                                    {__('permission_desc')}
+                                </div>
                                 <div class="px-3">
                                     <div>
-                                        <p class="font-bold">{__('Default posts')}</p>
+                                        <p class="font-bold">{__('Posts')}</p>
                                         <div>
-                                            <input type="hidden" name="defaults[user][{index}][name]" value={permission.name}>
+                                            <input type="hidden" name="defaults[user][{index}][id]" bind:value={permission.id}>
+                                            <input type="hidden" name="defaults[user][{index}][name]" bind:value={permission.name}>
                                             {#each permission.post_types as pt}
                                                 <label class="flex items-center">
                                                     <input type="checkbox" value={pt} name="defaults[user][{index}][post_types][]"
@@ -178,12 +179,12 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="font-bold">{__('Default capabilities')}</div>
+                                        <div class="font-bold">{__('Capabilities')}</div>
                                         <div class="flex flex-row space-x-2">
                                             {#each (permission.capabilities || []) as pt}
                                                 <div class=" items-center">
                                                     <input type="checkbox" value={pt} name="defaults[user][{index}][capabilities][]"
-                                                           checked={isCapabilityChecked(index, pt, config.defaults.user)}
+                                                           checked={isCapabilityChecked(permission.id, pt, config.defaults.user)}
                                                     >
                                                     <span>{pt}</span>
                                                 </div>
@@ -216,7 +217,8 @@
                             {/if}
                         </div>
                         <div class="flex-1"></div>
-                        <div on:click={e=>removePermission(index, e)} class="p-2 bg-red-500 rounded text-white ">{__("Delete")}</div>
+                        <div on:click|preventDefault={()=>  removePermission(index)}
+                             class="p-2 bg-red-500 rounded text-white cursor-pointer">{__("Delete")}</div>
                     </div>
                 </div>
             {/each}

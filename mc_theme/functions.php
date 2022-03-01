@@ -4,11 +4,10 @@ include_once "constants.php";
 include_once "template-parts/dom.php";
 include_once "template-parts/assets_installer.php";
 add_action('after_setup_theme', 'rad_theme_setup');
+
 function rad_theme_setup()
 {
-
-    $result = load_theme_textdomain('default', get_template_directory() . '/languages' );
-    $a = 1;
+    load_theme_textdomain('default', get_template_directory() . '/languages');
 }
 
 add_action("wp_head", "mc_wp_head");

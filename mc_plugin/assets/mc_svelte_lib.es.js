@@ -1,4 +1,6 @@
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -14,6 +16,7 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var windi = "";
 function noop() {
 }
@@ -27,7 +30,7 @@ function run(fn) {
   return fn();
 }
 function blank_object() {
-  return Object.create(null);
+  return /* @__PURE__ */ Object.create(null);
 }
 function run_all(fns) {
   fns.forEach(run);
@@ -96,7 +99,7 @@ function get_all_dirty_from_scope($$scope) {
 const is_client = typeof window !== "undefined";
 let now = is_client ? () => window.performance.now() : () => Date.now();
 let raf = is_client ? (cb) => requestAnimationFrame(cb) : noop;
-const tasks = new Set();
+const tasks = /* @__PURE__ */ new Set();
 function run_tasks(now2) {
   tasks.forEach((task) => {
     if (!task.c(now2)) {
@@ -135,7 +138,7 @@ function get_root_for_style(node) {
 function append_empty_stylesheet(node) {
   const style_element = element("style");
   append_stylesheet(get_root_for_style(node), style_element);
-  return style_element;
+  return style_element.sheet;
 }
 function append_stylesheet(node, style) {
   append(node.head || node, style);
@@ -171,6 +174,12 @@ function listen(node, event, handler, options) {
   node.addEventListener(event, handler, options);
   return () => node.removeEventListener(event, handler, options);
 }
+function prevent_default(fn) {
+  return function(event) {
+    event.preventDefault();
+    return fn.call(this, event);
+  };
+}
 function attr(node, attribute, value) {
   if (value == null)
     node.removeAttribute(attribute);
@@ -178,7 +187,7 @@ function attr(node, attribute, value) {
     node.setAttribute(attribute, value);
 }
 function get_binding_group_value(group, __value, checked) {
-  const value = new Set();
+  const value = /* @__PURE__ */ new Set();
   for (let i = 0; i < group.length; i += 1) {
     if (group[i].checked)
       value.add(group[i].__value);
@@ -207,7 +216,7 @@ function custom_event(type, detail, bubbles = false) {
   e.initCustomEvent(type, bubbles, false, detail);
   return e;
 }
-const active_docs = new Set();
+const managed_styles = /* @__PURE__ */ new Map();
 let active = 0;
 function hash(str) {
   let hash2 = 5381;
@@ -215,6 +224,11 @@ function hash(str) {
   while (i--)
     hash2 = (hash2 << 5) - hash2 ^ str.charCodeAt(i);
   return hash2 >>> 0;
+}
+function create_style_information(doc, node) {
+  const info = { stylesheet: append_empty_stylesheet(node), rules: {} };
+  managed_styles.set(doc, info);
+  return info;
 }
 function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
   const step = 16.666 / duration;
@@ -228,11 +242,9 @@ function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
 }`;
   const name = `__svelte_${hash(rule)}_${uid}`;
   const doc = get_root_for_style(node);
-  active_docs.add(doc);
-  const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = append_empty_stylesheet(node).sheet);
-  const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
-  if (!current_rules[name]) {
-    current_rules[name] = true;
+  const { stylesheet, rules } = managed_styles.get(doc) || create_style_information(doc, node);
+  if (!rules[name]) {
+    rules[name] = true;
     stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
   }
   const animation = node.style.animation || "";
@@ -255,14 +267,14 @@ function clear_rules() {
   raf(() => {
     if (active)
       return;
-    active_docs.forEach((doc) => {
-      const stylesheet = doc.__svelte_stylesheet;
+    managed_styles.forEach((info) => {
+      const { stylesheet } = info;
       let i = stylesheet.cssRules.length;
       while (i--)
         stylesheet.deleteRule(i);
-      doc.__svelte_rules = {};
+      info.rules = {};
     });
-    active_docs.clear();
+    managed_styles.clear();
   });
 }
 let current_component;
@@ -284,7 +296,7 @@ function schedule_update() {
 function add_render_callback(fn) {
   render_callbacks.push(fn);
 }
-const seen_callbacks = new Set();
+const seen_callbacks = /* @__PURE__ */ new Set();
 let flushidx = 0;
 function flush() {
   const saved_component = current_component;
@@ -339,7 +351,7 @@ function wait() {
 function dispatch(node, direction, kind) {
   node.dispatchEvent(custom_event(`${direction ? "intro" : "outro"}${kind}`));
 }
-const outroing = new Set();
+const outroing = /* @__PURE__ */ new Set();
 let outros;
 function group_outros() {
   outros = {
@@ -451,8 +463,8 @@ function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, looku
   while (i--)
     old_indexes[old_blocks[i].key] = i;
   const new_blocks = [];
-  const new_lookup = new Map();
-  const deltas = new Map();
+  const new_lookup = /* @__PURE__ */ new Map();
+  const deltas = /* @__PURE__ */ new Map();
   i = n;
   while (i--) {
     const child_ctx = get_context(ctx, list, i);
@@ -468,8 +480,8 @@ function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, looku
     if (key in old_indexes)
       deltas.set(key, Math.abs(i - old_indexes[key]));
   }
-  const will_move = new Set();
-  const did_move = new Set();
+  const will_move = /* @__PURE__ */ new Set();
+  const did_move = /* @__PURE__ */ new Set();
   function insert2(block) {
     transition_in(block, 1);
     block.m(node, next);
@@ -753,7 +765,7 @@ function create_each_block_2$2(ctx) {
       attr(input, "type", "checkbox");
       input.__value = ctx[14];
       input.value = input.__value;
-      attr(input, "name", input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][post_types][]"));
+      attr(input, "name", input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][post_types][]");
       ctx[8][1][ctx[13]].push(input);
     },
     m(target, anchor) {
@@ -772,7 +784,7 @@ function create_each_block_2$2(ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (dirty & 1 && input_name_value !== (input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][post_types][]"))) {
+      if (dirty & 1 && input_name_value !== (input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][post_types][]")) {
         attr(input, "name", input_name_value);
       }
       if (dirty & 10) {
@@ -816,7 +828,7 @@ function create_each_block_1$2(ctx) {
       attr(input, "type", "checkbox");
       input.__value = ctx[14];
       input.value = input.__value;
-      attr(input, "name", input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][capabilities][]"));
+      attr(input, "name", input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][capabilities][]");
       ctx[8][0][ctx[13]].push(input);
     },
     m(target, anchor) {
@@ -835,7 +847,7 @@ function create_each_block_1$2(ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (dirty & 1 && input_name_value !== (input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][capabilities][]"))) {
+      if (dirty & 1 && input_name_value !== (input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][capabilities][]")) {
         attr(input, "name", input_name_value);
       }
       if (dirty & 10) {
@@ -899,7 +911,7 @@ function create_each_block$2(key_1, ctx) {
       t6 = space();
       attr(input, "type", "hidden");
       input.value = ctx[11].id;
-      attr(input, "name", input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][id]"));
+      attr(input, "name", input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][id]");
       attr(div1, "class", "flex-1");
       attr(div3, "class", "flex-1");
       attr(div4, "class", "p-2 flex flex-row");
@@ -927,7 +939,7 @@ function create_each_block$2(key_1, ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (dirty & 1 && input_name_value !== (input_name_value = "" + (ctx[0].names.permission + "[" + ctx[11].id + "][id]"))) {
+      if (dirty & 1 && input_name_value !== (input_name_value = ctx[0].names.permission + "[" + ctx[11].id + "][id]")) {
         attr(input, "name", input_name_value);
       }
       if (dirty & 11) {
@@ -986,10 +998,10 @@ function create_fragment$4(ctx) {
   let div1;
   let div0;
   let each_blocks_1 = [];
-  let each0_lookup = new Map();
+  let each0_lookup = /* @__PURE__ */ new Map();
   let t;
   let each_blocks = [];
-  let each1_lookup = new Map();
+  let each1_lookup = /* @__PURE__ */ new Map();
   let each_value_3 = ctx[3];
   const get_key = (ctx2) => ctx2[11].id;
   for (let i = 0; i < each_value_3.length; i += 1) {
@@ -1064,7 +1076,6 @@ function instance$4($$self, $$props, $$invalidate) {
     selections: {},
     i18n: {}
   } } = $$props;
-  console.log(config);
   const finalConfig = __spreadValues(__spreadValues({}, defaultConfig), config || {});
   if (!finalConfig.selections) {
     finalConfig.selections = {};
@@ -1119,53 +1130,57 @@ class UserPermissions extends SvelteComponent {
 }
 function get_each_context$1(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[25] = list[i];
-  child_ctx[27] = i;
+  child_ctx[28] = list[i];
+  child_ctx[30] = i;
   return child_ctx;
 }
 function get_each_context_1$1(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[28] = list[i];
-  child_ctx[29] = list;
-  child_ctx[30] = i;
+  child_ctx[31] = list[i];
+  child_ctx[32] = list;
+  child_ctx[33] = i;
   return child_ctx;
 }
 function get_each_context_2$1(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[31] = list[i];
+  child_ctx[34] = list[i];
   return child_ctx;
 }
 function get_each_context_3$1(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[31] = list[i];
+  child_ctx[34] = list[i];
   return child_ctx;
 }
 function get_each_context_4(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[36] = list[i];
-  child_ctx[38] = i;
+  child_ctx[39] = list[i];
+  child_ctx[41] = i;
   return child_ctx;
 }
 function get_each_context_5(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[31] = list[i];
+  child_ctx[34] = list[i];
   return child_ctx;
 }
 function create_if_block_2$1(ctx) {
   let input;
+  let input_name_value;
   let input_value_value;
   return {
     c() {
       input = element("input");
       attr(input, "type", "hidden");
-      attr(input, "name", "permissions[" + ctx[30] + "][id]");
-      input.value = input_value_value = ctx[28].id;
+      attr(input, "name", input_name_value = "permissions[" + ctx[33] + "][id]");
+      input.value = input_value_value = ctx[31].id;
     },
     m(target, anchor) {
       insert(target, input, anchor);
     },
     p(ctx2, dirty) {
-      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[28].id)) {
+      if (dirty[0] & 1 && input_name_value !== (input_name_value = "permissions[" + ctx2[33] + "][id]")) {
+        attr(input, "name", input_name_value);
+      }
+      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[31].id)) {
         input.value = input_value_value;
       }
     },
@@ -1178,16 +1193,17 @@ function create_if_block_2$1(ctx) {
 function create_each_block_5(ctx) {
   let label;
   let input;
+  let input_name_value;
   let t0;
   let span;
-  let t1_value = ctx[31] + "";
+  let t1_value = ctx[34] + "";
   let t1;
   let t2;
   let mounted;
   let dispose;
-  ctx[13][0][ctx[30]] = [];
+  ctx[14][0][ctx[33]] = [];
   function input_change_handler() {
-    ctx[12].call(input, ctx[29], ctx[30]);
+    ctx[13].call(input, ctx[32], ctx[33]);
   }
   return {
     c() {
@@ -1198,16 +1214,16 @@ function create_each_block_5(ctx) {
       t1 = text(t1_value);
       t2 = space();
       attr(input, "type", "checkbox");
-      input.__value = ctx[31];
+      input.__value = ctx[34];
       input.value = input.__value;
-      attr(input, "name", "permissions[" + ctx[30] + "][post_types][]");
-      ctx[13][0][ctx[30]].push(input);
+      attr(input, "name", input_name_value = "permissions[" + ctx[33] + "][post_types][]");
+      ctx[14][0][ctx[33]].push(input);
       attr(label, "class", "items-center");
     },
     m(target, anchor) {
       insert(target, label, anchor);
       append(label, input);
-      input.checked = ~ctx[28].post_types.indexOf(input.__value);
+      input.checked = ~ctx[31].post_types.indexOf(input.__value);
       append(label, t0);
       append(label, span);
       append(span, t1);
@@ -1219,14 +1235,17 @@ function create_each_block_5(ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
+      if (dirty[0] & 1 && input_name_value !== (input_name_value = "permissions[" + ctx[33] + "][post_types][]")) {
+        attr(input, "name", input_name_value);
+      }
       if (dirty[0] & 1) {
-        input.checked = ~ctx[28].post_types.indexOf(input.__value);
+        input.checked = ~ctx[31].post_types.indexOf(input.__value);
       }
     },
     d(detaching) {
       if (detaching)
         detach(label);
-      ctx[13][0][ctx[30]].splice(ctx[13][0][ctx[30]].indexOf(input), 1);
+      ctx[14][0][ctx[33]].splice(ctx[14][0][ctx[33]].indexOf(input), 1);
       mounted = false;
       dispose();
     }
@@ -1236,10 +1255,11 @@ function create_each_block_4(ctx) {
   let div1;
   let input;
   let input_value_value;
+  let input_name_value;
   let t0;
   let div0;
   let span0;
-  let t1_value = ctx[36] + "";
+  let t1_value = ctx[39] + "";
   let t1;
   let t2;
   let span1;
@@ -1247,7 +1267,7 @@ function create_each_block_4(ctx) {
   let mounted;
   let dispose;
   function click_handler_2() {
-    return ctx[15](ctx[28], ctx[38], ctx[29], ctx[30]);
+    return ctx[16](ctx[31], ctx[41], ctx[32], ctx[33]);
   }
   return {
     c() {
@@ -1262,8 +1282,8 @@ function create_each_block_4(ctx) {
       span1.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" class="cursor-pointer" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
       t3 = space();
       attr(input, "type", "hidden");
-      input.value = input_value_value = ctx[36];
-      attr(input, "name", "permissions[" + ctx[30] + "][capabilities][]");
+      input.value = input_value_value = ctx[39];
+      attr(input, "name", input_name_value = "permissions[" + ctx[33] + "][capabilities][]");
       attr(span1, "class", "ml-2 font-bold");
       attr(div0, "class", "flex shadow items-center bg-blue-500 text-white fill-white rounded mr-1 px-1");
       attr(div1, "class", "w-auto");
@@ -1285,10 +1305,13 @@ function create_each_block_4(ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx[36])) {
+      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx[39])) {
         input.value = input_value_value;
       }
-      if (dirty[0] & 1 && t1_value !== (t1_value = ctx[36] + ""))
+      if (dirty[0] & 1 && input_name_value !== (input_name_value = "permissions[" + ctx[33] + "][capabilities][]")) {
+        attr(input, "name", input_name_value);
+      }
+      if (dirty[0] & 1 && t1_value !== (t1_value = ctx[39] + ""))
         set_data(t1, t1_value);
     },
     d(detaching) {
@@ -1303,10 +1326,11 @@ function create_each_block_3$1(ctx) {
   let label;
   let input;
   let input_value_value;
+  let input_name_value;
   let input_checked_value;
   let t0;
   let span;
-  let t1_value = ctx[31] + "";
+  let t1_value = ctx[34] + "";
   let t1;
   let t2;
   return {
@@ -1318,9 +1342,9 @@ function create_each_block_3$1(ctx) {
       t1 = text(t1_value);
       t2 = space();
       attr(input, "type", "checkbox");
-      input.value = input_value_value = ctx[31];
-      attr(input, "name", "defaults[user][" + ctx[30] + "][post_types][]");
-      input.checked = input_checked_value = ctx[0].defaults.user[ctx[30]].post_types.includes(ctx[31]);
+      input.value = input_value_value = ctx[34];
+      attr(input, "name", input_name_value = "defaults[user][" + ctx[33] + "][post_types][]");
+      input.checked = input_checked_value = ctx[0].defaults.user[ctx[33]].post_types.includes(ctx[34]);
       attr(label, "class", "flex items-center");
     },
     m(target, anchor) {
@@ -1332,13 +1356,16 @@ function create_each_block_3$1(ctx) {
       append(label, t2);
     },
     p(ctx2, dirty) {
-      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[31])) {
+      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[34])) {
         input.value = input_value_value;
       }
-      if (dirty[0] & 1 && input_checked_value !== (input_checked_value = ctx2[0].defaults.user[ctx2[30]].post_types.includes(ctx2[31]))) {
+      if (dirty[0] & 1 && input_name_value !== (input_name_value = "defaults[user][" + ctx2[33] + "][post_types][]")) {
+        attr(input, "name", input_name_value);
+      }
+      if (dirty[0] & 1 && input_checked_value !== (input_checked_value = ctx2[0].defaults.user[ctx2[33]].post_types.includes(ctx2[34]))) {
         input.checked = input_checked_value;
       }
-      if (dirty[0] & 1 && t1_value !== (t1_value = ctx2[31] + ""))
+      if (dirty[0] & 1 && t1_value !== (t1_value = ctx2[34] + ""))
         set_data(t1, t1_value);
     },
     d(detaching) {
@@ -1351,10 +1378,11 @@ function create_each_block_2$1(ctx) {
   let div;
   let input;
   let input_value_value;
+  let input_name_value;
   let input_checked_value;
   let t0;
   let span;
-  let t1_value = ctx[31] + "";
+  let t1_value = ctx[34] + "";
   let t1;
   let t2;
   return {
@@ -1366,9 +1394,9 @@ function create_each_block_2$1(ctx) {
       t1 = text(t1_value);
       t2 = space();
       attr(input, "type", "checkbox");
-      input.value = input_value_value = ctx[31];
-      attr(input, "name", "defaults[user][" + ctx[30] + "][capabilities][]");
-      input.checked = input_checked_value = isCapabilityChecked(ctx[30], ctx[31], ctx[0].defaults.user);
+      input.value = input_value_value = ctx[34];
+      attr(input, "name", input_name_value = "defaults[user][" + ctx[33] + "][capabilities][]");
+      input.checked = input_checked_value = isCapabilityChecked(ctx[31].id, ctx[34], ctx[0].defaults.user);
       attr(div, "class", "items-center");
     },
     m(target, anchor) {
@@ -1380,13 +1408,16 @@ function create_each_block_2$1(ctx) {
       append(div, t2);
     },
     p(ctx2, dirty) {
-      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[31])) {
+      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx2[34])) {
         input.value = input_value_value;
       }
-      if (dirty[0] & 1 && input_checked_value !== (input_checked_value = isCapabilityChecked(ctx2[30], ctx2[31], ctx2[0].defaults.user))) {
+      if (dirty[0] & 1 && input_name_value !== (input_name_value = "defaults[user][" + ctx2[33] + "][capabilities][]")) {
+        attr(input, "name", input_name_value);
+      }
+      if (dirty[0] & 1 && input_checked_value !== (input_checked_value = isCapabilityChecked(ctx2[31].id, ctx2[34], ctx2[0].defaults.user))) {
         input.checked = input_checked_value;
       }
-      if (dirty[0] & 1 && t1_value !== (t1_value = ctx2[31] + ""))
+      if (dirty[0] & 1 && t1_value !== (t1_value = ctx2[34] + ""))
         set_data(t1, t1_value);
     },
     d(detaching) {
@@ -1400,7 +1431,7 @@ function create_if_block_1$2(ctx) {
   let mounted;
   let dispose;
   function click_handler_3() {
-    return ctx[16](ctx[30]);
+    return ctx[19](ctx[33]);
   }
   return {
     c() {
@@ -1431,7 +1462,7 @@ function create_if_block$3(ctx) {
   let mounted;
   let dispose;
   function click_handler_4() {
-    return ctx[17](ctx[30]);
+    return ctx[20](ctx[33]);
   }
   return {
     c() {
@@ -1457,10 +1488,10 @@ function create_if_block$3(ctx) {
     }
   };
 }
-function create_each_block_1$1(ctx) {
-  let div19;
+function create_each_block_1$1(key_1, ctx) {
+  let div20;
   let t0;
-  let div14;
+  let div15;
   let div5;
   let p0;
   let t2;
@@ -1470,7 +1501,6 @@ function create_each_block_1$1(ctx) {
   let t4;
   let input0;
   let input0_name_value;
-  let input0_value_value;
   let t5;
   let label1;
   let input1;
@@ -1491,71 +1521,86 @@ function create_each_block_1$1(ctx) {
   let t14;
   let div2;
   let t15;
+  let div14;
   let div13;
-  let div12;
   let p1;
   let t17;
-  let div11;
-  let div7;
-  let p2;
-  let t19;
   let div6;
+  let t19;
+  let div12;
+  let div8;
+  let p2;
+  let t21;
+  let div7;
   let input3;
   let input3_name_value;
-  let input3_value_value;
-  let t20;
-  let t21;
-  let div10;
-  let div8;
+  let t22;
+  let input4;
+  let input4_name_value;
   let t23;
-  let div9;
   let t24;
-  let div18;
-  let div15;
-  let t25;
+  let div11;
+  let div9;
   let t26;
-  let div16;
+  let div10;
   let t27;
-  let div17;
+  let div19;
+  let div16;
+  let t28;
   let t29;
+  let div17;
+  let t30;
+  let div18;
+  let t32;
   let mounted;
   let dispose;
-  let if_block0 = ctx[28].id && create_if_block_2$1(ctx);
+  let if_block0 = ctx[31].id && create_if_block_2$1(ctx);
+  function input0_input_handler() {
+    ctx[12].call(input0, ctx[32], ctx[33]);
+  }
   let each_value_5 = ctx[3];
   let each_blocks_3 = [];
   for (let i = 0; i < each_value_5.length; i += 1) {
     each_blocks_3[i] = create_each_block_5(get_each_context_5(ctx, each_value_5, i));
   }
   function keypress_handler(...args) {
-    return ctx[14](ctx[30], ...args);
+    return ctx[15](ctx[33], ...args);
   }
-  let each_value_4 = ctx[28].capabilities || [];
+  let each_value_4 = ctx[31].capabilities || [];
   let each_blocks_2 = [];
   for (let i = 0; i < each_value_4.length; i += 1) {
     each_blocks_2[i] = create_each_block_4(get_each_context_4(ctx, each_value_4, i));
   }
-  let each_value_3 = ctx[28].post_types;
+  function input3_input_handler() {
+    ctx[17].call(input3, ctx[32], ctx[33]);
+  }
+  function input4_input_handler() {
+    ctx[18].call(input4, ctx[32], ctx[33]);
+  }
+  let each_value_3 = ctx[31].post_types;
   let each_blocks_1 = [];
   for (let i = 0; i < each_value_3.length; i += 1) {
     each_blocks_1[i] = create_each_block_3$1(get_each_context_3$1(ctx, each_value_3, i));
   }
-  let each_value_2 = ctx[28].capabilities || [];
+  let each_value_2 = ctx[31].capabilities || [];
   let each_blocks = [];
   for (let i = 0; i < each_value_2.length; i += 1) {
     each_blocks[i] = create_each_block_2$1(get_each_context_2$1(ctx, each_value_2, i));
   }
-  let if_block1 = ctx[30] > 0 && create_if_block_1$2(ctx);
-  let if_block2 = ctx[30] < ctx[0].permissions.length - 1 && create_if_block$3(ctx);
-  function click_handler_5(...args) {
-    return ctx[18](ctx[30], ...args);
+  let if_block1 = ctx[33] > 0 && create_if_block_1$2(ctx);
+  let if_block2 = ctx[33] < ctx[0].permissions.length - 1 && create_if_block$3(ctx);
+  function click_handler_5() {
+    return ctx[21](ctx[33]);
   }
   return {
+    key: key_1,
+    first: null,
     c() {
-      div19 = element("div");
+      div20 = element("div");
       if (if_block0)
         if_block0.c();
       t0 = space();
-      div14 = element("div");
+      div15 = element("div");
       div5 = element("div");
       p0 = element("p");
       p0.textContent = `${ctx[4]("Configuration")}`;
@@ -1575,7 +1620,7 @@ function create_each_block_1$1(ctx) {
       t8 = space();
       div1 = element("div");
       span2 = element("span");
-      span2.textContent = `${ctx[4]("Post type")}`;
+      span2.textContent = `${ctx[4]("Post types")}`;
       t10 = space();
       div0 = element("div");
       for (let i = 0; i < each_blocks_3.length; i += 1) {
@@ -1593,85 +1638,93 @@ function create_each_block_1$1(ctx) {
         each_blocks_2[i].c();
       }
       t15 = space();
+      div14 = element("div");
       div13 = element("div");
-      div12 = element("div");
       p1 = element("p");
-      p1.textContent = `${ctx[4]("Defaults settings")}`;
+      p1.textContent = `${ctx[4]("Default user settings")}`;
       t17 = space();
-      div11 = element("div");
-      div7 = element("div");
-      p2 = element("p");
-      p2.textContent = `${ctx[4]("Default posts")}`;
-      t19 = space();
       div6 = element("div");
+      div6.textContent = `${ctx[4]("permission_desc")}`;
+      t19 = space();
+      div12 = element("div");
+      div8 = element("div");
+      p2 = element("p");
+      p2.textContent = `${ctx[4]("Posts")}`;
+      t21 = space();
+      div7 = element("div");
       input3 = element("input");
-      t20 = space();
+      t22 = space();
+      input4 = element("input");
+      t23 = space();
       for (let i = 0; i < each_blocks_1.length; i += 1) {
         each_blocks_1[i].c();
       }
-      t21 = space();
-      div10 = element("div");
-      div8 = element("div");
-      div8.textContent = `${ctx[4]("Default capabilities")}`;
-      t23 = space();
+      t24 = space();
+      div11 = element("div");
       div9 = element("div");
+      div9.textContent = `${ctx[4]("Capabilities")}`;
+      t26 = space();
+      div10 = element("div");
       for (let i = 0; i < each_blocks.length; i += 1) {
         each_blocks[i].c();
       }
-      t24 = space();
-      div18 = element("div");
-      div15 = element("div");
+      t27 = space();
+      div19 = element("div");
+      div16 = element("div");
       if (if_block1)
         if_block1.c();
-      t25 = space();
+      t28 = space();
       if (if_block2)
         if_block2.c();
-      t26 = space();
-      div16 = element("div");
-      t27 = space();
-      div17 = element("div");
-      div17.textContent = `${ctx[4]("Delete")}`;
       t29 = space();
+      div17 = element("div");
+      t30 = space();
+      div18 = element("div");
+      div18.textContent = `${ctx[4]("Delete")}`;
+      t32 = space();
       attr(p0, "class", "font-bold text-sm mb-2");
       attr(span0, "class", "font-bold");
       attr(input0, "type", "text");
-      attr(input0, "name", input0_name_value = "permissions[" + ctx[30] + "][name]");
-      input0.value = input0_value_value = ctx[28].name;
+      attr(input0, "name", input0_name_value = "permissions[" + ctx[33] + "][name]");
       attr(input0, "class", "w-auto");
       attr(label0, "class", "flex flex-col");
       attr(input1, "type", "checkbox");
-      attr(input1, "name", input1_name_value = "permissions[" + ctx[30] + "][logged_required]'");
-      input1.checked = input1_checked_value = ctx[28].logged_required === "on";
+      attr(input1, "name", input1_name_value = "permissions[" + ctx[33] + "][logged_required]'");
+      input1.checked = input1_checked_value = ctx[31].logged_required === "on";
       attr(span2, "class", "font-bold");
+      attr(span3, "class", "font-bold");
       attr(input2, "type", "text");
       attr(div2, "class", "flex flex-wrap");
       attr(div3, "class", "flex flex-col space-y-1 flex-1");
       attr(div4, "class", "flex flex-col space-y-1 px-3");
       attr(div5, "class", "flex-1");
       attr(p1, "class", "font-bold text-sm mb-2");
+      attr(div6, "class", "ring-1 ring-amber-500 bg-white p-2 rounded");
       attr(p2, "class", "font-bold");
       attr(input3, "type", "hidden");
-      attr(input3, "name", input3_name_value = "defaults[user][" + ctx[30] + "][name]");
-      input3.value = input3_value_value = ctx[28].name;
-      attr(div8, "class", "font-bold");
-      attr(div9, "class", "flex flex-row space-x-2");
-      attr(div11, "class", "px-3");
-      attr(div12, "class", "space-y-3");
-      attr(div13, "class", "flex-1 space-y-3");
-      attr(div14, "class", "flex space-x-2");
-      attr(div15, "class", "flex flex-col ");
-      attr(div16, "class", "flex-1");
-      attr(div17, "class", "p-2 bg-red-500 rounded text-white ");
-      attr(div18, "class", "flex items-center ");
-      attr(div19, "class", "rounded bg-white p-2");
+      attr(input3, "name", input3_name_value = "defaults[user][" + ctx[33] + "][id]");
+      attr(input4, "type", "hidden");
+      attr(input4, "name", input4_name_value = "defaults[user][" + ctx[33] + "][name]");
+      attr(div9, "class", "font-bold");
+      attr(div10, "class", "flex flex-row space-x-2");
+      attr(div12, "class", "px-3");
+      attr(div13, "class", "space-y-3");
+      attr(div14, "class", "flex-1 space-y-3");
+      attr(div15, "class", "flex space-x-2");
+      attr(div16, "class", "flex flex-col ");
+      attr(div17, "class", "flex-1");
+      attr(div18, "class", "p-2 bg-red-500 rounded text-white cursor-pointer");
+      attr(div19, "class", "flex items-center ");
+      attr(div20, "class", "rounded bg-white p-2");
+      this.first = div20;
     },
     m(target, anchor) {
-      insert(target, div19, anchor);
+      insert(target, div20, anchor);
       if (if_block0)
-        if_block0.m(div19, null);
-      append(div19, t0);
-      append(div19, div14);
-      append(div14, div5);
+        if_block0.m(div20, null);
+      append(div20, t0);
+      append(div20, div15);
+      append(div15, div5);
       append(div5, p0);
       append(div5, t2);
       append(div5, div4);
@@ -1679,6 +1732,7 @@ function create_each_block_1$1(ctx) {
       append(label0, span0);
       append(label0, t4);
       append(label0, input0);
+      set_input_value(input0, ctx[31].name);
       append(div4, t5);
       append(div4, label1);
       append(label1, input1);
@@ -1702,68 +1756,83 @@ function create_each_block_1$1(ctx) {
       for (let i = 0; i < each_blocks_2.length; i += 1) {
         each_blocks_2[i].m(div2, null);
       }
-      append(div14, t15);
+      append(div15, t15);
+      append(div15, div14);
       append(div14, div13);
+      append(div13, p1);
+      append(div13, t17);
+      append(div13, div6);
+      append(div13, t19);
       append(div13, div12);
-      append(div12, p1);
-      append(div12, t17);
-      append(div12, div11);
-      append(div11, div7);
-      append(div7, p2);
-      append(div7, t19);
-      append(div7, div6);
-      append(div6, input3);
-      append(div6, t20);
+      append(div12, div8);
+      append(div8, p2);
+      append(div8, t21);
+      append(div8, div7);
+      append(div7, input3);
+      set_input_value(input3, ctx[31].id);
+      append(div7, t22);
+      append(div7, input4);
+      set_input_value(input4, ctx[31].name);
+      append(div7, t23);
       for (let i = 0; i < each_blocks_1.length; i += 1) {
-        each_blocks_1[i].m(div6, null);
+        each_blocks_1[i].m(div7, null);
       }
-      append(div11, t21);
+      append(div12, t24);
+      append(div12, div11);
+      append(div11, div9);
+      append(div11, t26);
       append(div11, div10);
-      append(div10, div8);
-      append(div10, t23);
-      append(div10, div9);
       for (let i = 0; i < each_blocks.length; i += 1) {
-        each_blocks[i].m(div9, null);
+        each_blocks[i].m(div10, null);
       }
-      append(div19, t24);
-      append(div19, div18);
-      append(div18, div15);
+      append(div20, t27);
+      append(div20, div19);
+      append(div19, div16);
       if (if_block1)
-        if_block1.m(div15, null);
-      append(div15, t25);
+        if_block1.m(div16, null);
+      append(div16, t28);
       if (if_block2)
-        if_block2.m(div15, null);
-      append(div18, t26);
-      append(div18, div16);
-      append(div18, t27);
-      append(div18, div17);
+        if_block2.m(div16, null);
       append(div19, t29);
+      append(div19, div17);
+      append(div19, t30);
+      append(div19, div18);
+      append(div20, t32);
       if (!mounted) {
         dispose = [
+          listen(input0, "input", input0_input_handler),
           listen(input2, "keypress", keypress_handler),
-          listen(div17, "click", click_handler_5)
+          listen(input3, "input", input3_input_handler),
+          listen(input4, "input", input4_input_handler),
+          listen(div18, "click", prevent_default(click_handler_5))
         ];
         mounted = true;
       }
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (ctx[28].id) {
+      if (ctx[31].id) {
         if (if_block0) {
           if_block0.p(ctx, dirty);
         } else {
           if_block0 = create_if_block_2$1(ctx);
           if_block0.c();
-          if_block0.m(div19, t0);
+          if_block0.m(div20, t0);
         }
       } else if (if_block0) {
         if_block0.d(1);
         if_block0 = null;
       }
-      if (dirty[0] & 1 && input0_value_value !== (input0_value_value = ctx[28].name) && input0.value !== input0_value_value) {
-        input0.value = input0_value_value;
+      if (dirty[0] & 1 && input0_name_value !== (input0_name_value = "permissions[" + ctx[33] + "][name]")) {
+        attr(input0, "name", input0_name_value);
       }
-      if (dirty[0] & 1 && input1_checked_value !== (input1_checked_value = ctx[28].logged_required === "on")) {
+      if (dirty[0] & 1 && input0.value !== ctx[31].name) {
+        set_input_value(input0, ctx[31].name);
+      }
+      if (dirty[0] & 1 && input1_name_value !== (input1_name_value = "permissions[" + ctx[33] + "][logged_required]'")) {
+        attr(input1, "name", input1_name_value);
+      }
+      if (dirty[0] & 1 && input1_checked_value !== (input1_checked_value = ctx[31].logged_required === "on")) {
         input1.checked = input1_checked_value;
       }
       if (dirty[0] & 9) {
@@ -1785,7 +1854,7 @@ function create_each_block_1$1(ctx) {
         each_blocks_3.length = each_value_5.length;
       }
       if (dirty[0] & 1) {
-        each_value_4 = ctx[28].capabilities || [];
+        each_value_4 = ctx[31].capabilities || [];
         let i;
         for (i = 0; i < each_value_4.length; i += 1) {
           const child_ctx = get_each_context_4(ctx, each_value_4, i);
@@ -1802,11 +1871,20 @@ function create_each_block_1$1(ctx) {
         }
         each_blocks_2.length = each_value_4.length;
       }
-      if (dirty[0] & 1 && input3_value_value !== (input3_value_value = ctx[28].name)) {
-        input3.value = input3_value_value;
+      if (dirty[0] & 1 && input3_name_value !== (input3_name_value = "defaults[user][" + ctx[33] + "][id]")) {
+        attr(input3, "name", input3_name_value);
       }
       if (dirty[0] & 1) {
-        each_value_3 = ctx[28].post_types;
+        set_input_value(input3, ctx[31].id);
+      }
+      if (dirty[0] & 1 && input4_name_value !== (input4_name_value = "defaults[user][" + ctx[33] + "][name]")) {
+        attr(input4, "name", input4_name_value);
+      }
+      if (dirty[0] & 1) {
+        set_input_value(input4, ctx[31].name);
+      }
+      if (dirty[0] & 1) {
+        each_value_3 = ctx[31].post_types;
         let i;
         for (i = 0; i < each_value_3.length; i += 1) {
           const child_ctx = get_each_context_3$1(ctx, each_value_3, i);
@@ -1815,7 +1893,7 @@ function create_each_block_1$1(ctx) {
           } else {
             each_blocks_1[i] = create_each_block_3$1(child_ctx);
             each_blocks_1[i].c();
-            each_blocks_1[i].m(div6, null);
+            each_blocks_1[i].m(div7, null);
           }
         }
         for (; i < each_blocks_1.length; i += 1) {
@@ -1824,7 +1902,7 @@ function create_each_block_1$1(ctx) {
         each_blocks_1.length = each_value_3.length;
       }
       if (dirty[0] & 1) {
-        each_value_2 = ctx[28].capabilities || [];
+        each_value_2 = ctx[31].capabilities || [];
         let i;
         for (i = 0; i < each_value_2.length; i += 1) {
           const child_ctx = get_each_context_2$1(ctx, each_value_2, i);
@@ -1833,7 +1911,7 @@ function create_each_block_1$1(ctx) {
           } else {
             each_blocks[i] = create_each_block_2$1(child_ctx);
             each_blocks[i].c();
-            each_blocks[i].m(div9, null);
+            each_blocks[i].m(div10, null);
           }
         }
         for (; i < each_blocks.length; i += 1) {
@@ -1841,15 +1919,25 @@ function create_each_block_1$1(ctx) {
         }
         each_blocks.length = each_value_2.length;
       }
-      if (ctx[30] > 0)
-        if_block1.p(ctx, dirty);
-      if (ctx[30] < ctx[0].permissions.length - 1) {
+      if (ctx[33] > 0) {
+        if (if_block1) {
+          if_block1.p(ctx, dirty);
+        } else {
+          if_block1 = create_if_block_1$2(ctx);
+          if_block1.c();
+          if_block1.m(div16, t28);
+        }
+      } else if (if_block1) {
+        if_block1.d(1);
+        if_block1 = null;
+      }
+      if (ctx[33] < ctx[0].permissions.length - 1) {
         if (if_block2) {
           if_block2.p(ctx, dirty);
         } else {
           if_block2 = create_if_block$3(ctx);
           if_block2.c();
-          if_block2.m(div15, null);
+          if_block2.m(div16, null);
         }
       } else if (if_block2) {
         if_block2.d(1);
@@ -1858,7 +1946,7 @@ function create_each_block_1$1(ctx) {
     },
     d(detaching) {
       if (detaching)
-        detach(div19);
+        detach(div20);
       if (if_block0)
         if_block0.d();
       destroy_each(each_blocks_3, detaching);
@@ -1880,7 +1968,7 @@ function create_each_block$1(ctx) {
   let t0;
   let div;
   let span0;
-  let t1_value = ctx[25] + "";
+  let t1_value = ctx[28] + "";
   let t1;
   let t2;
   let span1;
@@ -1888,7 +1976,7 @@ function create_each_block$1(ctx) {
   let mounted;
   let dispose;
   function click_handler_6() {
-    return ctx[20](ctx[27]);
+    return ctx[23](ctx[30]);
   }
   return {
     c() {
@@ -1903,7 +1991,7 @@ function create_each_block$1(ctx) {
       t3 = space();
       attr(input, "type", "hidden");
       attr(input, "name", "countries[]");
-      input.value = input_value_value = ctx[25];
+      input.value = input_value_value = ctx[28];
       attr(span1, "class", "ml-2 font-bold");
       attr(div, "class", "flex shadow items-center bg-blue-500 text-white fill-white rounded mr-1 px-1 mt-1");
     },
@@ -1923,10 +2011,10 @@ function create_each_block$1(ctx) {
     },
     p(new_ctx, dirty) {
       ctx = new_ctx;
-      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx[25])) {
+      if (dirty[0] & 1 && input_value_value !== (input_value_value = ctx[28])) {
         input.value = input_value_value;
       }
-      if (dirty[0] & 1 && t1_value !== (t1_value = ctx[25] + ""))
+      if (dirty[0] & 1 && t1_value !== (t1_value = ctx[28] + ""))
         set_data(t1, t1_value);
     },
     d(detaching) {
@@ -1952,6 +2040,8 @@ function create_fragment$3(ctx) {
   let details0;
   let summary0;
   let t5;
+  let each_blocks_1 = [];
+  let each0_lookup = /* @__PURE__ */ new Map();
   let t6;
   let details1;
   let summary1;
@@ -1963,9 +2053,11 @@ function create_fragment$3(ctx) {
   let mounted;
   let dispose;
   let each_value_1 = ctx[0].permissions;
-  let each_blocks_1 = [];
+  const get_key = (ctx2) => ctx2[31].id;
   for (let i = 0; i < each_value_1.length; i += 1) {
-    each_blocks_1[i] = create_each_block_1$1(get_each_context_1$1(ctx, each_value_1, i));
+    let child_ctx = get_each_context_1$1(ctx, each_value_1, i);
+    let key = get_key(child_ctx);
+    each0_lookup.set(key, each_blocks_1[i] = create_each_block_1$1(key, child_ctx));
   }
   let each_value = ctx[0].countries;
   let each_blocks = [];
@@ -1980,7 +2072,7 @@ function create_fragment$3(ctx) {
       button0.textContent = `${ctx[4]("Save settings")}`;
       t1 = space();
       button1 = element("button");
-      button1.textContent = `${ctx[4]("Add new")}`;
+      button1.textContent = `${ctx[4]("Add permission")}`;
       t3 = space();
       form = element("form");
       details0 = element("details");
@@ -2002,9 +2094,9 @@ function create_fragment$3(ctx) {
       for (let i = 0; i < each_blocks.length; i += 1) {
         each_blocks[i].c();
       }
-      attr(button0, "class", "bg-blue-500 text-white rounded p-1");
-      attr(button1, "class", "border-1 border-blue-500 rounded p-1 bg-white");
-      attr(div0, "class", "flex flex-row space-x-2 mt-2");
+      attr(button0, "class", "bg-blue-500 text-white rounded p-1 font-bold");
+      attr(button1, "class", "bg-blue-500 rounded p-1 text-white shadow font-bold");
+      attr(div0, "class", "flex space-x-2 mt-2");
       details0.open = true;
       attr(input, "type", "text");
       attr(input, "placeholder", ctx[4]("Add country"));
@@ -2041,12 +2133,12 @@ function create_fragment$3(ctx) {
       for (let i = 0; i < each_blocks.length; i += 1) {
         each_blocks[i].m(div1, null);
       }
-      ctx[21](form);
+      ctx[24](form);
       if (!mounted) {
         dispose = [
           listen(button0, "click", ctx[10]),
           listen(button1, "click", ctx[11]),
-          listen(input, "change", ctx[19])
+          listen(input, "change", ctx[22])
         ];
         mounted = true;
       }
@@ -2054,21 +2146,7 @@ function create_fragment$3(ctx) {
     p(ctx2, dirty) {
       if (dirty[0] & 505) {
         each_value_1 = ctx2[0].permissions;
-        let i;
-        for (i = 0; i < each_value_1.length; i += 1) {
-          const child_ctx = get_each_context_1$1(ctx2, each_value_1, i);
-          if (each_blocks_1[i]) {
-            each_blocks_1[i].p(child_ctx, dirty);
-          } else {
-            each_blocks_1[i] = create_each_block_1$1(child_ctx);
-            each_blocks_1[i].c();
-            each_blocks_1[i].m(details0, null);
-          }
-        }
-        for (; i < each_blocks_1.length; i += 1) {
-          each_blocks_1[i].d(1);
-        }
-        each_blocks_1.length = each_value_1.length;
+        each_blocks_1 = update_keyed_each(each_blocks_1, dirty, get_key, 1, ctx2, each_value_1, each0_lookup, details0, destroy_block, create_each_block_1$1, null, get_each_context_1$1);
       }
       if (dirty[0] & 1) {
         each_value = ctx2[0].countries;
@@ -2094,16 +2172,18 @@ function create_fragment$3(ctx) {
     d(detaching) {
       if (detaching)
         detach(div3);
-      destroy_each(each_blocks_1, detaching);
+      for (let i = 0; i < each_blocks_1.length; i += 1) {
+        each_blocks_1[i].d();
+      }
       destroy_each(each_blocks, detaching);
-      ctx[21](null);
+      ctx[24](null);
       mounted = false;
       run_all(dispose);
     }
   };
 }
 function isCapabilityChecked(index, pt, items) {
-  const tmp = items[index];
+  const tmp = items.find((x) => x.id === index);
   return tmp && tmp.capabilities.includes(pt);
 }
 function instance$3($$self, $$props, $$invalidate) {
@@ -2159,8 +2239,7 @@ function instance$3($$self, $$props, $$invalidate) {
       e.target.value = "";
     }
   }
-  function removePermission(index, event) {
-    event.preventDefault();
+  function removePermission(index) {
     config.permissions.splice(index, 1);
     $$invalidate(0, config);
   }
@@ -2175,12 +2254,16 @@ function instance$3($$self, $$props, $$invalidate) {
     $$invalidate(0, config.permissions[index] = tmp, config);
   }
   function addNew() {
-    $$invalidate(0, config.permissions = [defaultPermission, ...config.permissions], config);
+    $$invalidate(0, config.permissions = [__spreadProps(__spreadValues({}, defaultPermission), { id: Date.now() }), ...config.permissions], config);
     doDefault2(config.defaults.user);
   }
   const $$binding_groups = [[]];
   const click_handler = () => formRef.submit();
   const click_handler_1 = () => addNew();
+  function input0_input_handler(each_value_1, index) {
+    each_value_1[index].name = this.value;
+    $$invalidate(0, config);
+  }
   function input_change_handler(each_value_1, index) {
     each_value_1[index].post_types = get_binding_group_value($$binding_groups[0][index], this.__value, this.checked);
     $$invalidate(0, config);
@@ -2190,9 +2273,17 @@ function instance$3($$self, $$props, $$invalidate) {
     permission.capabilities.splice(capIndex, 1);
     $$invalidate(0, each_value_1[index].capabilities = permission.capabilities, config);
   };
+  function input3_input_handler(each_value_1, index) {
+    each_value_1[index].id = this.value;
+    $$invalidate(0, config);
+  }
+  function input4_input_handler(each_value_1, index) {
+    each_value_1[index].name = this.value;
+    $$invalidate(0, config);
+  }
   const click_handler_3 = (index) => moveUp(index);
   const click_handler_4 = (index) => moveDown(index);
-  const click_handler_5 = (index, e) => removePermission(index, e);
+  const click_handler_5 = (index) => removePermission(index);
   const change_handler = (e) => {
     if (e.target.value.length > 0) {
       config.countries.push(e.target.value);
@@ -2226,10 +2317,13 @@ function instance$3($$self, $$props, $$invalidate) {
     addNew,
     click_handler,
     click_handler_1,
+    input0_input_handler,
     input_change_handler,
     $$binding_groups,
     keypress_handler,
     click_handler_2,
+    input3_input_handler,
+    input4_input_handler,
     click_handler_3,
     click_handler_4,
     click_handler_5,
@@ -2271,7 +2365,7 @@ function get_each_context_3(ctx, list, i) {
 }
 function create_if_block$2(ctx) {
   let div2;
-  let p;
+  let b;
   let t1;
   let div1;
   let div0;
@@ -2289,8 +2383,8 @@ function create_if_block$2(ctx) {
   return {
     c() {
       div2 = element("div");
-      p = element("p");
-      p.textContent = `${ctx[3]("Permissions")}`;
+      b = element("b");
+      b.textContent = `${ctx[3]("Permissions")}`;
       t1 = space();
       div1 = element("div");
       div0 = element("div");
@@ -2303,11 +2397,11 @@ function create_if_block$2(ctx) {
       }
       attr(div0, "class", "flex flex-row space-x-2");
       attr(div1, "class", "p-2 bg-white space-y-2");
-      attr(div2, "class", "flex-1");
+      attr(div2, "class", "ring-1 ring-gray-300 p-2 rounded");
     },
     m(target, anchor) {
       insert(target, div2, anchor);
-      append(div2, p);
+      append(div2, b);
       append(div2, t1);
       append(div2, div1);
       append(div1, div0);
@@ -2517,7 +2611,7 @@ function create_each_block_2(ctx) {
       attr(input, "type", "checkbox");
       input.__value = input_value_value = ctx[15];
       input.value = input.__value;
-      attr(input, "name", input_name_value = "" + (ctx[0].names.permission + "[" + ctx[13].id + "][capabilities][]"));
+      attr(input, "name", input_name_value = ctx[0].names.permission + "[" + ctx[13].id + "][capabilities][]");
       ctx[7][1][ctx[12]].push(input);
     },
     m(target, anchor) {
@@ -2539,7 +2633,7 @@ function create_each_block_2(ctx) {
         input.__value = input_value_value;
         input.value = input.__value;
       }
-      if (dirty & 1 && input_name_value !== (input_name_value = "" + (ctx[0].names.permission + "[" + ctx[13].id + "][capabilities][]"))) {
+      if (dirty & 1 && input_name_value !== (input_name_value = ctx[0].names.permission + "[" + ctx[13].id + "][capabilities][]")) {
         attr(input, "name", input_name_value);
       }
       if (dirty & 3) {
@@ -2676,7 +2770,7 @@ function create_each_block(ctx) {
       attr(input, "type", "checkbox");
       input.__value = input_value_value = ctx[10];
       input.value = input.__value;
-      attr(input, "name", input_name_value = "" + (ctx[0].names.countries + "[]"));
+      attr(input, "name", input_name_value = ctx[0].names.countries + "[]");
       ctx[7][0].push(input);
     },
     m(target, anchor) {
@@ -2696,7 +2790,7 @@ function create_each_block(ctx) {
         input.__value = input_value_value;
         input.value = input.__value;
       }
-      if (dirty & 1 && input_name_value !== (input_name_value = "" + (ctx2[0].names.countries + "[]"))) {
+      if (dirty & 1 && input_name_value !== (input_name_value = ctx2[0].names.countries + "[]")) {
         attr(input, "name", input_name_value);
       }
       if (dirty & 1) {
@@ -2716,27 +2810,26 @@ function create_each_block(ctx) {
 }
 function create_fragment$2(ctx) {
   let div4;
-  let div3;
   let div0;
   let label0;
-  let p0;
+  let b0;
   let t1;
   let textarea;
   let textarea_name_value;
   let textarea_value_value;
   let t2;
-  let div2;
-  let label1;
   let div1;
+  let label1;
+  let b1;
   let t4;
   let input;
   let input_name_value;
   let t5;
   let t6;
-  let div6;
-  let p1;
+  let div3;
+  let b2;
   let t8;
-  let div5;
+  let div2;
   let if_block = ctx[2] && create_if_block$2(ctx);
   let each_value = ctx[0].base_countries;
   let each_blocks = [];
@@ -2746,29 +2839,28 @@ function create_fragment$2(ctx) {
   return {
     c() {
       div4 = element("div");
-      div3 = element("div");
       div0 = element("div");
       label0 = element("label");
-      p0 = element("p");
-      p0.textContent = `${ctx[3]("Abstract")}`;
+      b0 = element("b");
+      b0.textContent = `${ctx[3]("Abstract")}`;
       t1 = space();
       textarea = element("textarea");
       t2 = space();
-      div2 = element("div");
-      label1 = element("label");
       div1 = element("div");
-      div1.textContent = `${ctx[3]("Decorative image")}`;
+      label1 = element("label");
+      b1 = element("b");
+      b1.textContent = `${ctx[3]("Decorative image")}`;
       t4 = space();
       input = element("input");
       t5 = space();
       if (if_block)
         if_block.c();
       t6 = space();
-      div6 = element("div");
-      p1 = element("p");
-      p1.textContent = `${ctx[3]("Countries")}`;
+      div3 = element("div");
+      b2 = element("b");
+      b2.textContent = `${ctx[3]("Countries")}`;
       t8 = space();
-      div5 = element("div");
+      div2 = element("div");
       for (let i = 0; i < each_blocks.length; i += 1) {
         each_blocks[i].c();
       }
@@ -2776,39 +2868,38 @@ function create_fragment$2(ctx) {
       attr(textarea, "class", "w-full");
       textarea.value = textarea_value_value = ctx[0].abstract;
       attr(label0, "class", "space-y-1");
-      attr(div0, "class", "flex flex-col");
+      attr(div0, "class", "flex flex-col ring-1 ring-gray-300 p-2 rounded");
       attr(input, "type", "file");
       attr(input, "accept", "image/png, image/jpeg");
       attr(input, "name", input_name_value = ctx[0].names.image);
-      attr(div2, "class", "flex flex-col");
-      attr(div3, "class", "space-y-3 flex-1");
-      attr(div4, "class", "flex flex-row space-x-2");
-      attr(div5, "class", "flex flex-row flex-wrap space-x-2");
+      attr(div1, "class", "flex flex-col ring-1 ring-gray-300 p-2 rounded");
+      attr(div2, "class", "flex flex-row flex-wrap space-x-2");
+      attr(div3, "class", "ring-1 ring-gray-300 p-2 rounded");
+      attr(div4, "class", "space-y-2");
     },
     m(target, anchor) {
       insert(target, div4, anchor);
-      append(div4, div3);
-      append(div3, div0);
+      append(div4, div0);
       append(div0, label0);
-      append(label0, p0);
+      append(label0, b0);
       append(label0, t1);
       append(label0, textarea);
-      append(div3, t2);
-      append(div3, div2);
-      append(div2, label1);
-      append(label1, div1);
+      append(div4, t2);
+      append(div4, div1);
+      append(div1, label1);
+      append(label1, b1);
       append(label1, t4);
       append(label1, input);
       append(div4, t5);
       if (if_block)
         if_block.m(div4, null);
-      insert(target, t6, anchor);
-      insert(target, div6, anchor);
-      append(div6, p1);
-      append(div6, t8);
-      append(div6, div5);
+      append(div4, t6);
+      append(div4, div3);
+      append(div3, b2);
+      append(div3, t8);
+      append(div3, div2);
       for (let i = 0; i < each_blocks.length; i += 1) {
-        each_blocks[i].m(div5, null);
+        each_blocks[i].m(div2, null);
       }
     },
     p(ctx2, [dirty]) {
@@ -2827,7 +2918,7 @@ function create_fragment$2(ctx) {
         } else {
           if_block = create_if_block$2(ctx2);
           if_block.c();
-          if_block.m(div4, null);
+          if_block.m(div4, t6);
         }
       } else if (if_block) {
         if_block.d(1);
@@ -2843,7 +2934,7 @@ function create_fragment$2(ctx) {
           } else {
             each_blocks[i] = create_each_block(child_ctx);
             each_blocks[i].c();
-            each_blocks[i].m(div5, null);
+            each_blocks[i].m(div2, null);
           }
         }
         for (; i < each_blocks.length; i += 1) {
@@ -2859,10 +2950,6 @@ function create_fragment$2(ctx) {
         detach(div4);
       if (if_block)
         if_block.d();
-      if (detaching)
-        detach(t6);
-      if (detaching)
-        detach(div6);
       destroy_each(each_blocks, detaching);
     }
   };
@@ -2885,6 +2972,7 @@ function instance$2($$self, $$props, $$invalidate) {
   config.base_countries || (config.base_countries = []);
   config.countries || (config.countries = []);
   const finalConfig = __spreadValues(__spreadValues({}, defaultConfig), config || {});
+  console.log(finalConfig);
   doDefault(finalConfig.permissions, finalConfig.selections || [], (x) => x.id, (src) => ({
     id: src.id,
     name: src.name,

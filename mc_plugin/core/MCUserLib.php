@@ -24,11 +24,21 @@ class MCUserLib
         if (!$settings) {
             $settings = ["permissions" => []];
         }
+        if (empty($permissionSelection)) {
+            $tmp = ($settings[MC_DEFAULTS] ?? [])[MC_USER] ?? [];
+            $permissionSelection = [];
+            foreach ($tmp as $item) {
+                $permissionSelection[$item['id']] = $item;
+            }
+        }
 
         $config = [
             'permissions' => $settings['permissions'],
-            'selections' => $permissionSelection === "" ? null : $permissionSelection,
-            'i18n' => []
+            'selections' => $permissionSelection,
+            'i18n' => [
+                'Post types' => __('Post types'),
+                'Capabilities' => __('Capabilities'),
+            ]
         ];
         ?>
         <script type="module">
@@ -43,22 +53,11 @@ class MCUserLib
     function addExtraFields(WP_User $user)
     {
         $this->user = $user;
-        $permissionSelection = get_user_meta($user->ID, MC_METABOX_PERMISSION, true);
-        $settings = get_option(MC_SETTING);
-
-        if (!$settings) {
-            $settings = ["permissions" => []];
-        }
-
-        $settings['selection'] = $permissionSelection === "" ? [] : $permissionSelection;
-        $settingsEsc = htmlspecialchars(wp_json_encode($settings));
-
         ?>
-        <h3>It's Your Birthday</h3>
         <table class="form-table">
             <tr>
                 <th>
-                    <label for="birthday">Birthday</label>
+                    <label for="birthday"><?= __('Birthday') ?></label>
                 </th>
                 <td>
                     <input type="date"
@@ -69,14 +68,22 @@ class MCUserLib
                            title="Please use YYYY-MM-DD as the date format."
                            pattern="(19[0-9][0-9]|20[0-9][0-9])-(1[0-2]|0[1-9])-(3[01]|[21][0-9]|0[1-9])"
                            required>
-                    <p class="description">
-                        Please enter your birthday date.
-                    </p>
                 </td>
             </tr>
-            <tr x-data="<?= $settingsEsc ?>">
+            <tr>
+                <th><?= __('Enabled') ?></th>
+                <td>
+                    <label>
+                        <input
+                                title="Enables user to login on website"
+                                type="checkbox"
+                                name="<?= MC_ENABLED ?>" <?= get_user_meta($user->ID, MC_ENABLED, true) === 'on' ? 'checked' : '' ?>>
+                    </label>
+                </td>
+            </tr>
+            <tr>
                 <th><?= __('Permissions') ?></th>
-                <td x-data="{currentTab: undefined}" x-init="currentTab=permissions[0]" class="mc_plugin_user_permission">
+                <td class="mc_plugin_user_permission">
                 </td>
             </tr>
         </table>
@@ -98,7 +105,7 @@ class MCUserLib
                     "post_type" => PROFESSIONAL_CATALOG,
                     "meta_input" => [
                         MC_KIND => "person",
-                        MC_ENABLED => false,
+                        MC_ENABLED => 'off',
                         MC_USER_REF => $user_id,
                     ]
                 ]
@@ -126,6 +133,8 @@ class MCUserLib
 
     function mc_user_profile_updated($user_id)
     {
+        update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
+
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
             $permissions = $_POST[MC_METABOX_PERMISSION];
 

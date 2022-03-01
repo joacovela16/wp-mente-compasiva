@@ -128,7 +128,7 @@
 
 
                     <div class="flex flex-row">
-                        <button type="submit" class="transition-all bg-blue-500 text-white p-2 rounded shadow-lg inline-block w-35 text-center cursor-pointer"><?= __('Save changes') ?></button>
+                        <button type="submit" class="transition-all bg-blue-500 text-white p-2 rounded shadow-lg inline-block w-40 text-center cursor-pointer"><?= __('Save changes') ?></button>
                         <div class="flex-1"></div>
                         <div class="transition-all ring-red-500 ring-2 rounded p-2 rounded shadow-lg inline-block text-center cursor-pointer hover:text-white hover:bg-red-500">
                             <a href="<?= wp_logout_url(site_url()) ?>" class="flex flex-row">

@@ -21,31 +21,29 @@
     config.countries || (config.countries = []);
 
     const finalConfig = {...defaultConfig, ...(config || {})};
+    console.log(finalConfig)
     doDefault(finalConfig.permissions, finalConfig.selections || [], x => x.id, src => ({id: src.id, name: src.name, post_types: [], capabilities: []}));
     const selections = arrayAsMap(finalConfig.selections, x => x.id);
     const __ = doGetter(finalConfig.i18n);
     let currentTab = finalConfig.permissions[0];
 
 </script>
-
-<div class="flex flex-row space-x-2">
-    <div class="space-y-3 flex-1">
-        <div class="flex flex-col">
-            <label class="space-y-1">
-                <p>{__("Abstract")} </p>
-                <textarea name={finalConfig.names.abstract} class="w-full">{finalConfig.abstract}</textarea>
-            </label>
-        </div>
-        <div class="flex flex-col">
-            <label>
-                <div>{__("Decorative image")}</div>
-                <input type="file" accept="image/png, image/jpeg" name={finalConfig.names.image}>
-            </label>
-        </div>
+<div class="space-y-2">
+    <div class="flex flex-col ring-1 ring-gray-300 p-2 rounded">
+        <label class="space-y-1">
+            <b>{__("Abstract")} </b>
+            <textarea name={finalConfig.names.abstract} class="w-full">{finalConfig.abstract}</textarea>
+        </label>
+    </div>
+    <div class="flex flex-col ring-1 ring-gray-300 p-2 rounded">
+        <label>
+            <b>{__("Decorative image")}</b>
+            <input type="file" accept="image/png, image/jpeg" name={finalConfig.names.image}>
+        </label>
     </div>
     {#if currentTab}
-        <div class="flex-1">
-            <p>{__("Permissions")}</p>
+        <div class="ring-1 ring-gray-300 p-2 rounded">
+            <b>{__("Permissions")}</b>
             <div class="p-2 bg-white space-y-2">
                 <div class="flex flex-row space-x-2">
                     {#each finalConfig.permissions as item, index}
@@ -98,17 +96,17 @@
             </div>
         </div>
     {/if}
-</div>
 
-<div>
-    <p>{__('Countries')}</p>
-    <div class="flex flex-row flex-wrap space-x-2">
-        {#each finalConfig.base_countries as c, index}
-            <label >
-                <input type="checkbox" value={c} name="{finalConfig.names.countries}[]" bind:group={finalConfig.countries}>
-                {c}
-            </label>
-        {/each}
+    <div class="ring-1 ring-gray-300 p-2 rounded">
+        <b>{__('Countries')}</b>
+        <div class="flex flex-row flex-wrap space-x-2">
+            {#each finalConfig.base_countries as c, index}
+                <label>
+                    <input type="checkbox" value={c} name="{finalConfig.names.countries}[]" bind:group={finalConfig.countries}>
+                    {c}
+                </label>
+            {/each}
+        </div>
     </div>
 </div>
 <style lang="scss">

@@ -210,6 +210,10 @@
   width: 1.25rem;
 }
 
+.w-40 {
+  width: 10rem;
+}
+
 .w-auto {
   width: auto;
 }
@@ -503,16 +507,6 @@
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.py-7 {
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
-}
-
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 
 .pr-8 {
@@ -864,6 +858,18 @@ body.login {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+}
+
+.language-switcher {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  padding: 0px;
+  text-align: center;
+}
+
+#language-switcher {
+  margin: 0px;
 }
 
 .hover\:border-blue-500:hover {

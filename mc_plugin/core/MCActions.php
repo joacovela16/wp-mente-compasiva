@@ -2,11 +2,36 @@
 
 class MCActions
 {
+    private function isAdm($user = null): bool
+    {
+        if (is_wp_error($user)) return false;
+
+        $usr = empty($user) ? wp_get_current_user() : $user;
+        return user_can($usr, 'administrator');
+    }
     public function init()
     {
         add_action('admin_post_update_user', [$this, 'update_user_action']);
         add_action('template_redirect', [$this, 'secure_profile']);
-        add_filter('authenticate', [$this, 'authenticate']);
+        add_filter('authenticate', [$this, 'authenticate'], 20, 3);
+        add_filter('login_redirect', [$this, 'login_redirect'],10, 3);
+        add_filter('init', [$this, 'block_wp_admin_init']);
+    }
+
+    function block_wp_admin_init()
+    {
+        if (strpos(strtolower($_SERVER['REQUEST_URI']), '/wp-admin/') !== false) {
+
+            if (!$this->isAdm()) {
+                wp_redirect(site_url(), 302);
+            }
+        }
+    }
+
+
+    public function login_redirect($redirect_to,  $requested_redirect_to,  $user )
+    {
+        return $this->isAdm($user) ? '/wp-admin' : '/';
     }
 
     public function authenticate($user)
@@ -18,7 +43,7 @@ class MCActions
 
         $is_enabled = get_user_meta($user->ID, MC_ENABLED, true);
 
-        if ($is_enabled === 'true') {
+        if ($is_enabled === 'on') {
             return $user;
         }
         return new WP_Error(404, __('User disabled. Contact administrator.'));

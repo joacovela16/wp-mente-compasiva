@@ -1,5 +1,5 @@
 <script>
-    import {arrayAsMap, doDefault, doGetter} from "../lib/shared";
+    import {doDefault, doGetter} from "../lib/shared";
 
     const defaultConfig = {
         names: {
@@ -16,7 +16,7 @@
         selections: {},
         i18n: {}
     };
-    console.log(config)
+
     const finalConfig = {...defaultConfig, ...(config || {})};
 
     if (!finalConfig.selections) {

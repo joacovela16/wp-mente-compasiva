@@ -2,7 +2,7 @@
 # "sudo apt install gettext"
 # msgfmt -o es_ES.mo es_ES.po
 msgid "Last posts"
-msgstr "Últimos posts"
+msgstr "Últimas entradas"
 
 msgid "Most readed"
 msgstr "Más leidos"
@@ -54,4 +54,31 @@ msgstr "Fecha de publicación"
 
 msgid "Author name"
 msgstr "Nombre de autor"
+
+msgid "Capabilities"
+msgstr "Capacidades"
+
+msgid "Post types"
+msgstr "Tipos de entradas"
+
+msgid "Permissions"
+msgstr "Permisos"
+
+msgid "Signed required"
+msgstr "Inicio de sesión requerido"
+
+msgid "Save settings"
+msgstr "Guardar"
+
+msgid "Add permission"
+msgstr "Agregar permiso"
+
+msgid "Delete"
+msgstr "Remover"
+
+msgid "Default user settings"
+msgstr "Configuraciones por defecto para usuarios"
+
+msgid "permission_desc"
+msgstr "Los usuarios que se registren, tendrán asignados estos permisos por defecto."
 
