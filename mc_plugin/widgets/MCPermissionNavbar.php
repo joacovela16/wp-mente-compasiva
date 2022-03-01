@@ -8,8 +8,6 @@ class MCPermissionNavbar extends WP_Widget
             'mc_permission_navbar',  // Base ID
             'MC - Permission Navbar'
         );
-
-
     }
 
     public function widget($args, $instance)
@@ -42,18 +40,19 @@ class MCPermissionNavbar extends WP_Widget
 
             </div>
             <div class="flex flex-row flex-1 justify-center ">
-                <div class="w-2/3 flex flex-row">
+                <div class="w-full md:w-2/3 flex flex-row items-center">
                     <?php foreach ($permissions as $item): ?>
                         <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
                             <?php if ($item[MC_ID] === $ptype): ?>
-                                <div class="px-3 py-5 border-b-2 border-blue-500 cursor-pointer text-center items-center font-bold flex-1">
+                                <div class="px-1 py-5 border-b-2 border-blue-500 cursor-pointer text-center font-bold flex-1">
                                     <a class="w-full" href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>">
                                         <?= $item[MC_NAME] ?>
                                     </a>
                                 </div>
                             <?php else: ?>
-                                <div class="px-3 py-5 border-b-2 border-transparent hover:border-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center
-                            items-center font-bold flex-1">
+                                <div
+                                        class="px-1 py-5 border-b-2 border-transparent hover:border-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center font-bold flex-1 "
+                                >
                                     <a
                                             class="w-full"
                                             href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
@@ -66,30 +65,32 @@ class MCPermissionNavbar extends WP_Widget
                     <?php endforeach; ?>
                 </div>
             </div>
-            <form action="/" method="get" class="flex flex-row items-center border-gray-200 px-2 py-1 border-1 rounded-full bg-white m-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                     class="flex-grow-0 text-gray-600"
-                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                     stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <circle cx="10" cy="10" r="7"></circle>
-                    <line x1="21" y1="21" x2="15" y2="15"></line>
-                </svg>
-                <input type="text" class="w-full focus:outline-none" placeholder="<?= __("Search") ?>..." name="s">
-            </form>
-            <?php if (is_user_logged_in()): ?>
-                <div class="flex-grow-0 cursor-pointer px-3" title="<?= __('Profile') ?>">
-                    <a href="<?= site_url('/profile') ?>">
-                        <img src="<?= $user_avatar_url ?>" alt="AV" class="w-[48px] h-[48px] rounded-full shadow-lg border-2">
-                    </a>
-                </div>
-            <?php else: ?>
-                <div class="flex-grow-0 cursor-pointer px-3">
-                    <a href="<?= wp_login_url() ?>" class="font-bold">
-                        <?= __('Login/Register') ?>
-                    </a>
-                </div>
-            <?php endif; ?>
+            <div class="flex flex-row items-center">
+                <form action="/" method="get" class="flex flex-row items-center border-gray-200 px-2 py-1 border-1 rounded-full bg-white m-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         class="flex-grow-0 text-gray-600"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="10" cy="10" r="7"></circle>
+                        <line x1="21" y1="21" x2="15" y2="15"></line>
+                    </svg>
+                    <input type="text" class="w-full focus:outline-none" placeholder="<?= __("Search") ?>..." name="s">
+                </form>
+                <?php if (is_user_logged_in()): ?>
+                    <div class="flex-grow-0 cursor-pointer px-3" title="<?= __('Profile') ?>">
+                        <a href="<?= site_url('/profile') ?>">
+                            <img src="<?= $user_avatar_url ?>" alt="AV" class="w-[48px] h-[48px] rounded-full shadow-lg border-2">
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div class="flex-grow-0 cursor-pointer px-3">
+                        <a href="<?= wp_login_url() ?>" class="font-bold">
+                            <?= __('Login/Register') ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
         <?php
     }

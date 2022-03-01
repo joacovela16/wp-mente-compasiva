@@ -5,6 +5,31 @@ class MCActions
     public function init()
     {
         add_action('admin_post_update_user', [$this, 'update_user_action']);
+        add_action('template_redirect', [$this, 'secure_profile']);
+        add_filter('authenticate', [$this, 'authenticate']);
+    }
+
+    public function authenticate($user)
+    {
+
+        if (empty($user) || is_wp_error($user)) return $user;
+
+        if (user_can($user, 'administrator')) return $user;
+
+        $is_enabled = get_user_meta($user->ID, MC_ENABLED, true);
+
+        if ($is_enabled === 'true') {
+            return $user;
+        }
+        return new WP_Error(404, __('User disabled. Contact administrator.'));
+    }
+
+    public function secure_profile()
+    {
+        if (is_page('mc_profile') && !is_user_logged_in()) {
+            wp_redirect(site_url(), 301);
+            exit;
+        }
     }
 
     public function update_user_action()
@@ -51,9 +76,9 @@ class MCActions
                 $meta["user_avatar_url"] = $avatarURL;
             }
 
-            $mc_country = $_POST["mc_country"];
 
-            if (isset($mc_country)) {
+            if (isset($_POST["mc_country"])) {
+                $mc_country = $_POST["mc_country"];
                 update_user_meta($ID, 'country', $mc_country);
                 $meta['country'] = $mc_country;
             }

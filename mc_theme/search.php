@@ -18,7 +18,7 @@ $selected_countries = is_array($selected_countries) ? $selected_countries : [$se
 
 get_header();
 ?>
-    <div class="container py-24 mx-auto flex flex-row">
+    <div class="container py-24 mx-auto flex flex-col md:flex-row">
         <form class="space-y-2" method="get">
             <?php foreach ($_GET as $k => $v): ?>
                 <?php if (!empty(array_filter($search_fields, fn($x) => $x === $k))): continue; endif; ?>
@@ -65,7 +65,7 @@ get_header();
             </div>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
-                    <span><?= __('Sort be') ?></span>
+                    <span><?= __('Sort by') ?></span>
                     <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="<?= SORTBY ?>">
                         <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Published date') ?></option>
                         <option <?= $orderby === 'date' ? '' : 'selected' ?> value="author"><?= __('Author name') ?></option>

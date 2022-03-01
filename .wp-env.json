@@ -5,7 +5,7 @@
     "./mc_plugin"
   ],
   "themes": [
-    "./mc_application"
+    "./mc_theme"
   ],
   "config": {
     "WP_DEBUG": true,

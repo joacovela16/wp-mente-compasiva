@@ -97,7 +97,8 @@ class MCUserLib
                     "post_status" => "publish",
                     "post_type" => PROFESSIONAL_CATALOG,
                     "meta_input" => [
-                        "kind" => "person",
+                        MC_KIND => "person",
+                        MC_ENABLED => false,
                         MC_USER_REF => $user_id,
                     ]
                 ]
@@ -108,7 +109,7 @@ class MCUserLib
                 if (array_key_exists(MC_DEFAULTS, $settings) && array_key_exists(MC_USER, $settings[MC_DEFAULTS])) {
                     $user_defaults = $settings[MC_DEFAULTS][MC_USER];
                     $items = [];
-                    foreach ($user_defaults as $item){
+                    foreach ($user_defaults as $item) {
                         $items[$item[MC_NAME]] = $item[MC_CAPABILITIES];
                     }
                     $this->update_metadata($items, $user_id);

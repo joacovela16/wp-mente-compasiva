@@ -1,0 +1,57 @@
+# msgfmt included in "gettext"
+# "sudo apt install gettext"
+# msgfmt -o es_ES.mo es_ES.po
+msgid "Last posts"
+msgstr "Últimos posts"
+
+msgid "Most readed"
+msgstr "Más leidos"
+
+msgid "Most commented"
+msgstr "Recomendados"
+
+msgid "Read more"
+msgstr "Ver más"
+
+msgid "About me"
+msgstr "Sobre mí"
+
+msgid "Birthdate"
+msgstr "Fecha de nacimiento"
+
+msgid "Web site"
+msgstr "Sitio web"
+
+msgid "Change picture"
+msgstr "Cambiar avatar"
+
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+msgid "Security"
+msgstr "Seguridad"
+
+msgid "My profile"
+msgstr "Mi perfil"
+
+msgid "Published before"
+msgstr "Publicado antes de"
+
+msgid "Published after"
+msgstr "Publicado después de"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Sort by"
+msgstr "Ordenar por"
+
+msgid "Published date"
+msgstr "Fecha de publicación"
+
+msgid "Author name"
+msgstr "Nombre de autor"
+

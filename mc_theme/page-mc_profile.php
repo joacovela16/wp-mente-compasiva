@@ -31,7 +31,7 @@
                 <video class="filter blur" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
             </div>
             <div class="flex  flex-col ">
-                <div class="p-2  w-full flex-grow-0" >
+                <div class="p-2  w-full flex-grow-0">
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20">
                     <div class="text-5xl text-center">
                         <?= $data->display_name ?? "" ?>
@@ -126,24 +126,28 @@
                         </div>
                     </details>
 
-                    <a href="<?= wp_logout_url('/') ?>" class="flex flex-row">
-                        <span>
-                            <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                <path d="M7 12h14l-3 -3m0 6l3 -3"></path>
-                            </svg>
-                        </span>
-                        <span><?= __('Logout') ?></span>
-                    </a>
 
-                    <button type="submit" class="transition-all bg-blue-500 text-white p-2 rounded shadow-lg inline-block w-35 text-center cursor-pointer"><?= __('Save changes') ?></button>
+                    <div class="flex flex-row">
+                        <button type="submit" class="transition-all bg-blue-500 text-white p-2 rounded shadow-lg inline-block w-35 text-center cursor-pointer"><?= __('Save changes') ?></button>
+                        <div class="flex-1"></div>
+                        <div class="transition-all ring-red-500 ring-2 rounded p-2 rounded shadow-lg inline-block text-center cursor-pointer hover:text-white hover:bg-red-500">
+                            <a href="<?= wp_logout_url(site_url()) ?>" class="flex flex-row">
+                                <span>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                        <path d="M7 12h14l-3 -3m0 6l3 -3"></path>
+                                    </svg>
+                                </span>
+                                <span><?= __('Logout') ?></span>
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
 
         </div>
     <?php endif; ?>
-<?php else: ?>
 <?php endif; ?>
 
 </body>
