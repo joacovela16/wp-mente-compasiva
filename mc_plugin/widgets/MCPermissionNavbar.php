@@ -24,7 +24,7 @@ class MCPermissionNavbar extends WP_Widget
             $permissions = array_values(array_filter($permissions, fn($x) => !isset($x[MC_LOGGED_REQUIRED])));
         }
         ?>
-        <div class="flex sm:flex-row flex-col items-center transition-all text-lg bg-white shadow-lg p-1 space-x-2">
+        <div class="flex sm:flex-row flex-col items-center transition-all text-lg bg-white shadow-lg p-1 space-x-2 min-h-[5rem]">
             <div class="flex flex-row items-center ">
                 <div class="flex-grow-0 cursor-pointer ">
                     <div class="flex flex-row px-3 items-center">

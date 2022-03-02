@@ -38,10 +38,7 @@ register_deactivation_hook(__FILE__, 'mc_undo_pages');
 
 
 add_action("init", function () {
-//    add_rewrite_rule("^login\/?", "index.php?pagename=mc_login", 'top');
     add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
-//    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
-//    add_rewrite_rule("^contact\/?", "index.php?pagename=mc_contact", 'top');
 });
 
 function mc_plugin_activated()
@@ -58,8 +55,5 @@ function mc_plugin_deactivated()
 {
     mc_undo_post();
     update_option('users_can_register', false);
-//    mc_unregister_taxonomy();
-//    global $wp_rewrite;
-//    $wp_rewrite->set_permalink_structure("/%postname%/");
 }
 

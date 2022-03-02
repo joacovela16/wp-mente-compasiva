@@ -134,6 +134,14 @@
   margin-right: 0.25rem;
 }
 
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -188,6 +196,14 @@
 
 .max-h-screen {
   max-height: 100vh;
+}
+
+.min-h-\[16rem\] {
+  min-height: 16rem;
+}
+
+.min-h-\[5rem\] {
+  min-height: 5rem;
 }
 
 .w-full {
@@ -258,6 +274,10 @@
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.place-content-center {
+  place-content: center;
 }
 
 .items-center {

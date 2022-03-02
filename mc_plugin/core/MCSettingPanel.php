@@ -17,7 +17,7 @@ class MCSettingPanel
             'manage_options',
             'mc_panel',
             [$this, 'mc_options_page_html'],
-            null, //plugin_dir_url(__FILE__) . 'images/icon_wporg.png',
+            null,
             3
         );
 

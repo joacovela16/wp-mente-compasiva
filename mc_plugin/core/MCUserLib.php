@@ -102,7 +102,7 @@ class MCUserLib
                     "post_name" => "person: " . $maybe_user->display_name,
                     "post_title" => $maybe_user->display_name . " " . $maybe_user->user_email,
                     "post_status" => "publish",
-                    "post_type" => PROFESSIONAL_CATALOG,
+                    "post_type" => CFT_DIRECTORY,
                     "meta_input" => [
                         MC_KIND => "person",
                         MC_ENABLED => 'off',
@@ -147,6 +147,10 @@ class MCUserLib
         delete_user_meta($user_id, MC_METABOX_PERMISSION_RULE);
 
         foreach ($permissions as $k => $v) {
+            $post_types = $v[MC_POST_TYPES] ?? [];
+
+            if (count($post_types) === 0) continue;
+
             foreach ($v[MC_CAPABILITIES] ?? [] as $datum) {
                 $result = $k . "::" . $datum;
                 add_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);

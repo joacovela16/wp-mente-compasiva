@@ -1,5 +1,5 @@
 <?php
-const PROFESSIONAL_CATALOG = "professional_catalog";
+const CFT_DIRECTORY = "cft";
 const DIRECTORY_CATALOG = "directory_catalog";
 const CLASSIFICATION_TAXONOMY = "classification";
 const TERM_PERSON = "Person";

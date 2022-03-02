@@ -75,13 +75,13 @@ function mc_obtain_model(): array
                 "slug" => "catalog"
             ]
         ],
-        PROFESSIONAL_CATALOG => [
-            'labels' => ["name" => 'Prof. Catalog', 'singular_name' => 'Prof. Catalog'],
+        CFT_DIRECTORY => [
+            'labels' => ["name" => 'CFT', 'singular_name' => 'CFT'],
             'public' => true,
             'has_archive' => true,
             'show_in_rest' => true,
             'rewrite' => [
-                "slug" => "pro_catalog"
+                "slug" => "cft"
             ]
         ],
         "news" => [
