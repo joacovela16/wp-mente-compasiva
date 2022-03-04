@@ -87,3 +87,6 @@ msgstr "Contenido no disponible"
 
 msgid "empty_content"
 msgstr "Sin contenido para mostrar"
+
+msgid "Took CFT"
+msgstr "Cursó CFT"

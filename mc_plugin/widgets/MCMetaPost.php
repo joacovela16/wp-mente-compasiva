@@ -58,7 +58,12 @@ class MCMetaPost
         delete_post_meta($post_id, MC_METABOX_PERMISSION_RULE);
 
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
-            MCPermissionLib::update_post_permissions($post_id, $_POST[MC_METABOX_PERMISSION] ?? []);
+            // adjust format
+            $perm = [];
+            foreach ($_POST[MC_METABOX_PERMISSION] ?? [] as $k=>$v){
+                $perm[] = [MC_ID => $k, MC_CAPABILITIES => $v[MC_CAPABILITIES] ?? []];
+            }
+            MCPermissionLib::update_post_permissions($post_id, $perm);
         }
 
         if (array_key_exists(MC_METABOX_COUNTRIES, $_POST)) {

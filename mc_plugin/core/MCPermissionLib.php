@@ -21,6 +21,7 @@ class MCPermissionLib
     {
         $qvars[] = "ptype";
         $qvars[] = "country";
+        $qvars[] = "tookCFT";
         return $qvars;
     }
 
@@ -35,6 +36,11 @@ class MCPermissionLib
             $country_query = array_map(fn($x) => ['key' => MC_METABOX_COUNTRIES, 'value' => $x, 'compare' => '='], $countries);
             if (count($country_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$country_query];
+            }
+
+            $tookCFT = ($_GET['tookCFT'] ?? 'off') === 'on';
+            if ($tookCFT) {
+                $meta_query[] = ['key' => MC_CFT, 'value' => true];
             }
 
             $has_date = false;

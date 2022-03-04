@@ -86,13 +86,14 @@ function render_post(WP_Post $post)
     $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
     $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
     $tags = get_the_tags();
-
+    $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
+    $rounded_img = $is_person ? 'rounded-full w-48 border-4' : 'w-full';
     ?>
-    <div class="h-full shadow-md rounded-lg overflow-hidden flex flex-col">
+    <div class="h-full shadow-lg rounded-lg overflow-hidden flex flex-col">
         <?php if (!is_numeric($image_url)): ?>
-            <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="<?= get_template_directory_uri() . "/assets/images/img" . random_int(1, 3) . ".svg" ?>" alt="blog">
+            <img class="mx-auto lg:h-48 md:h-36 object-cover object-center <?= $rounded_img ?>" src="<?= get_template_directory_uri() . "/assets/images/img" . random_int(1, 3) . ".svg" ?>" alt="blog">
         <?php else: ?>
-            <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
+            <img class="mx-auto lg:h-48 md:h-36 object-cover object-center <?= $rounded_img ?>" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
         <?php endif; ?>
         <div class="p-6 flex flex-col flex-1">
             <div class="flex flex-row">
@@ -104,7 +105,16 @@ function render_post(WP_Post $post)
                     <?php endif; ?>
                 </h2>
                 <div class="text-gray-400 py-1 flex-1 text-right">
-                    <? the_date() ?>
+                    <?php
+                    if ($is_person):
+                        $details = get_post_meta($post->ID, MC_USER_DETAILS, true);
+                        $country = $details['country'] ?? '';
+                        $location = $details['location'] ?? '';
+                        echo $location . ' - ' . $country;
+                    else:
+                        the_date();
+                    endif;
+                    ?>
                 </div>
             </div>
             <h1 class="title-font text-lg font-medium text-gray-900 mb-3"><?= $post->post_title ?></h1>
@@ -137,4 +147,5 @@ function render_post(WP_Post $post)
         </div>
     </div>
     <?php
+
 }

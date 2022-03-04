@@ -63,13 +63,16 @@ class MCActions
                     wp_update_post([
                         'ID' => $post->ID,
                         'meta_input' => [
-                            'country' => $country,
-                            'location' => $location,
-                            'email' => $email,
-                            'phone' => $phone,
-                            'website' => $website,
-                            'description' => $description,
-
+                            MC_METABOX_ABSTRACT =>$description,
+                            MC_USER_DETAILS => [
+                                'country' => $country,
+                                'location' => $location,
+                                'email' => $email,
+                                'phone' => $phone,
+                                'website' => $website,
+                                'description' => $description,
+                            ],
+                            MC_CFT=> true
                         ]
                     ]);
 

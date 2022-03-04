@@ -1,10 +1,12 @@
 <?php
-global $wp_query;
+global
+$wp_query;
+const TOOK_CFT = 'tookCFT';
 const SORTBY = "orderby";
 const PAFTER = "after";
 const PBEFORE = "before";
 
-$search_fields = ['tag', 'country'];
+$search_fields = ['tag', 'country', TOOK_CFT, SORTBY, PBEFORE, PAFTER];
 
 $tags = get_tags();
 $selected_tags = $_GET['tag'] ?? [];
@@ -13,7 +15,7 @@ $selected_tags = is_array($selected_tags) ? $selected_tags : [$selected_tags];
 $orderby = $_GET[SORTBY] ?? 'date';
 
 $countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRIES] ?? [];
-$selected_countries= $_GET['country'] ?? [];
+$selected_countries = $_GET['country'] ?? [];
 $selected_countries = is_array($selected_countries) ? $selected_countries : [$selected_countries];
 
 get_header();
@@ -24,22 +26,18 @@ get_header();
                 <?php if (!empty(array_filter($search_fields, fn($x) => $x === $k))): continue; endif; ?>
                 <input type="hidden" name="<?= $k ?>" value="<?= get_query_var($k) ?>">
             <?php endforeach; ?>
-            <div class="md:mb-0">
-                <label class="uppercase text-gray-700 text-xs font-bold mb-2">
-                    <div><?= __('Published before') ?></div>
-                    <input
-                            class="appearance-none w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-gray-500"
-                            type="date" name="<?= PBEFORE ?>" value="<?= $_GET[PBEFORE] ?>">
-                </label>
-            </div>
-            <div class="md:mb-0">
-                <label class="uppercase  text-gray-700 text-xs font-bold mb-2">
-                    <div><?= __('Published after') ?></div>
-                    <input
-                            class="appearance-none w-full text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-gray-500"
-                            type="date" name="<?= PAFTER ?>" value="<?= $_GET[PAFTER] ?>">
-                </label>
-            </div>
+
+            <?php if (!isset($_GET['ptype'])): ?>
+                <div class="md:mb-0">
+                    <label class="uppercase text-gray-700 text-xs font-bold mb-2">
+                        <span><?= __('Took CFT') ?></span>
+
+                        <input
+                                class="border border-gray-200 rounded py-3 px-4 focus:bg-white focus:border-gray-500"
+                                type="checkbox" name="<?= TOOK_CFT ?>" <?= isset($_GET[TOOK_CFT]) ? 'checked' : '' ?>>
+                    </label>
+                </div>
+            <?php endif; ?>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
                     <span><?= __('Category') ?></span>
@@ -58,9 +56,25 @@ get_header();
                     <span><?= __('Country') ?></span>
                     <select class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="country[]" multiple>
                         <?php foreach ($countries as $c): ?>
-                            <option value="<?= $c ?>" <?= in_array($c, $selected_countries) ?'selected':'' ?> ><?= $c ?></option>
-                        <?php endforeach;  ?>
+                            <option value="<?= $c ?>" <?= in_array($c, $selected_countries) ? 'selected' : '' ?> ><?= $c ?></option>
+                        <?php endforeach; ?>
                     </select>
+                </label>
+            </div>
+            <div class="md:mb-0">
+                <label class="uppercase text-gray-700 text-xs font-bold mb-2">
+                    <div><?= __('Published before') ?></div>
+                    <input
+                            class="appearance-none w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="date" name="<?= PBEFORE ?>" value="<?= $_GET[PBEFORE] ?>">
+                </label>
+            </div>
+            <div class="md:mb-0">
+                <label class="uppercase  text-gray-700 text-xs font-bold mb-2">
+                    <div><?= __('Published after') ?></div>
+                    <input
+                            class="appearance-none w-full text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="date" name="<?= PAFTER ?>" value="<?= $_GET[PAFTER] ?>">
                 </label>
             </div>
             <div class="md:mb-0">
@@ -77,8 +91,8 @@ get_header();
                 <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><?= __('Search') ?></button>
             </div>
         </form>
-        <div class="flex-1 p-2 space-y-2">
-            <div class="grid grid-cols-3 gap-5">
+        <div class="flex-1 p-2 space-y-2 mt-5 sm:mt-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <?php
 
                 if (have_posts()) {
