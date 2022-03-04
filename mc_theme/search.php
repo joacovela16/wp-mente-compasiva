@@ -20,7 +20,7 @@ $selected_countries = is_array($selected_countries) ? $selected_countries : [$se
 
 get_header();
 ?>
-    <div class="container py-8 mt-40 md:mt-24 mx-auto flex flex-col md:flex-row">
+    <div class="container py-8 mt-40 md:mt-24 mx-auto flex flex-col md:flex-row space-x-3">
         <form class="space-y-2" method="get">
             <?php foreach ($_GET as $k => $v): ?>
                 <?php if (!empty(array_filter($search_fields, fn($x) => $x === $k))): continue; endif; ?>
@@ -112,7 +112,6 @@ get_header();
                 </div>
             <?php endif; ?>
         </div>
-
     </div>
 <?php
 get_footer();

@@ -87,13 +87,13 @@ function render_post(WP_Post $post)
     $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
     $tags = get_the_tags();
     $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
-    $rounded_img = $is_person ? 'rounded-full w-48 border-4' : 'w-full';
+    $rounded_img = $is_person ? 'rounded-full lg:w-48 md:w-36 border-4' : 'w-full lg:h-48 md:h-36';
     ?>
     <div class="h-full shadow-lg rounded-lg overflow-hidden flex flex-col">
         <?php if (!is_numeric($image_url)): ?>
-            <img class="mx-auto lg:h-48 md:h-36 object-cover object-center <?= $rounded_img ?>" src="<?= get_template_directory_uri() . "/assets/images/img" . random_int(1, 3) . ".svg" ?>" alt="blog">
+            <img class="mx-auto object-cover object-center <?= $rounded_img ?>" src="<?= get_template_directory_uri() . "/assets/images/img" . random_int(1, 3) . ".svg" ?>" alt="blog">
         <?php else: ?>
-            <img class="mx-auto lg:h-48 md:h-36 object-cover object-center <?= $rounded_img ?>" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
+            <img class="mx-auto object-cover object-center <?= $rounded_img ?>" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
         <?php endif; ?>
         <div class="p-6 flex flex-col flex-1">
             <div class="flex flex-row">
@@ -118,7 +118,7 @@ function render_post(WP_Post $post)
                 </div>
             </div>
             <h1 class="title-font text-lg font-medium text-gray-900 mb-3"><?= $post->post_title ?></h1>
-            <div class="flex-1 mb-3"><?= $abstract ?></div>
+            <div class="flex-1 mb-3 max-h-48 overflow-hidden text-ellipsis whitespace-nowrap"><?= $abstract ?></div>
             <div class="flex items-center flex-wrap">
                 <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0" href="<?= get_permalink($post) ?>">
                     <?= __('Read more') ?>

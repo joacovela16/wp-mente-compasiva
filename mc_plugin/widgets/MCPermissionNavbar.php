@@ -73,7 +73,11 @@ class MCPermissionNavbar extends WP_Widget
                         <circle cx="10" cy="10" r="7"></circle>
                         <line x1="21" y1="21" x2="15" y2="15"></line>
                     </svg>
-                    <input type="text" class="w-full focus:outline-none" placeholder="<?= __("Search") ?>..." name="s">
+                    <input
+                            type="text"
+                            class="w-full focus:outline-none"
+                            autofocus
+                            placeholder="<?= __("Search") ?>..." name="s" value="<?= $_GET['s'] ?? '' ?>">
                 </form>
                 <?php if (is_user_logged_in()): ?>
                     <div class="flex-grow-0 cursor-pointer px-3" title="<?= __('Profile') ?>">

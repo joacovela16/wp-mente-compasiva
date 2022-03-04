@@ -64,13 +64,13 @@ class MCActions
                         'ID' => $post->ID,
                         'meta_input' => [
                             MC_METABOX_ABSTRACT =>$description,
+                            MC_METABOX_COUNTRIES =>$country,
                             MC_USER_DETAILS => [
                                 'country' => $country,
                                 'location' => $location,
                                 'email' => $email,
                                 'phone' => $phone,
-                                'website' => $website,
-                                'description' => $description,
+                                'website' => $website
                             ],
                             MC_CFT=> true
                         ]
