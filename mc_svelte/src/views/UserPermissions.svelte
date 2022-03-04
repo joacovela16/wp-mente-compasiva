@@ -9,10 +9,7 @@
         i18n: {}
     };
     export let config = {
-        permissions: [
-            // {name: 'ShowProDir', logged_required: false, post_types: ['attachment'], capabilities: ['CAN_READ', 'CAN_WRITE']},
-            // {name: 'ShowProDir2', logged_required: false, post_types: ['attachment'], capabilities: ['CAN_READ_1', 'CAN_WRITE_1']},
-        ],
+        permissions: [],
         selections: {},
         i18n: {}
     };
@@ -23,7 +20,7 @@
         finalConfig.selections = {}
     }
 
-    doDefault(finalConfig.permissions, finalConfig.selections || {}, x => x.id, src => ({id:src.id,name: src.name, post_types: [], capabilities: []}));
+    doDefault(finalConfig.permissions, finalConfig.selections || {}, x => x.id, src => ({id: src.id, name: src.name, post_types: [], capabilities: []}));
 
     Object.keys(finalConfig.selections || {}).forEach(x => {
         const item = finalConfig.selections[x];

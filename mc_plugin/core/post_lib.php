@@ -66,7 +66,7 @@ function mc_obtain_pages(): array
 function mc_obtain_model(): array
 {
     return array(
-        DIRECTORY_CATALOG => [
+        /*DIRECTORY_CATALOG => [
             'labels' => ["name" => 'Catalog', 'singular_name' => 'Catalog'],
             'public' => true,
             'has_archive' => true,
@@ -74,7 +74,7 @@ function mc_obtain_model(): array
             'rewrite' => [
                 "slug" => "catalog"
             ]
-        ],
+        ],*/
         CFT_DIRECTORY => [
             'labels' => ["name" => 'CFT', 'singular_name' => 'CFT'],
             'public' => true,

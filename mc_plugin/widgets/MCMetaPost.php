@@ -58,16 +58,7 @@ class MCMetaPost
         delete_post_meta($post_id, MC_METABOX_PERMISSION_RULE);
 
         if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
-
-            $permissions = $_POST[MC_METABOX_PERMISSION];
-
-            foreach ($permissions as $k => $v) {
-                foreach ($v[MC_CAPABILITIES] as $datum) {
-                    $value = $k . "::" . $datum;
-                    add_post_meta($post_id, MC_METABOX_PERMISSION_RULE, $value);
-                }
-            }
-            update_post_meta($post_id, MC_METABOX_PERMISSION, $permissions);
+            MCPermissionLib::update_post_permissions($post_id, $_POST[MC_METABOX_PERMISSION] ?? []);
         }
 
         if (array_key_exists(MC_METABOX_COUNTRIES, $_POST)) {
@@ -77,7 +68,6 @@ class MCMetaPost
             }
         }
     }
-
 
     /**
      * Display the meta box HTML to the user.

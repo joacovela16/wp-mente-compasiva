@@ -13,6 +13,16 @@ class MCUserLib
         add_action('admin_footer', [$this, "render_user_permissions"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
         add_action("profile_update", [$this, "mc_user_profile_updated"]);
+        add_action('delete_user', [$this, 'delete_user']);
+    }
+
+    public function delete_user($user_id)
+    {
+        $bind = get_user_meta($user_id, MC_POST_BIND, true);
+
+        if (empty($bind)) return;
+
+        wp_delete_post(intval($bind), true);
     }
 
     function render_user_permissions()
@@ -21,14 +31,16 @@ class MCUserLib
 
         $permissionSelection = get_user_meta($this->user->ID, MC_METABOX_PERMISSION, true);
         $settings = get_option(MC_SETTING);
+
         if (!$settings) {
             $settings = ["permissions" => []];
         }
+
         if (empty($permissionSelection)) {
             $tmp = ($settings[MC_DEFAULTS] ?? [])[MC_USER] ?? [];
             $permissionSelection = [];
             foreach ($tmp as $item) {
-                $permissionSelection[$item['id']] = $item;
+                $permissionSelection[$item[MC_ID]] = $item;
             }
         }
 
@@ -95,12 +107,11 @@ class MCUserLib
 
         $maybe_user = get_userdata($user_id);
         if ($maybe_user) {
-
             $post_linked_to_user = wp_insert_post(
                 [
                     "post_author" => $maybe_user->ID,
-                    "post_name" => "person: " . $maybe_user->display_name,
-                    "post_title" => $maybe_user->display_name . " " . $maybe_user->user_email,
+                    "post_name" => $maybe_user->display_name,
+                    "post_title" => $maybe_user->display_name,
                     "post_status" => "publish",
                     "post_type" => CFT_DIRECTORY,
                     "meta_input" => [
@@ -117,7 +128,7 @@ class MCUserLib
                     $user_defaults = $settings[MC_DEFAULTS][MC_USER];
                     $items = [];
                     foreach ($user_defaults as $item) {
-                        $items[$item[MC_NAME]] = $item[MC_CAPABILITIES];
+                        $items[$item[MC_ID]] = $item;
                     }
                     $this->update_metadata($items, $user_id);
                 }
@@ -125,6 +136,8 @@ class MCUserLib
 
             if (is_wp_error($post_linked_to_user)) {
                 error_log($post_linked_to_user->get_error_message());
+            } else {
+                update_user_meta($user_id, MC_POST_BIND, $post_linked_to_user);
             }
         } else {
             error_log("Can't found user " . $user_id);

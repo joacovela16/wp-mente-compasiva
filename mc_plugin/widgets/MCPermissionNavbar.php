@@ -24,7 +24,7 @@ class MCPermissionNavbar extends WP_Widget
             $permissions = array_values(array_filter($permissions, fn($x) => !isset($x[MC_LOGGED_REQUIRED])));
         }
         ?>
-        <div class="flex sm:flex-row flex-col items-center transition-all text-lg bg-white shadow-lg p-1 space-x-2 min-h-[5rem]">
+        <div class="flex md:flex-row flex-col items-center transition-all text-lg bg-white shadow-lg p-1 space-x-2 min-h-[5rem]">
             <div class="flex flex-row items-center ">
                 <div class="flex-grow-0 cursor-pointer ">
                     <div class="flex flex-row px-3 items-center">
@@ -39,31 +39,29 @@ class MCPermissionNavbar extends WP_Widget
                 </div>
 
             </div>
-            <div class="flex flex-row flex-1 justify-center ">
-                <div class="w-full md:w-2/3 flex flex-row items-center">
-                    <?php foreach ($permissions as $item): ?>
-                        <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
-                            <?php if ($item[MC_ID] === $ptype): ?>
-                                <div class="px-1 py-5 border-b-2 border-blue-500 cursor-pointer text-center font-bold flex-1">
-                                    <a class="w-full" href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>">
-                                        <?= $item[MC_NAME] ?>
-                                    </a>
-                                </div>
-                            <?php else: ?>
-                                <div
-                                        class="px-1 py-5 border-b-2 border-transparent hover:border-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center font-bold flex-1 "
+            <div class="w-full flex-1 flex flex-row items-center divide-x">
+                <?php foreach ($permissions as $item): ?>
+                    <?php if (count($item[MC_POST_TYPES] ?? []) > 0): ?>
+                        <?php if ($item[MC_ID] === $ptype): ?>
+                            <div class="px-1 py-5 border-b-2 border-b-blue-500 cursor-pointer text-center font-bold flex-1">
+                                <a class="w-full" href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>">
+                                    <?= $item[MC_NAME] ?>
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div
+                                    class="px-1 py-5 border-b-2 border-b-transparent hover:border-b-blue-500 hover:bg-zinc-100 cursor-pointer transition text-center font-bold flex-1 "
+                            >
+                                <a
+                                        class="w-full"
+                                        href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
                                 >
-                                    <a
-                                            class="w-full"
-                                            href="<?= ("/?s=&ptype=" . $item[MC_ID]) ?>"
-                                    >
-                                        <?= $item[MC_NAME] ?>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
+                                    <?= $item[MC_NAME] ?>
+                                </a>
+                            </div>
                         <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </div>
             <div class="flex flex-row items-center">
                 <form action="/" method="get" class="flex flex-row items-center border-gray-200 px-2 py-1 border-1 rounded-full bg-white m-0">

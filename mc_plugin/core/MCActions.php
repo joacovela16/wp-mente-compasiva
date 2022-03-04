@@ -5,11 +5,78 @@ class MCActions
 
     public function init()
     {
+
         add_action('admin_post_update_user', [$this, 'update_user_action']);
+        add_action('wp_ajax_nopriv_upload_csv', [$this, 'csv_handler']);
         add_action('template_redirect', [$this, 'secure_profile']);
         add_filter('authenticate', [$this, 'authenticate'], 20, 3);
         add_filter('login_redirect', [$this, 'login_redirect'], 10, 3);
         add_filter('init', [$this, 'block_wp_admin_init']);
+    }
+
+    public function csv_handler()
+    {
+        $settings = get_option(MC_SETTING) ?? [];
+        $default_permissions = ($settings[MC_DEFAULTS] ?? [])[MC_USER] ?? [];
+        $datum = [];
+        if (($stream = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
+            $data = fgetcsv($stream, 1000, ",");
+            if ($data) {
+                $n = count($data);
+                $header = $data;
+
+
+                while (($data = fgetcsv($stream, 1000, ",")) !== false) {
+                    $row = [];
+                    for ($c = 0; $c < $n; $c++) {
+                        $row[$header[$c]] = $data[$c];
+                    }
+                    $datum[] = $row;
+                }
+
+
+            }
+            fclose($stream);
+        }
+
+        foreach ($datum as $item) {
+            $name = $item['name'];
+            $country = $item['country'];
+            $location = $item['location'];
+            $description = $item['description'];
+            $email = $item['email'];
+            $phone = $item['phone'];
+            $website = $item['website'];
+            $password = 'QgHTPqkTzg4K6u';
+            $user = wp_create_user($name, $password, $email);
+
+            if (is_wp_error($user)) {
+                error_log(`ERROR: Usuario ${$name}/${email} no pudo ser creado`);
+                $user = get_user_by('email', $email);
+            }
+
+            if ($user) {
+
+                $post_id = get_user_meta($user, MC_POST_BIND, true);
+                if (!empty($post_id)) {
+                    $post = get_post(intval($post_id));
+                    wp_update_post([
+                        'ID' => $post->ID,
+                        'meta_input' => [
+                            'country' => $country,
+                            'location' => $location,
+                            'email' => $email,
+                            'phone' => $phone,
+                            'website' => $website,
+                            'description' => $description,
+
+                        ]
+                    ]);
+
+                    MCPermissionLib::update_post_permissions($post->ID, $default_permissions);
+                }
+            }
+        }
     }
 
     private function isAdm($user = null): bool

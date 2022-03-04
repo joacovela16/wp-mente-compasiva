@@ -15,27 +15,33 @@ $allowed = array_exists($post_include, fn($x) => $x === $post->post_type);
 if ($allowed):
     setup_postdata($post);
     $tags = get_the_tags();
+    $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
     ?>
-    <div class="mx-auto container mt-8 h-screen" x-init="loaderOn=false">
-        <article  class="space-y-10">
-            <?php goBack(); ?>
-            <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center">
-                <div><?php the_title() ?></div>
-                <div class="flex-1"></div>
-                <div class="text-base">
-                    <div><?php the_date() ?></div>
-                    <div> <?= __("by") . " " . get_the_author() ?></div>
+    <div class="mx-auto container mt-24 h-screen" x-init="loaderOn=false">
+        <?php if ($is_person): ?>
+                Person
+        <?php else: ?>
+            <article >
+                <div class="space-y-10">
+                    <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center">
+                        <div><?php the_title() ?></div>
+                        <div class="flex-1"></div>
+                        <div class="text-base">
+                            <div><?php the_date() ?></div>
+                            <div> <?= __("by") . " " . get_the_author() ?></div>
+                        </div>
+                    </header>
+                    <div>
+                        <?php the_content(); ?>
+                    </div>
+
+                    <?php if (comments_open() || get_comments_number()) : ?>
+                        <?php comments_template(); ?>
+                    <?php endif; ?>
                 </div>
-            </header>
-            <div>
-                <?php the_content(); ?>
-            </div>
 
-            <?php if (comments_open() || get_comments_number()) : ?>
-                <?php comments_template(); ?>
-            <?php endif; ?>
-
-        </article>
+            </article>
+        <?php endif; ?>
     </div>
 <?php else: ?>
     <div x-init="loaderOn=false" class="h-screen flex place-content-center">

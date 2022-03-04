@@ -50,28 +50,18 @@ class MCPostExplorer extends WP_Widget
         $lib = new MCPermissionLib();
         $lib->pre_get_posts($query);
 
-//        $args = [];
-//        $args["post_type"] = $post_types;
-//        $args["post_status"] = 'publish';
-//        $args["posts_per_page"] = 12;
-//        $args['order'] = 'DESC';
         $query->set('posts_per_page', 12);
         $query->set('order', 'DESC');
 
         // MODES
         $mode = $_GET['m'] ?? 'latest';
         if ($mode === 'most_readed') {
-//            $args['orderby'] = 'date';
             $query->set('orderby', 'date');
         } elseif ($mode === 'most_commented') {
-//            $args['orderby'] = 'comment_count';
             $query->set('orderby', 'comment_count');
         } else {
-//            $args['orderby'] = 'date';
             $query->set('orderby', 'date');
         }
-//        $query = new WP_Query($args);
-
 
         ?>
         <div class="p-5 flex flex-row space-x-5 bg-zinc-100 rounded">

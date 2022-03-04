@@ -6,6 +6,15 @@ class MCPermissionLib
     {
         add_action('pre_get_posts', [$this, "pre_get_posts"], 10, 1);
         add_filter('query_vars', [$this, 'query_vars']);
+        add_filter('map_meta_cap', [$this, 'map_meta_cap'], 10, 4);
+    }
+
+    function map_meta_cap($caps, $cap, $user_id, $args)
+    {
+        if ($cap === 'delete_post' && get_post_type() === CFT_DIRECTORY) {
+            $caps[] = 'do_not_allow';
+        }
+        return $caps;
     }
 
     public function query_vars($qvars)
@@ -50,10 +59,16 @@ class MCPermissionLib
             if (is_user_logged_in()) {
                 $user = wp_get_current_user();
                 $user_rules = get_user_meta($user->ID, MC_METABOX_PERMISSION_RULE);
+
                 $ptype = $_GET['ptype'] ?? null;
                 $pbase = empty($ptype) ? null : array_find($settings[MC_PERMISSIONS], fn($x) => $x[MC_ID] === $ptype);
 
                 if (!empty($pbase)) {
+                    $user_permission = get_user_meta($user->ID, MC_METABOX_PERMISSION, true);
+                    $post_allowed = $pbase[MC_POST_TYPES] ?? [];
+                    $is_allowed = count($post_allowed) > 0 && array_exists($user_permission, fn($x) => $x[MC_ID] === $ptype);
+                    $post_allowed = $is_allowed ? $post_allowed : ['mc' . rand()];
+                    $query->set("post_type", $post_allowed);
                     $indexer = fn($x) => $pbase[MC_ID];
                 } else {
                     $indexer = fn($x) => $x[MC_ID];
@@ -86,7 +101,7 @@ class MCPermissionLib
                     $query->set("post_type", $post_allowed);
                 }
             }
-            if (count($meta_query) > 1){
+            if (count($meta_query) > 1) {
                 $query->set('meta_query', $meta_query);
             }
 
@@ -97,42 +112,18 @@ class MCPermissionLib
         }
     }
 
-    public static function get_permissions(): array
+    public static function update_post_permissions($post_id, array $permissions)
     {
-        $settings = get_option(MC_SETTING);
-        $result = [];
 
-        if ($settings) {
-            $user = wp_get_current_user();
-            $userID = $user->ID;
-            if ($user) {
-                $permissions = $settings[MC_PERMISSIONS] ?? [];
-                $user_permissions = get_user_meta($userID, MC_METABOX_PERMISSION, true);
-                $user_permissions = $user_permissions === '' ? $settings[MC_DEFAULTS][MC_USER] ?? [] : $user_permissions;
+        delete_post_meta($post_id, MC_METABOX_PERMISSION_RULE);
 
-                $user_permissions_map = $user_permissions;
-
-                if (is_user_logged_in()) {
-
-                    foreach ($permissions as $item) {
-                        $name = $item[MC_NAME];
-                        $user_permission = $user_permissions_map[$name];
-
-                        if (isset($user_permission) && count($user_permission[MC_POST_TYPES]) > 0) {
-                            $result[] = $user_permission;
-                        }
-                    }
-                } else {
-                    foreach ($permissions as $item) {
-                        if ($item[MC_LOGGED_REQUIRED] !== "on" && count($item[MC_POST_TYPES]) > 0) {
-                            $result[] = $item;
-                        }
-                    }
-                }
+        foreach ($permissions as $v) {
+            foreach ($v[MC_CAPABILITIES] as $datum) {
+                $value = $v[MC_ID] . "::" . $datum;
+                add_post_meta($post_id, MC_METABOX_PERMISSION_RULE, $value);
             }
-
         }
-        return $result;
+        update_post_meta($post_id, MC_METABOX_PERMISSION, $permissions);
     }
 
 }
