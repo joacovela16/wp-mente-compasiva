@@ -1,6 +1,5 @@
 <?php
-global
-$wp_query;
+global $wp_query;
 const TOOK_CFT = 'tookCFT';
 const SORTBY = "orderby";
 const PAFTER = "after";

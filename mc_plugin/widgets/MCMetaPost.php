@@ -116,7 +116,7 @@ class MCMetaPost
             'selections' => $permissionSelection,
             'abstract' => $abstractValue,
             MC_COUNTRIES => $countries,
-            'base_countries' => $settings[MC_COUNTRIES]
+            'base_countries' => $settings[MC_COUNTRIES] ?? []
         ];
         ?>
         <script id="jvc" type="module">

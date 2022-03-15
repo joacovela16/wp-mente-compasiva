@@ -3,16 +3,15 @@ $post = get_post();
 $settings = get_option(MC_SETTING);
 $permissions = $settings[MC_PERMISSIONS] ?? [];
 $post_include = [];
-$cond = is_user_logged_in() ? fn($x) => $x[MC_LOGGED_REQUIRED] === 'on' : fn($x) => empty($x[MC_LOGGED_REQUIRED]) || $x[MC_LOGGED_REQUIRED] !== 'on';
+/*$cond = is_user_logged_in() ? fn($x) => $x[MC_LOGGED_REQUIRED] === 'on' : fn($x) => empty($x[MC_LOGGED_REQUIRED]) || $x[MC_LOGGED_REQUIRED] !== 'on';
 
 foreach ($permissions as $item) {
     if ($cond($item)) {
         $post_include = array_merge($post_include, $item[MC_POST_TYPES] ?? []);
     }
-}
-$allowed = array_exists($post_include, fn($x) => $x === $post->post_type);
+}*/
+$allowed = true; //array_exists($post_include, fn($x) => $x === $post->post_type);
 
-if ($allowed):
     setup_postdata($post);
     $tags = get_the_tags();
     $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
@@ -116,18 +115,5 @@ if ($allowed):
             </article>
         <?php endif; ?>
     </div>
-<?php else: ?>
-    <div x-init="loaderOn=false" class="h-screen flex place-content-center">
-        <div class="my-auto flex flex-row items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="" width="128" height="128" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                 stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <circle cx="12" cy="12" r="9"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <div class="font-bold text-lg"><?= __('Content unavailable') ?></div>
-        </div>
-    </div>
+
 <?php
-endif;

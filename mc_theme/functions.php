@@ -14,7 +14,18 @@ add_action("wp_head", "mc_wp_head");
 add_filter('show_admin_bar', '__return_false');
 
 add_action("init", function () {
-    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+    add_rewrite_rule("^profile\/?", "index.php?pagename=profile", 'top');
+    register_nav_menu("header-menu", 'Header Menu' );
+});
+
+add_filter('template_include', function ($template){
+    global $wp_query;
+    $post_type = get_query_var('post_type');
+    if( $wp_query->is_search && $post_type == MC_CFT )
+    {
+        return locate_template('template-parts/content-cft.php');  //  redirect to archive-search.php
+    }
+    return $template;
 });
 
 function mc_wp_head()
