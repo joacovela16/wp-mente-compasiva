@@ -114,6 +114,6 @@ body.login {
   @apply cursor-pointer list-none inline-block hover:bg-gray-200 p-6 transition-colors border-b-2 border-transparent hover:border-b-blue-500;
 }
 
-.current-menu-item {
-  @apply list-none inline-block hover:bg-gray-200 p-4 border-b-2 border-b-blue-500;
+.menu > .current-menu-item {
+  @apply list-none inline-block hover:bg-gray-200 p-6 border-b-2 border-b-blue-500;
 }

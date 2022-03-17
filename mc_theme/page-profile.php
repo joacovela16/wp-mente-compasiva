@@ -24,6 +24,7 @@
         $country = get_user_meta($user->ID, "country", true) ?? '';
         $user_avatar_url = get_user_meta($user->ID, "user_avatar_url", true);
         $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($user->ID) : $user_avatar_url;
+        $work_with = [];
 
         ?>
         <div class=" mx-auto ">
@@ -75,24 +76,46 @@
                     </div>
 
                     <div class="field">
+                        <div class="field-label"><?= __("Works with") ?></div>
+                        <div class="field-content">
+                            <select class="w-full" name="works_with[]" multiple>
+                                <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
+                                <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
+                                <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
+                                <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <div class="field-label"><?= __('Birthdate') ?></div>
                         <div class="field-content">
                             <input name="mc_birthday" type="date" value="<?= $birthday ?? '' ?>" class="field-text" placeholder="<?= __('Birthdate') ?>">
                         </div>
                     </div>
 
-                    <div class="field">
-                        <div class="field-label"><?= __('Country') ?></div>
-                        <div class="field-content">
-                            <select name="mc_country" class="field-select">
-                                <? foreach ($countries as $item): ?>
-                                    <option <?= $item === $country ? 'selected' : '' ?>><?= $item ?></option>
-                                <? endforeach; ?>
-                            </select>
+                    <div class="flex flex-row items-center space-x-3">
+                        <div class="field">
+                            <div class="field-label"><?= __('Country') ?></div>
+                            <div class="field-content">
+                                <input name="mc_country" type="text" value="<?= $country ?? '' ?>" class="field-text">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="field-label"><?= __('City') . '/' . __('Province') ?></div>
+                            <div class="field-content">
+                                <input name="mc_city" type="text" value="<?= $country ?? '' ?>" class="field-text">
+                            </div>
                         </div>
                     </div>
 
-
+                    <div class="field">
+                        <div class="field-label"><?= __('Phone') ?></div>
+                        <div class="field-content">
+                            <input name="mc_phone" type="text" value="<?= $country ?? '' ?>" class="field-text" placeholder="<?= __('phone_alert') ?>">
+                        </div>
+                    </div>
                     <div class="field">
                         <div class="field-label"><?= __('Web site') ?></div>
                         <div class="field-content">

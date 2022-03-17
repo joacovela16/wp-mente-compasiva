@@ -90,3 +90,30 @@ msgstr "Sin contenido para mostrar"
 
 msgid "Took CFT"
 msgstr "Cursó CFT"
+
+msgid "Works with"
+msgstr "Población con la que trabaja"
+
+msgid "Children"
+msgstr "Niños"
+
+msgid "Teenager"
+msgstr "Adolescentes"
+
+msgid "Adult"
+msgstr "Adultos"
+
+msgid "Couple"
+msgstr "Parejas"
+
+msgid "Province"
+msgstr "Provincia"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "phone_alert"
+msgstr "Deje su teléfono si quiere que aparezca en el listado"
+
+msgid "Write about you"
+msgstr "Escribe sobre tí"
