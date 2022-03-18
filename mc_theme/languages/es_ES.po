@@ -123,3 +123,12 @@ msgstr "Usuario activo"
 
 msgid "CFT Coursed"
 msgstr "Cursó CFT"
+
+msgid "Gender"
+msgstr "Género"
+
+msgid "Male"
+msgstr "Masculino"
+
+msgid "Female"
+msgstr "Femenino"

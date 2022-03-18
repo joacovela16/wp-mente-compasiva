@@ -1,7 +1,7 @@
 <?php
 
 $current_user = wp_get_current_user();
-$user_avatar_url = get_user_meta($current_user->ID, "user_avatar_url", true);
+$user_avatar_url = get_user_meta($current_user->ID, MC_AVATAR_URL, true);
 $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) : $user_avatar_url;
 
 ?>

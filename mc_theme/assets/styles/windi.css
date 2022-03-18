@@ -210,6 +210,10 @@
   height: 1rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .max-h-screen {
   max-height: 100vh;
 }

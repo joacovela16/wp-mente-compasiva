@@ -11,21 +11,26 @@
 <body x-data="mc_app" class="text-gray-600">
 <?php if (is_user_logged_in()): ?>
     <?php
+
     $index = random_int(1, 7);
     $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
     $author = get_query_var('author');
     $user = wp_get_current_user();
-    $countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRY] ?? [];
 
     if ($user):
+        $ID = $user->ID;
         $data = $user->data;
-        $description = get_user_meta($user->ID, "description", true);
-        $birthday = get_user_meta($user->ID, "birthday", true);
-        $country = get_user_meta($user->ID, "country", true) ?? '';
-        $user_avatar_url = get_user_meta($user->ID, "user_avatar_url", true);
-        $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($user->ID) : $user_avatar_url;
-        $work_with = [];
-
+        $description = get_user_meta($ID, MC_ABSTRACT, true);
+        $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
+        $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
+        $city = get_user_meta($ID, MC_CITY, true) ?? '';
+        $phone = get_user_meta($ID, MC_PHONE, true) ?? '';
+        $user_avatar_url = get_user_meta($ID, MC_AVATAR_URL, true);
+        $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($ID) : $user_avatar_url;
+        $work_with = get_user_meta($ID, MC_WORKS_WITH);
+        $website = get_user_meta($ID, MC_WEBSITE, true);
+        $gender = get_user_meta($ID, MC_GENDER, true);
+        $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
         ?>
         <div class=" mx-auto ">
             <div class=" h-48 w-full overflow-hidden ">
@@ -64,7 +69,7 @@
                     <div class="field">
                         <div class="field-label"><?= __('Name') ?></div>
                         <div class="field-content">
-                            <input value="<?= $data->display_name ?>" name="<?= MC_NAME ?>" type="text" class="field-text" placeholder="<?= __('Name') ?>">
+                            <input value="<?= $data->display_name ?>" name="<?= MC_NAME ?>" type="text" class="field-text" placeholder="...">
                         </div>
                     </div>
 
@@ -75,14 +80,27 @@
                         </div>
                     </div>
 
+                    <?php if ($is_cft): ?>
+                        <div class="field">
+                            <div class="field-label"><?= __("Works with") ?></div>
+                            <div class="field-content">
+                                <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
+                                    <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
+                                    <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
+                                    <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
+                                    <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                                </select>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="field">
-                        <div class="field-label"><?= __("Works with") ?></div>
+                        <div class="field-label"><?= __('Gender') ?></div>
                         <div class="field-content">
-                            <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
-                                <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                                <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                                <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                                <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                            <select class="w-full field-select" name="<?= MC_GENDER ?>" >
+                                <option value=""></option>
+                                <option value="female" <?= $gender === "female" ?'selected':'' ?> ><?= __('Female') ?></option>
+                                <option value="male" <?= $gender === "male" ?'selected':'' ?>><?= __('Male') ?></option>
                             </select>
                         </div>
                     </div>
@@ -98,7 +116,7 @@
                         <div class="field">
                             <div class="field-label"><?= __('City') . '/' . __('Province') ?></div>
                             <div class="field-content">
-                                <input name="<?= MC_CITY ?>" type="text" value="<?= $country ?? '' ?>" class="field-text">
+                                <input name="<?= MC_CITY ?>" type="text" value="<?= $city ?? '' ?>" class="field-text">
                             </div>
                         </div>
                     </div>
@@ -113,13 +131,13 @@
                     <div class="field">
                         <div class="field-label"><?= __('Phone') ?></div>
                         <div class="field-content">
-                            <input name="<?= MC_PHONE ?>" type="text" value="<?= $country ?? '' ?>" class="field-text" placeholder="<?= __('phone_alert') ?>">
+                            <input name="<?= MC_PHONE ?>" type="text" value="<?= $phone ?? '' ?>" class="field-text" placeholder="<?= __('phone_alert') ?>">
                         </div>
                     </div>
                     <div class="field">
                         <div class="field-label"><?= __('Web site') ?></div>
                         <div class="field-content">
-                            <input name="<?= MC_WEBSITE ?>" type="url" value="<?= $data->user_url ?? '' ?>" class="field-text" placeholder="<?= __('Web site') ?>">
+                            <input name="<?= MC_WEBSITE ?>" value="<?= $website ?? '' ?>" class="field-text" placeholder="<?= __('Web site') ?>">
                         </div>
                     </div>
 

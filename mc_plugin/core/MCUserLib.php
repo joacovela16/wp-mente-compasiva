@@ -3,7 +3,6 @@ include_once "constants.php";
 
 class MCUserLib
 {
-    private WP_User $user;
 
     public function init()
     {
@@ -26,7 +25,8 @@ class MCUserLib
 
     function addExtraFields(WP_User $user)
     {
-        $this->user = $user;
+        $is_cft = get_user_meta($user->ID, MC_CFT, true) === "on";
+        $work_with = get_user_meta($user->ID, MC_WORKS_WITH);
         ?>
         <table class="form-table">
             <tr>
@@ -51,6 +51,31 @@ class MCUserLib
                 </td>
             </tr>
 
+            <tr>
+                <th>
+                    <?= __('About me') ?>
+                </th>
+                <td>
+                    <textarea name="<?= MC_ABSTRACT ?>" cols="100" rows="15"><?= get_user_meta($user->ID, MC_ABSTRACT, true) ?></textarea>
+                </td>
+            </tr>
+
+            <?php if ($is_cft): ?>
+
+                <tr>
+                    <th>
+                        <?= __('Works with') ?>
+                    </th>
+                    <td>
+                        <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
+                            <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
+                            <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
+                            <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
+                            <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                        </select>
+                    </td>
+                </tr>
+            <?php endif; ?>
             <tr>
                 <th>
                     <?= __('Birthday') ?>
@@ -160,7 +185,7 @@ class MCUserLib
     {
 
         update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
-        $user = get_user_by("ID", $user_id);
+        $user = get_userdata($user_id);
         if ($user) {
             MCUserLib::update_user_data($user);
         }
@@ -237,6 +262,12 @@ class MCUserLib
                 $meta_input[MC_CFT] = $_POST[MC_CFT];
             }
 
+            if (isset($_POST[MC_GENDER])) {
+                $value = $_POST[MC_GENDER] ?? "";
+                update_user_meta($ID, MC_GENDER, $value);
+                $meta_input[MC_GENDER] = $value;
+            }
+
             if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {
                 $ww = $_POST[MC_WORKS_WITH] ?? [];
                 $ww = is_array($ww) ? $ww : [];
@@ -245,8 +276,8 @@ class MCUserLib
                 delete_post_meta($post_id, MC_WORKS_WITH);
 
                 foreach ($ww as $item) {
-                    update_user_meta($ID, MC_WORKS_WITH, $item);
-                    update_post_meta($post_id, MC_WORKS_WITH, $item);
+                    add_user_meta($ID, MC_WORKS_WITH, $item);
+                    add_user_meta($post_id, MC_WORKS_WITH, $item);
                 }
             }
 
@@ -257,6 +288,7 @@ class MCUserLib
 
             if (isset($_POST[MC_WEBSITE]) && nonEmpty($_POST[MC_WEBSITE])) {
                 $user_data['user_url'] = $_POST[MC_WEBSITE];
+                update_user_meta($ID, MC_WEBSITE, $_POST[MC_WEBSITE]);
                 $meta_input[MC_WEBSITE] = $_POST[MC_WEBSITE];
             }
 
@@ -273,7 +305,6 @@ class MCUserLib
             }
 
             wp_update_post($post_data);
-
             if ($update) {
                 wp_update_user($user_data);
             }
