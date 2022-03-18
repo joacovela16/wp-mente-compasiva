@@ -13,7 +13,7 @@ $selected_tags = is_array($selected_tags) ? $selected_tags : [$selected_tags];
 
 $orderby = $_GET[SORTBY] ?? 'date';
 
-$countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRIES] ?? [];
+$countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRY] ?? [];
 $selected_countries = $_GET['country'] ?? [];
 $selected_countries = is_array($selected_countries) ? $selected_countries : [$selected_countries];
 

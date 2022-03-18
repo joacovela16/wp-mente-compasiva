@@ -12,39 +12,50 @@ foreach ($permissions as $item) {
 }*/
 $allowed = true; //array_exists($post_include, fn($x) => $x === $post->post_type);
 
-    setup_postdata($post);
-    $tags = get_the_tags();
-    $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
-    ?>
+setup_postdata($post);
+$tags = get_the_tags();
+$is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
+?>
     <div class="mx-auto container md:mt-24 mt-48 h-screen" x-init="loaderOn=false">
         <?php
         if ($is_person):
 
             $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
-            $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+            $abstract = get_post_meta($post->ID, MC_ABSTRACT, true);
             $details = get_post_meta($post->ID, MC_USER_DETAILS, true);
-            $location = $details['location'] ?? '';
-            $country = $details['country'] ?? '';
-            $email = $details['email'] ?? '';
-            $website = $details['website'] ?? '';
-            $phone = $details['phone'] ?? '';
+            $location = get_post_meta($post->ID, MC_CITY, true);
+            $country = get_post_meta($post->ID, MC_COUNTRY, true);
+            $email = get_post_meta($post->ID, MC_EMAIL, true);
+            $website = get_post_meta($post->ID, MC_WEBSITE, true);
+            $phone = get_post_meta($post->ID, MC_PHONE, true);
 
             ?>
             <article>
                 <div class="rounded-3xl overflow-hidden shadow-lg pb-10 bg-zinc-50 space-y-5">
                     <div class="relative">
                         <svg preserveAspectRatio="none" width="100%" height="392" viewBox="0 0 1920 966">
-                                <g transform="translate(960,483) scale(1,1) translate(-960,-483)"><linearGradient id="lg-0.2760189174407055" x1="0" x2="1" y1="0" y2="0">
-                                        <stop stop-color="#3b82f6" offset="0"></stop>
-                                        <stop stop-color="#3b82f6" offset="1"></stop>
-                                    </linearGradient><path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
-                                        <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="0s" values="M0 0L 0 757.285843974929Q 480 829.0540789219586  960 796.5625314758961T 1920 797.593217090224L 1920 0 Z;M0 0L 0 767.4691080922058Q 480 845.9032302826004  960 825.6200074236563T 1920 799.7667348879111L 1920 0 Z;M0 0L 0 805.239797118701Q 480 844.0462141396819  960 796.4749472048918T 1920 856.7062989544117L 1920 0 Z;M0 0L 0 757.285843974929Q 480 829.0540789219586  960 796.5625314758961T 1920 797.593217090224L 1920 0 Z"></animate>
-                                    </path><path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
-                                        <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="-33.333333333333336s" values="M0 0L 0 802.2955895305398Q 480 804.6621360307138  960 777.4958848811332T 1920 827.4003724484824L 1920 0 Z;M0 0L 0 824.0693395310052Q 480 871.0126001761827  960 851.1429529711223T 1920 865.6499451479178L 1920 0 Z;M0 0L 0 800.0001623290995Q 480 842.4648989162648  960 824.1682195705657T 1920 800.116601379561L 1920 0 Z;M0 0L 0 802.2955895305398Q 480 804.6621360307138  960 777.4958848811332T 1920 827.4003724484824L 1920 0 Z"></animate>
-                                    </path><path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
-                                        <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="-66.66666666666667s" values="M0 0L 0 830.2413258021917Q 480 755.4779864484038  960 724.9812523214165T 1920 779.1382823024304L 1920 0 Z;M0 0L 0 769.999377743319Q 480 813.4188543610501  960 790.0873669446495T 1920 751.648244740765L 1920 0 Z;M0 0L 0 770.4727082288574Q 480 788.2777921532546  960 761.9636693412018T 1920 754.8361132214287L 1920 0 Z;M0 0L 0 830.2413258021917Q 480 755.4779864484038  960 724.9812523214165T 1920 779.1382823024304L 1920 0 Z"></animate>
-                                    </path></g>
-                            </svg>
+                            <g transform="translate(960,483) scale(1,1) translate(-960,-483)">
+                                <linearGradient id="lg-0.2760189174407055" x1="0" x2="1" y1="0" y2="0">
+                                    <stop stop-color="#3b82f6" offset="0"></stop>
+                                    <stop stop-color="#3b82f6" offset="1"></stop>
+                                </linearGradient>
+                                <path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
+                                    <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1"
+                                             begin="0s"
+                                             values="M0 0L 0 757.285843974929Q 480 829.0540789219586  960 796.5625314758961T 1920 797.593217090224L 1920 0 Z;M0 0L 0 767.4691080922058Q 480 845.9032302826004  960 825.6200074236563T 1920 799.7667348879111L 1920 0 Z;M0 0L 0 805.239797118701Q 480 844.0462141396819  960 796.4749472048918T 1920 856.7062989544117L 1920 0 Z;M0 0L 0 757.285843974929Q 480 829.0540789219586  960 796.5625314758961T 1920 797.593217090224L 1920 0 Z"></animate>
+                                </path>
+                                <path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
+                                    <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1"
+                                             begin="-33.333333333333336s"
+                                             values="M0 0L 0 802.2955895305398Q 480 804.6621360307138  960 777.4958848811332T 1920 827.4003724484824L 1920 0 Z;M0 0L 0 824.0693395310052Q 480 871.0126001761827  960 851.1429529711223T 1920 865.6499451479178L 1920 0 Z;M0 0L 0 800.0001623290995Q 480 842.4648989162648  960 824.1682195705657T 1920 800.116601379561L 1920 0 Z;M0 0L 0 802.2955895305398Q 480 804.6621360307138  960 777.4958848811332T 1920 827.4003724484824L 1920 0 Z"></animate>
+                                </path>
+                                <path d="" fill="url(#lg-0.2760189174407055)" opacity="0.4">
+                                    <animate attributeName="d" dur="100s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1"
+                                             begin="-66.66666666666667s"
+                                             values="M0 0L 0 830.2413258021917Q 480 755.4779864484038  960 724.9812523214165T 1920 779.1382823024304L 1920 0 Z;M0 0L 0 769.999377743319Q 480 813.4188543610501  960 790.0873669446495T 1920 751.648244740765L 1920 0 Z;M0 0L 0 770.4727082288574Q 480 788.2777921532546  960 761.9636693412018T 1920 754.8361132214287L 1920 0 Z;M0 0L 0 830.2413258021917Q 480 755.4779864484038  960 724.9812523214165T 1920 779.1382823024304L 1920 0 Z"></animate>
+                                </path>
+                            </g>
+                        </svg>
                         <?php if (is_numeric($image_url)): ?>
                             <img class="rounded-full w-64 ring-4 ring-8 ring-white shadow-lg object-cover absolute left-[calc(50%-8rem)] top-10" src="<?= wp_get_attachment_url($image_url) ?>">
                         <?php endif; ?>

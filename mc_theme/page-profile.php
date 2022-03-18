@@ -15,7 +15,7 @@
     $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
     $author = get_query_var('author');
     $user = wp_get_current_user();
-    $countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRIES] ?? [];
+    $countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRY] ?? [];
 
     if ($user):
         $data = $user->data;
@@ -48,6 +48,7 @@
                         class="mx-auto px-5 w-full md:w-2/3 flow-grow-0 space-y-3 p-3 shadow-lg bg-white rounded-lg"
                         enctype="multipart/form-data"
                 >
+                    <input type="hidden" name="action" value="update_user">
                     <div class="flex flex-row items-center">
                         <div class="font-bold text-3xl flex-1"><?= __('My profile') ?></div>
                         <div class=>
@@ -60,25 +61,24 @@
                             </a>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="update_user">
                     <div class="field">
                         <div class="field-label"><?= __('Name') ?></div>
                         <div class="field-content">
-                            <input value="<?= $data->display_name ?>" name="mc_name" type="text" class="field-text" placeholder="<?= __('Name') ?>">
+                            <input value="<?= $data->display_name ?>" name="<?= MC_NAME ?>" type="text" class="field-text" placeholder="<?= __('Name') ?>">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="field-label"><?= __('About me') ?></div>
                         <div class="field-content">
-                            <textarea rows="10" name="mc_about" class="field-text" placeholder="<?= __('Write about you') ?>"><?= $description ?? '' ?></textarea>
+                            <textarea rows="10" name="<?= MC_ABSTRACT ?>" class="field-text" placeholder="<?= __('Write about you') ?>"><?= $description ?? '' ?></textarea>
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="field-label"><?= __("Works with") ?></div>
                         <div class="field-content">
-                            <select class="w-full" name="works_with[]" multiple>
+                            <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
                                 <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
                                 <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
                                 <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
@@ -87,46 +87,46 @@
                         </div>
                     </div>
 
-                    <div class="field">
-                        <div class="field-label"><?= __('Birthdate') ?></div>
-                        <div class="field-content">
-                            <input name="mc_birthday" type="date" value="<?= $birthday ?? '' ?>" class="field-text" placeholder="<?= __('Birthdate') ?>">
-                        </div>
-                    </div>
-
                     <div class="flex flex-row items-center space-x-3">
                         <div class="field">
                             <div class="field-label"><?= __('Country') ?></div>
                             <div class="field-content">
-                                <input name="mc_country" type="text" value="<?= $country ?? '' ?>" class="field-text">
+                                <input name="<?= MC_COUNTRY ?>" type="text" value="<?= $country ?? '' ?>" class="field-text">
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="field-label"><?= __('City') . '/' . __('Province') ?></div>
                             <div class="field-content">
-                                <input name="mc_city" type="text" value="<?= $country ?? '' ?>" class="field-text">
+                                <input name="<?= MC_CITY ?>" type="text" value="<?= $country ?? '' ?>" class="field-text">
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label"><?= __('Birthdate') ?></div>
+                        <div class="field-content">
+                            <input name="<?= MC_BIRTHDAY ?>" type="date" value="<?= $birthday ?? '' ?>" class="field-text" placeholder="<?= __('Birthdate') ?>">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="field-label"><?= __('Phone') ?></div>
                         <div class="field-content">
-                            <input name="mc_phone" type="text" value="<?= $country ?? '' ?>" class="field-text" placeholder="<?= __('phone_alert') ?>">
+                            <input name="<?= MC_PHONE ?>" type="text" value="<?= $country ?? '' ?>" class="field-text" placeholder="<?= __('phone_alert') ?>">
                         </div>
                     </div>
                     <div class="field">
                         <div class="field-label"><?= __('Web site') ?></div>
                         <div class="field-content">
-                            <input name="mc_website" type="url" value="<?= $data->user_url ?? '' ?>" class="field-text" placeholder="<?= __('Web site') ?>">
+                            <input name="<?= MC_WEBSITE ?>" type="url" value="<?= $data->user_url ?? '' ?>" class="field-text" placeholder="<?= __('Web site') ?>">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="field-label"><?= __('Change picture') ?></div>
                         <div class="field-content">
-                            <input name="mc_picture" type="file" accept="image/png,image/jpeg" class="field-text" placeholder="<?= __('Change picture') ?>">
+                            <input name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" class="field-text" placeholder="<?= __('Change picture') ?>">
                         </div>
                     </div>
 
@@ -136,14 +136,14 @@
                             <div class="field">
                                 <div class="field-label"><?= __('New password') ?></div>
                                 <div class="field-content">
-                                    <input name="mc_password_1" type="password" class="field-text" placeholder="<?= __('New password') ?>">
+                                    <input name="<?= MC_PASSWORD_1 ?>" type="password" class="field-text" placeholder="<?= __('New password') ?>">
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="field-label"><?= __('Confirm password') ?></div>
                                 <div class="field-content">
-                                    <input name="mc_password_2" type="password" class="field-text" placeholder="<?= __('Confirm password') ?>">
+                                    <input name="<?= MC_PASSWORD_1 ?>" type="password" class="field-text" placeholder="<?= __('Confirm password') ?>">
                                 </div>
                             </div>
                         </div>

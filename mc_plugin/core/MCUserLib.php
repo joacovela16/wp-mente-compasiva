@@ -10,9 +10,8 @@ class MCUserLib
         add_action("show_user_profile", [$this, "addExtraFields"]);
         add_action("edit_user_profile", [$this, "addExtraFields"]);
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
-        add_action('admin_footer', [$this, "render_user_permissions"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
-        add_action("profile_update", [$this, "mc_user_profile_updated"]);
+//        add_action("profile_update", [$this, "mc_user_profile_updated"]);
         add_action('delete_user', [$this, 'delete_user']);
     }
 
@@ -25,77 +24,102 @@ class MCUserLib
         wp_delete_post(intval($bind), true);
     }
 
-    function render_user_permissions()
-    {
-        if (!isset($this->user)) return;
-
-        $permissionSelection = get_user_meta($this->user->ID, MC_METABOX_PERMISSION, true);
-        $settings = get_option(MC_SETTING);
-
-        if (!$settings) {
-            $settings = ["permissions" => []];
-        }
-
-        if (empty($permissionSelection)) {
-            $tmp = ($settings[MC_DEFAULTS] ?? [])[MC_USER] ?? [];
-            $permissionSelection = [];
-            foreach ($tmp as $item) {
-                $permissionSelection[$item[MC_ID]] = $item;
-            }
-        }
-
-        $config = [
-            'permissions' => $settings['permissions'],
-            'selections' => $permissionSelection,
-            'i18n' => [
-                'Post types' => __('Post types'),
-                'Capabilities' => __('Capabilities'),
-            ]
-        ];
-        ?>
-        <script type="module">
-            <?= 'import {renderUserPermissions} from "' . plugins_url() . '/mc_plugin/assets/mc_svelte_lib.es.js"' ?>
-
-            renderUserPermissions("mc_plugin_user_permission", <?= wp_json_encode($config) ?>);
-
-        </script>
-        <?php
-    }
-
     function addExtraFields(WP_User $user)
     {
         $this->user = $user;
         ?>
         <table class="form-table">
             <tr>
-                <th>
-                    <label for="birthday"><?= __('Birthday') ?></label>
-                </th>
-                <td>
-                    <input type="date"
-                           class="regular-text ltr"
-                           id="birthday"
-                           name="birthday"
-                           value="<?= esc_attr(get_user_meta($user->ID, 'birthday', true)) ?>"
-                           title="Please use YYYY-MM-DD as the date format."
-                           pattern="(19[0-9][0-9]|20[0-9][0-9])-(1[0-2]|0[1-9])-(3[01]|[21][0-9]|0[1-9])"
-                           required>
-                </td>
-            </tr>
-            <tr>
-                <th><?= __('Enabled') ?></th>
+                <th><?= __('User enabled') ?></th>
                 <td>
                     <label>
                         <input
-                                title="Enables user to login on website"
                                 type="checkbox"
                                 name="<?= MC_ENABLED ?>" <?= get_user_meta($user->ID, MC_ENABLED, true) === 'on' ? 'checked' : '' ?>>
                     </label>
                 </td>
             </tr>
+
             <tr>
-                <th><?= __('Permissions') ?></th>
-                <td class="mc_plugin_user_permission">
+                <th><?= __('CFT Coursed') ?></th>
+                <td>
+                    <label>
+                        <input
+                                type="checkbox"
+                                name="<?= MC_CFT ?>" <?= get_user_meta($user->ID, MC_CFT, true) === 'on' ? 'checked' : '' ?>>
+                    </label>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <?= __('Birthday') ?>
+                </th>
+                <td>
+                    <input type="date"
+                           class="regular-text ltr"
+                           id="<?= MC_BIRTHDAY ?>"
+                           name="<?= MC_BIRTHDAY ?>"
+                           value="<?= esc_attr(get_user_meta($user->ID, MC_BIRTHDAY, true)) ?>"
+                           title="Please use YYYY-MM-DD as the date format."
+                           pattern="(19[0-9][0-9]|20[0-9][0-9])-(1[0-2]|0[1-9])-(3[01]|[21][0-9]|0[1-9])"
+                           required>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <?= __('Country') ?>
+                </th>
+                <td>
+                    <input type="text"
+                           class="regular-text ltr"
+                           id="<?= MC_COUNTRY ?>"
+                           name="<?= MC_COUNTRY ?>"
+                           value="<?= esc_attr(get_user_meta($user->ID, MC_COUNTRY, true)) ?>"
+                           required>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <?= __('City') ?>
+                </th>
+                <td>
+                    <input type="text"
+                           class="regular-text ltr"
+                           id="<?= MC_CITY ?>"
+                           name="<?= MC_CITY ?>"
+                           value="<?= esc_attr(get_user_meta($user->ID, MC_CITY, true)) ?>"
+                           required>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <?= __('Website') ?>
+                </th>
+                <td>
+                    <input type="text"
+                           class="regular-text ltr"
+                           id="<?= MC_WEBSITE ?>"
+                           name="<?= MC_WEBSITE ?>"
+                           value="<?= esc_attr(get_user_meta($user->ID, MC_WEBSITE, true)) ?>"
+                           required>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <?= __('Phone') ?>
+                </th>
+                <td>
+                    <input type="text"
+                           class="regular-text ltr"
+                           id="<?= MC_PHONE ?>"
+                           name="<?= MC_PHONE ?>"
+                           value="<?= esc_attr(get_user_meta($user->ID, MC_PHONE, true)) ?>"
+                           required>
                 </td>
             </tr>
         </table>
@@ -104,7 +128,6 @@ class MCUserLib
 
     function mc_user_register_interceptor(int $user_id)
     {
-
         $maybe_user = get_userdata($user_id);
         if ($maybe_user) {
             $post_linked_to_user = wp_insert_post(
@@ -116,28 +139,17 @@ class MCUserLib
                     "post_type" => CFT_DIRECTORY,
                     "meta_input" => [
                         MC_KIND => "person",
-                        MC_ENABLED => 'off',
+                        MC_ENABLED => 'on',
                         MC_USER_REF => $user_id,
                     ]
                 ]
             );
 
-            $settings = get_option(MC_SETTING);
-            if ($settings) {
-                if (array_key_exists(MC_DEFAULTS, $settings) && array_key_exists(MC_USER, $settings[MC_DEFAULTS])) {
-                    $user_defaults = $settings[MC_DEFAULTS][MC_USER];
-                    $items = [];
-                    foreach ($user_defaults as $item) {
-                        $items[$item[MC_ID]] = $item;
-                    }
-                    $this->update_metadata($items, $user_id);
-                }
-            }
-
             if (is_wp_error($post_linked_to_user)) {
                 error_log($post_linked_to_user->get_error_message());
             } else {
                 update_user_meta($user_id, MC_POST_BIND, $post_linked_to_user);
+                update_user_meta($user_id, MC_ENABLED, 'on');
             }
         } else {
             error_log("Can't found user " . $user_id);
@@ -146,30 +158,126 @@ class MCUserLib
 
     function mc_user_profile_updated($user_id)
     {
+
         update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
-
-        if (array_key_exists(MC_METABOX_PERMISSION, $_POST)) {
-            $permissions = $_POST[MC_METABOX_PERMISSION];
-
-            $this->update_metadata($permissions, $user_id);
+        $user = get_user_by("ID", $user_id);
+        if ($user) {
+            MCUserLib::update_user_data($user);
         }
     }
 
-    function update_metadata(array $permissions, $user_id)
+    public static function update_user_data(WP_User $user, bool $update = true)
     {
-        delete_user_meta($user_id, MC_METABOX_PERMISSION_RULE);
+        $ID = $user->ID;
+        $avatarURL = null;
+        $attachmentID = null;
+        $user_data = ["ID" => $ID];
 
-        foreach ($permissions as $k => $v) {
-            $post_types = $v[MC_POST_TYPES] ?? [];
+        if ($ID !== 0) {
 
-            if (count($post_types) === 0) continue;
+            $meta_input = [];
 
-            foreach ($v[MC_CAPABILITIES] ?? [] as $datum) {
-                $result = $k . "::" . $datum;
-                add_user_meta($user_id, MC_METABOX_PERMISSION_RULE, $result);
+            if (isset($_FILES[MC_PICTURE]) && !empty($_FILES[MC_PICTURE])) {
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                $lastAttachment = get_user_meta($ID, MC_AVATAR_ID, true);
+
+                if (!is_wp_error($lastAttachment)) {
+                    $attachmentID = media_handle_upload(MC_PICTURE, null);
+                }
+
+                if (!is_null($attachmentID) && !is_wp_error($attachmentID)) {
+
+                    $id = intval($lastAttachment);
+                    $wp_delete_attachment_result = wp_delete_attachment($id);
+
+                    if (!is_wp_error($wp_delete_attachment_result)) {
+                        $avatarURL = wp_get_attachment_url($attachmentID);
+
+                        if (nonEmpty($avatarURL)) $meta_input[MC_AVATAR_URL] = $avatarURL;
+                        if (nonEmpty($attachmentID)) $meta_input[MC_AVATAR_ID] = $attachmentID;
+
+                        update_user_meta($ID, MC_AVATAR_URL, $avatarURL);
+                        update_user_meta($ID, MC_AVATAR_ID, $attachmentID);
+                    }
+                }
+            }
+            $post_id = get_user_meta($ID, MC_USER_REF, true);
+            $post_id = intval($post_id);
+
+            $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
+
+            if (isset($_POST[MC_CITY]) && nonEmpty($_POST[MC_CITY])) {
+                $mc_country = $_POST[MC_CITY];
+                $meta_input[MC_CITY] = $mc_country;
+                update_user_meta($ID, MC_CITY, $mc_country);
+            }
+
+
+            if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
+                $meta_input[MC_CITY] = $_POST[MC_ABSTRACT];
+                $post_data['post_content'] = $_POST[MC_ABSTRACT];
+                update_user_meta($ID, MC_ABSTRACT, $_POST[MC_ABSTRACT]);
+            }
+
+
+            if (isset($_POST[MC_BIRTHDAY]) && nonEmpty($_POST[MC_BIRTHDAY])) {
+                update_user_meta($ID, MC_BIRTHDAY, $_POST[MC_BIRTHDAY]);
+                $meta_input[MC_BIRTHDAY] = $_POST[MC_BIRTHDAY];
+            }
+
+            if (isset($_POST[MC_PHONE]) && nonEmpty($_POST[MC_PHONE])) {
+                update_user_meta($ID, MC_PHONE, $_POST[MC_PHONE]);
+                $meta_input[MC_PHONE] = $_POST[MC_PHONE];
+            }
+
+            if (isset($_POST[MC_CFT]) && nonEmpty($_POST[MC_CFT])) {
+                update_user_meta($ID, MC_CFT, $_POST[MC_CFT]);
+                $meta_input[MC_CFT] = $_POST[MC_CFT];
+            }
+
+            if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {
+                $ww = $_POST[MC_WORKS_WITH] ?? [];
+                $ww = is_array($ww) ? $ww : [];
+
+                delete_user_meta($ID, MC_WORKS_WITH);
+                delete_post_meta($post_id, MC_WORKS_WITH);
+
+                foreach ($ww as $item) {
+                    update_user_meta($ID, MC_WORKS_WITH, $item);
+                    update_post_meta($post_id, MC_WORKS_WITH, $item);
+                }
+            }
+
+            if (isset($_POST[MC_NAME]) && nonEmpty($_POST[MC_NAME])) {
+                $user_data['display_name'] = $_POST[MC_NAME];
+                $meta_input[MC_NAME] = $_POST[MC_NAME];
+            }
+
+            if (isset($_POST[MC_WEBSITE]) && nonEmpty($_POST[MC_WEBSITE])) {
+                $user_data['user_url'] = $_POST[MC_WEBSITE];
+                $meta_input[MC_WEBSITE] = $_POST[MC_WEBSITE];
+            }
+
+            if (isset($_POST[MC_PASSWORD_1]) && isset($_POST[MC_PASSWORD_2])) {
+
+                $new_password = $_POST[MC_PASSWORD_1];
+                $confirm_password = $_POST[MC_PASSWORD_2];
+
+                if (nonEmpty($new_password) && $new_password == $confirm_password) {
+                    if (!empty($new_password) && !empty($confirm_password)) {
+                        $user_data = array_merge($user_data, ["user_pass" => $new_password]);
+                    }
+                }
+            }
+
+            wp_update_post($post_data);
+
+            if ($update) {
+                wp_update_user($user_data);
             }
         }
-        update_user_meta($user_id, MC_METABOX_PERMISSION, $permissions);
     }
 
 }

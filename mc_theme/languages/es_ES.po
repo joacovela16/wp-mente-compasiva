@@ -117,3 +117,9 @@ msgstr "Deje su teléfono si quiere que aparezca en el listado"
 
 msgid "Write about you"
 msgstr "Escribe sobre tí"
+
+msgid "User enabled"
+msgstr "Usuario activo"
+
+msgid "CFT Coursed"
+msgstr "Cursó CFT"

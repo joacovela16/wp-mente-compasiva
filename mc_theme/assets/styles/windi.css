@@ -76,10 +76,6 @@
   margin: auto;
 }
 
-.m-2 {
-  margin: 0.5rem;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -206,12 +202,12 @@
   height: 100vh;
 }
 
-.h-4 {
-  height: 1rem;
-}
-
 .h-24 {
   height: 6rem;
+}
+
+.h-4 {
+  height: 1rem;
 }
 
 .max-h-screen {
@@ -220,14 +216,6 @@
 
 .max-h-48 {
   max-height: 12rem;
-}
-
-.max-h-4 {
-  max-height: 1rem;
-}
-
-.max-h-8 {
-  max-height: 2rem;
 }
 
 .min-h-\[5rem\] {
@@ -266,24 +254,16 @@
   width: auto;
 }
 
-.w-4 {
-  width: 1rem;
-}
-
 .w-24 {
   width: 6rem;
 }
 
+.w-4 {
+  width: 1rem;
+}
+
 .max-w-xs {
   max-width: 20rem;
-}
-
-.max-w-full {
-  max-width: 100%;
-}
-
-.max-w-sm {
-  max-width: 24rem;
 }
 
 .max-w-md {
@@ -424,10 +404,6 @@
 
 .text-ellipsis {
   text-overflow: ellipsis;
-}
-
-.whitespace-normal {
-  white-space: normal;
 }
 
 .whitespace-nowrap {
@@ -987,7 +963,7 @@ body.login {
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(243 244 246 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
 }
 
 .field-text:focus {
@@ -1005,7 +981,7 @@ body.login {
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(243 244 246 / var(--tw-ring-opacity));
+  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
 }
 
 .field-select:focus {
@@ -1100,11 +1076,6 @@ body.login {
 .hover\:bg-blue-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-gray-200:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-gray-100:hover {
@@ -1215,20 +1186,12 @@ body.login {
     height: 9rem;
   }
 
-  .md\:h-24 {
-    height: 6rem;
-  }
-
   .md\:w-2\/3 {
     width: 66.666667%;
   }
 
   .md\:w-36 {
     width: 9rem;
-  }
-
-  .md\:w-24 {
-    width: 6rem;
   }
 
   .md\:grid-cols-2 {
@@ -1263,24 +1226,8 @@ body.login {
     height: 12rem;
   }
 
-  .lg\:h-36 {
-    height: 9rem;
-  }
-
-  .lg\:h-24 {
-    height: 6rem;
-  }
-
   .lg\:w-48 {
     width: 12rem;
-  }
-
-  .lg\:w-36 {
-    width: 9rem;
-  }
-
-  .lg\:w-24 {
-    width: 6rem;
   }
 
   .lg\:grid-cols-3 {

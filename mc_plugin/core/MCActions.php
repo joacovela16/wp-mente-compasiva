@@ -16,8 +16,6 @@ class MCActions
 
     public function csv_handler()
     {
-        $settings = get_option(MC_SETTING) ?? [];
-        $default_permissions = ($settings[MC_DEFAULTS] ?? [])[MC_USER] ?? [];
         $datum = [];
         if (($stream = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
             $data = fgetcsv($stream, 1000, ",");
@@ -60,23 +58,21 @@ class MCActions
                 $post_id = get_user_meta($user, MC_POST_BIND, true);
                 if (!empty($post_id)) {
                     $post = get_post(intval($post_id));
-                    wp_update_post([
-                        'ID' => $post->ID,
-                        'meta_input' => [
-                            MC_METABOX_ABSTRACT =>$description,
-                            MC_METABOX_COUNTRIES =>$country,
-                            MC_USER_DETAILS => [
-                                'country' => $country,
-                                'location' => $location,
-                                'email' => $email,
-                                'phone' => $phone,
-                                'website' => $website
-                            ],
-                            MC_CFT=> true
-                        ]
-                    ]);
+                    if (nonEmpty($post)) {
+                        $metaInput = [MC_CFT => 'on'];
 
-                    MCPermissionLib::update_post_permissions($post->ID, $default_permissions);
+                        if (nonEmpty($description)) $metaInput[MC_ABSTRACT] = $description;
+                        if (nonEmpty($country)) $metaInput[MC_COUNTRY] = $country;
+                        if (nonEmpty($location)) $metaInput[MC_CITY] = $location;
+                        if (nonEmpty($email)) $metaInput[MC_EMAIL] = $email;
+                        if (nonEmpty($phone)) $metaInput[MC_PHONE] = $phone;
+                        if (nonEmpty($website)) $metaInput[MC_WEBSITE] = $website;
+
+                        foreach ($metaInput as $k=>$v){
+                            update_post_meta($post->ID, $k, $v);
+                            update_user_meta($user, $k, $v);
+                        }
+                    }
                 }
             }
         }
@@ -101,7 +97,7 @@ class MCActions
     }
 
 
-    public function login_redirect($redirect_to, $requested_redirect_to, $user)
+    public function login_redirect($redirect_to, $requested_redirect_to, $user): string
     {
         return $this->isAdm($user) ? '/wp-admin' : '/';
     }
@@ -123,90 +119,23 @@ class MCActions
 
     public function secure_profile()
     {
-        if (is_page('mc_profile') && !is_user_logged_in()) {
+        if (is_page(MC_PAGE_PROFILE) && !is_user_logged_in()) {
             wp_redirect(site_url(), 301);
             exit;
         }
     }
 
+    public function getAndSet(array $source, array &$target, $sourceField, $targetField)
+    {
+        if (isset($source[$sourceField]) && !empty($source[$sourceField])) {
+            $target[$targetField] = $source[$sourceField];
+        }
+    }
+
     public function update_user_action()
     {
-
         $user = wp_get_current_user();
-        $ID = $user->ID;
-        $avatarURL = null;
-        $attachmentID = null;
-        $user_data = ["ID" => $ID];
-
-        if (isset($_FILES["mc_picture"])) {
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            require_once(ABSPATH . 'wp-admin/includes/media.php');
-            $lastAttachment = get_user_meta($ID, "user_avatar_id", true);
-
-            if (!is_wp_error($lastAttachment)) {
-
-
-                $attachmentID = media_handle_upload("mc_picture", null);
-            }
-
-            if (!is_null($attachmentID) && !is_wp_error($attachmentID)) {
-
-                $id = intval($lastAttachment);
-                $wp_delete_attachment_result = wp_delete_attachment($id);
-
-                if (!is_wp_error($wp_delete_attachment_result)) {
-                    $avatarURL = wp_get_attachment_url($attachmentID);
-                    update_user_meta($ID, "user_avatar_url", $avatarURL);
-                    update_user_meta($ID, "user_avatar_id", $attachmentID);
-                }
-            }
-        }
-
-        if ($ID !== 0) {
-            $post_id = get_user_meta($ID, MC_USER_REF, true);
-
-            $meta = [
-                MC_METABOX_ABSTRACT => $_POST["mc_about"]
-            ];
-            if (!$avatarURL == null) {
-                $meta["user_avatar_url"] = $avatarURL;
-            }
-
-
-            if (isset($_POST["mc_country"])) {
-                $mc_country = $_POST["mc_country"];
-                update_user_meta($ID, 'country', $mc_country);
-                $meta['country'] = $mc_country;
-            }
-
-            $update_result = wp_update_post([
-                "ID" => intval($post_id),
-                "post_content" => $_POST["mc_about"] ?? '',
-                "meta_input" => $meta
-            ]);
-
-            $user_data = array_merge($user_data, [
-                "display_name" => $_POST["mc_name"],
-                "description" => $_POST["mc_about"] ?? '',
-                "user_url" => $_POST["mc_website"] ?? '',
-            ]);
-
-            if (isset($_POST["mc_birthday"])) {
-                update_user_meta($ID, 'birthday', $_POST["mc_birthday"]);
-            }
-
-
-            $new_password = $_POST["mc_password_1"];
-            $confirm_password = $_POST["mc_password_2"];
-
-            if ($new_password == $confirm_password) {
-                if (!empty($new_password) && !empty($confirm_password)) {
-                    $user_data = array_merge($user_data, ["user_pass" => $new_password]);
-                }
-            }
-            wp_update_user($user_data);
-        }
+        MCUserLib::update_user_data($user);
         wp_safe_redirect('/profile');
     }
 

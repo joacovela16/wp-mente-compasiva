@@ -61,3 +61,7 @@ function array_forall(array $array, Closure $test): bool
 
     return true;
 }
+
+function nonEmpty(mixed $obj):bool{
+    return !empty($obj);
+}

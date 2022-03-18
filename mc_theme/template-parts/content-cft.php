@@ -1,24 +1,18 @@
 <?php
 
 global $wp_query;
-const TOOK_CFT = 'tookCFT';
 const SORTBY = "orderby";
 const PAFTER = "after";
 const PBEFORE = "before";
 
-$search_fields = ['tag', 'gender', 'country', 'city', TOOK_CFT, SORTBY, PBEFORE, PAFTER, 's', 'post_type'];
-
-$tags = get_tags();
-$selected_tags = $_GET['tag'] ?? [];
-$selected_tags = is_array($selected_tags) ? $selected_tags : [$selected_tags];
+$search_fields = [MC_GENDER, MC_COUNTRY, MC_CITY, SORTBY, PBEFORE, PAFTER, 's', 'post_type'];
 
 $orderby = $_GET[SORTBY] ?? 'date';
 
-$countries = (get_option(MC_SETTING) ?? [])[MC_COUNTRIES] ?? [];
-$selected_countries = $_GET['country'] ?? [];
+$selected_countries = $_GET[MC_COUNTRY] ?? [];
 $selected_countries = is_array($selected_countries) ? $selected_countries : [$selected_countries];
-$gender = $_GET['gender'] ?? [];
-$work_with = $_GET['work_with'] ?? [];
+$gender = $_GET[MC_GENDER] ?? [];
+$work_with = $_GET[MC_WORKS_WITH] ?? [];
 
 get_header();
 ?>
@@ -37,19 +31,19 @@ get_header();
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
                     <span><?= __('Country') ?></span>
-                    <input type="text" class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="country" value="<?= $_GET['country'] ?? '' ?>">
+                    <input type="text" class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="<?= MC_COUNTRY ?>" value="<?= $_GET['country'] ?? '' ?>">
                 </label>
             </div>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
                     <span><?= __('City') ?></span>
-                    <input type="text" class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="city" value="<?= $_GET['city'] ?? '' ?>">
+                    <input type="text" class="w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded" name="<?= MC_CITY ?>" value="<?= $_GET['city'] ?? '' ?>">
                 </label>
             </div>
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
                     <span><?= __('Gender') ?></span>
-                    <select class="w-full" name="gender[]" multiple>
+                    <select class="w-full" name="<?= MC_GENDER ?>[]" multiple>
                         <option value="female" <?= in_array("female", $gender) ? 'selected' : '' ?>><?= __('Female') ?></option>
                         <option value="male" <?= in_array("male", $gender) ? 'selected':'' ?>><?= __('Male') ?></option>
                     </select>
@@ -59,7 +53,7 @@ get_header();
             <div class="md:mb-0">
                 <label class="uppercase text-gray-700 text-xs font-bold mb-2">
                     <span><?= __('Works with') ?></span>
-                    <select class="w-full" name="works_with[]" multiple>
+                    <select class="w-full" name="<?= MC_WORKS_WITH ?>[]" multiple>
                         <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
                         <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
                         <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>

@@ -57,7 +57,7 @@ class MCRestAPI extends WP_REST_Controller
             $post_id = get_user_meta($user->ID, MC_USER_REF, true);
 
             $meta = [
-                MC_METABOX_ABSTRACT => $_POST["description"]
+                MC_ABSTRACT => $_POST["description"]
             ];
             if (!$avatarURL == null) {
                 $meta["user_avatar_url"] = $avatarURL;

@@ -12,9 +12,9 @@ class MCMetaPost
     public function init()
     {
 
-        add_action('add_meta_boxes', [$this, 'add']);
-        add_action('save_post', [$this, 'save']);
-        add_action("admin_footer", [$this, "prepareScript"]);
+//        add_action('add_meta_boxes', [$this, 'add']);
+//        add_action('save_post', [$this, 'save']);
+//        add_action("admin_footer", [$this, "prepareScript"]);
     }
 
     /**
@@ -39,8 +39,8 @@ class MCMetaPost
      */
     public function save(int $post_id)
     {
-        if (array_key_exists(MC_METABOX_ABSTRACT, $_POST)) {
-            update_post_meta($post_id, MC_METABOX_ABSTRACT, $_POST[MC_METABOX_ABSTRACT]);
+        if (array_key_exists(MC_ABSTRACT, $_POST)) {
+            update_post_meta($post_id, MC_ABSTRACT, $_POST[MC_ABSTRACT]);
         }
 
         if (array_key_exists(MC_METABOX_IMAGE, $_FILES) && $_FILES[MC_METABOX_IMAGE]['size'] > 0) {
@@ -66,10 +66,10 @@ class MCMetaPost
             MCPermissionLib::update_post_permissions($post_id, $perm);
         }
 
-        if (array_key_exists(MC_METABOX_COUNTRIES, $_POST)) {
-            $countries = $_POST[MC_METABOX_COUNTRIES] ?? [];
+        if (array_key_exists(MC_COUNTRY, $_POST)) {
+            $countries = $_POST[MC_COUNTRY] ?? [];
             foreach ($countries as $item) {
-                update_post_meta($post_id, MC_METABOX_COUNTRIES, $item);
+                update_post_meta($post_id, MC_COUNTRY, $item);
             }
         }
     }
@@ -93,9 +93,9 @@ class MCMetaPost
         if (!isset($this->post)) return;
 
         $post = $this->post;
-        $abstractValue = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+        $abstractValue = get_post_meta($post->ID, MC_ABSTRACT, true);
         $permissionSelection = get_post_meta($post->ID, MC_METABOX_PERMISSION, true);
-        $countries = get_post_meta($post->ID, MC_METABOX_COUNTRIES, false);
+        $countries = get_post_meta($post->ID, MC_COUNTRY, false);
         $settings = get_option(MC_SETTING);
 
         if (!$settings) {
@@ -114,9 +114,9 @@ class MCMetaPost
         $config = [
             'permissions' => $permissions,
             'selections' => $permissionSelection,
-            'abstract' => $abstractValue,
-            MC_COUNTRIES => $countries,
-            'base_countries' => $settings[MC_COUNTRIES] ?? []
+            MC_ABSTRACT => $abstractValue,
+            MC_COUNTRY => $countries,
+            'base_countries' => $settings[MC_COUNTRY] ?? []
         ];
         ?>
         <script id="jvc" type="module">

@@ -72,7 +72,7 @@ function render(array $data, $field)
 function mc_get_user_avatar_url()
 {
     $currentUser = wp_get_current_user();
-    $user_avatar_url = get_user_meta($currentUser->ID, "user_avatar_url", true);
+    $user_avatar_url = get_user_meta($currentUser->ID, MC_AVATAR_URL, true);
 
     if (empty($user_avatar_url)) {
         $user_avatar_url = get_avatar_url($currentUser->ID);
@@ -83,23 +83,21 @@ function mc_get_user_avatar_url()
 
 function render_cft(WP_Post $post)
 {
-    $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+    $abstract = get_post_meta($post->ID, MC_ABSTRACT, true);
     $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
-//    $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
-    $details = get_post_meta($post->ID, MC_USER_DETAILS, true);
-    $country = $details['country'] ?? '';
-    $location = $details['location'] ?? '';;
+    $country = get_post_meta($post->ID, MC_COUNTRY, true);
+    $city = get_post_meta($post->ID, MC_CITY, true);;
     ?>
-    <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1" >
+    <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1">
         <?php if (!is_numeric($image_url)): ?>
             <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= get_avatar_url(0) ?>" alt="blog">
         <?php else: ?>
             <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
         <?php endif; ?>
-        <a class="flex-1 max-w-md " href="<?= get_permalink($post) ?>" >
-            <p class="text-lg text-bold"><?= $post->post_title ?></p>
+        <a class="flex-1 max-w-md " href="<?= get_permalink($post) ?>">
+            <p class="text-lg font-bold"><?= $post->post_title ?></p>
             <p class="whitespace-nowrap truncate text-gray-500 "><?= $abstract ?></p>
-            <p><?= $country . '/' . $location ?></p>
+            <p><?= $country . ', ' . $city ?></p>
         </a>
     </div>
     <?php
@@ -107,7 +105,7 @@ function render_cft(WP_Post $post)
 
 function render_post(WP_Post $post)
 {
-    $abstract = get_post_meta($post->ID, MC_METABOX_ABSTRACT, true);
+    $abstract = get_post_meta($post->ID, MC_ABSTRACT, true);
     $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
     $tags = get_the_tags();
     $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
@@ -131,10 +129,9 @@ function render_post(WP_Post $post)
                 <div class="text-gray-400 py-1 flex-1 text-right">
                     <?php
                     if ($is_person):
-                        $details = get_post_meta($post->ID, MC_USER_DETAILS, true);
-                        $country = $details['country'] ?? '';
-                        $location = $details['location'] ?? '';
-                        echo $location . ' - ' . $country;
+                        $country = get_post_meta($post->ID, MC_COUNTRY, true);
+                        $location = get_post_meta($post->ID, MC_CITY, true);
+                        echo $country . ' - ' . $location;
                     else:
                         the_date();
                     endif;

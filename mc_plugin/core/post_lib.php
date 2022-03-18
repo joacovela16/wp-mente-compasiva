@@ -56,25 +56,13 @@ function mc_undo_post()
 function mc_obtain_pages(): array
 {
     return [
-//        ["post_title" => "About", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => "mc_about"],
-//        ["post_title" => "Contact", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => "mc_contact"],
-//        ["post_title" => "Login", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => "mc_login"],
-        ["post_title" => "Profile", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => "profile"],
+        ["post_title" => "Profile", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => MC_PAGE_PROFILE],
     ];
 }
 
 function mc_obtain_model(): array
 {
-    return array(
-        /*DIRECTORY_CATALOG => [
-            'labels' => ["name" => 'Catalog', 'singular_name' => 'Catalog'],
-            'public' => true,
-            'has_archive' => true,
-            'show_in_rest' => true,
-            'rewrite' => [
-                "slug" => "catalog"
-            ]
-        ],*/
+    return [
         CFT_DIRECTORY => [
             'labels' => ["name" => 'Directorio CFT', 'singular_name' => 'directory_cft'],
             'public' => true,
@@ -83,12 +71,6 @@ function mc_obtain_model(): array
             'rewrite' => [
                 "slug" => "directorio-cft"
             ]
-        ]/*,
-        "news" => [
-            "labels" => ["name" => "News", "singular_name" => "news"],
-            "public" => true,
-            'has_archive' => true,
-            'show_in_rest' => true,
-        ]*/
-    );
+        ]
+    ];
 }
