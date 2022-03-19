@@ -80,7 +80,7 @@ get_header();
             </div>
 
             <select class="mt-3 select select-bordered w-full max-w-xs h-18 overflow-hidden" name="<?= SORTBY ?>">
-                <option disabled  <?= $orderby === '' ? 'selected' : '' ?>><?= __('Sort by') ?></option>
+                <option disabled <?= $orderby === '' ? 'selected' : '' ?>><?= __('Sort by') ?></option>
                 <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Published date') ?></option>
                 <option <?= $orderby === 'author' ? 'selected' : '' ?> value="author"><?= __('Author name') ?></option>
             </select>
@@ -88,6 +88,11 @@ get_header();
             <button class="mt-3 btn btn-primary"><?= __('Search') ?></button>
         </form>
         <div class="flex-1 p-2 space-y-2 mt-5 sm:mt-0">
+            <?php
+            $previous_link = get_previous_posts_link();
+            $next_link = get_next_posts_link();
+            ?>
+
             <div class="space-y-2">
                 <?php
 
@@ -97,8 +102,7 @@ get_header();
                         render_cft($post);
                     endwhile;
                 }
-                $previous_link = get_previous_posts_link();
-                $next_link = get_next_posts_link();
+
                 ?>
             </div>
             <?php if (!(is_null($next_link) && is_null($previous_link))): ?>
