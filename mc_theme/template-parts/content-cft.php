@@ -95,14 +95,12 @@ get_header();
 
             <div class="space-y-2">
                 <?php
-
                 if (have_posts()) {
                     while (have_posts()): the_post();
                         $post = get_post();
                         render_cft($post);
                     endwhile;
                 }
-
                 ?>
             </div>
             <?php if (!(is_null($next_link) && is_null($previous_link))): ?>

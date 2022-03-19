@@ -9,9 +9,7 @@ include_once "core/utils.php";
 include_once "core/post_lib.php";
 include_once "core/MCRestAPI.php";
 
-include_once "widgets/MCMetaPost.php";
-include_once "widgets/MCPostExplorer.php";
-include_once "widgets/MCPermissionNavbar.php";
+include_once "widgets/MCDirectoryExplorer.php";
 
 include_once "core/MCPermissionLib.php";
 include_once "core/MCUserLib.php";
@@ -25,7 +23,7 @@ add_action("rest_api_init", function () {
 
 (new MCUserLib())->init();
 (new MCAssetLib())->init();
-(new MCMetaPost())->init();
+//(new MCMetaPost())->init();
 (new MCSettingPanel())->init();
 (new MCPermissionLib())->init();
 (new MCActions())->init();

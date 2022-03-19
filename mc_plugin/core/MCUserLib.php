@@ -243,10 +243,16 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
+            if (isset($_POST[MC_COUNTRY]) && nonEmpty($_POST[MC_COUNTRY])) {
+                $mc_country = $_POST[MC_COUNTRY];
+                $meta_input[MC_COUNTRY] = $mc_country;
+                update_user_meta($ID, MC_COUNTRY, $mc_country);
+            }
+
             if (isset($_POST[MC_CITY]) && nonEmpty($_POST[MC_CITY])) {
-                $mc_country = $_POST[MC_CITY];
-                $meta_input[MC_CITY] = $mc_country;
-                update_user_meta($ID, MC_CITY, $mc_country);
+                $mc_city = $_POST[MC_CITY];
+                $meta_input[MC_CITY] = $mc_city;
+                update_user_meta($ID, MC_CITY, $mc_city);
             }
 
 

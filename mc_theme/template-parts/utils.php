@@ -25,7 +25,7 @@ function render_cft(WP_Post $post)
     $country = get_post_meta($post->ID, MC_COUNTRY, true);
     $city = get_post_meta($post->ID, MC_CITY, true);;
     ?>
-    <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1">
+    <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg">
         <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= $image_url ?>" alt="blog">
         <a class="flex-1 max-w-md " href="<?= get_permalink($post) ?>">
             <p class="text-lg font-bold"><?= $post->post_title ?></p>

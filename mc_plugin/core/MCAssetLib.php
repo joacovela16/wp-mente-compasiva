@@ -13,14 +13,6 @@ class MCAssetLib
 
     public function register_widgets()
     {
-        register_sidebar([
-            'name' => __('Navbar Zone', 'mc_theme'),
-            'id' => 'sidebar-1',
-            'before_widget' => '',
-            'after_widget' => '',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        ]);
 
         register_sidebar([
             'name' => __('Main content', 'mc_theme'),
@@ -31,8 +23,8 @@ class MCAssetLib
             'after_title' => '</h3>',
         ]);
 
-        register_widget("MCPermissionNavbar");
-        register_widget("MCPostExplorer");
+        register_widget("MCDirectoryExplorer");
+//        register_widget("MCPostExplorer");
     }
 
     public function mc_plugin_install_assets()

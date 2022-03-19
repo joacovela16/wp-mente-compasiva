@@ -143,10 +143,21 @@ msgid "cft_when_and_where"
 msgstr "Donde y cuando cursó CFT"
 
 msgid "CFT Professional"
-msgstr "Profesional de CFT"
+msgstr "Prof. formado en CFT"
 
 msgid "by"
 msgstr "por"
 
 msgid "Results"
 msgstr "Resultados"
+
+msgid "lastes CFT Professionals"
+msgstr "Últimos Profesionales formados en CFT"
+
+msgid "Explore"
+msgstr "Explorar"
+
+
+msgid "Login/Register"
+msgstr "Ingresar/Registrarse"
+
