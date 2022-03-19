@@ -75,6 +75,16 @@ class MCUserLib
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <th><?= __('cft_when_and_where') ?></th>
+                    <td>
+                        <label>
+                            <input
+                                    type="text"
+                                    name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= get_user_meta($user->ID, MC_CFT_WHEN_WHERE, true) ?>">
+                        </label>
+                    </td>
+                </tr>
             <?php endif; ?>
             <tr>
                 <th>
@@ -228,7 +238,7 @@ class MCUserLib
                     }
                 }
             }
-            $post_id = get_user_meta($ID, MC_USER_REF, true);
+            $post_id = get_user_meta($ID, MC_POST_BIND, true);
             $post_id = intval($post_id);
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
@@ -241,7 +251,7 @@ class MCUserLib
 
 
             if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
-                $meta_input[MC_CITY] = $_POST[MC_ABSTRACT];
+                $meta_input[MC_ABSTRACT] = $_POST[MC_ABSTRACT];
                 $post_data['post_content'] = $_POST[MC_ABSTRACT];
                 update_user_meta($ID, MC_ABSTRACT, $_POST[MC_ABSTRACT]);
             }
@@ -268,6 +278,12 @@ class MCUserLib
                 $meta_input[MC_GENDER] = $value;
             }
 
+            if (isset($_POST[MC_CFT_WHEN_WHERE])) {
+                $value = $_POST[MC_CFT_WHEN_WHERE] ?? "";
+                update_user_meta($ID, MC_CFT_WHEN_WHERE, $value);
+                $meta_input[MC_CFT_WHEN_WHERE] = $value;
+            }
+
             if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {
                 $ww = $_POST[MC_WORKS_WITH] ?? [];
                 $ww = is_array($ww) ? $ww : [];
@@ -277,7 +293,7 @@ class MCUserLib
 
                 foreach ($ww as $item) {
                     add_user_meta($ID, MC_WORKS_WITH, $item);
-                    add_user_meta($post_id, MC_WORKS_WITH, $item);
+                    add_post_meta($post_id, MC_WORKS_WITH, $item);
                 }
             }
 

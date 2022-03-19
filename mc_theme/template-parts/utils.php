@@ -14,90 +14,23 @@ function get_post_views()
     return $count;
 }
 
-function goBack()
-{
-    echo div(["class" => "cursor-pointer font-bold underline", "@click" => "goBack()"], __("Back"));
-}
-
-function field(array $config): string
-{
-    $label = isset($config["label"]) ? div(['class' => "font-bold z-index-10"], render($config, 'label')) : '';
-
-    return div(['class' => "flex flex-col space-y-2 flex-1 justify-center"], $label, render($config, 'content'));
-}
-
-function modal(array $config, string $handler): string
-{
-    $header = isset($config["header"]) ? div(["class" => 'font-bold z-index-10'], render($config, 'header')) : '';
-    $footer = isset($config["footer"]) ? div(["class" => 'py-3 px-2 bg-cool-gray-100'], render($config, 'footer')) : '';
-
-    return div(["class" => "flex justify-center items-center fixed top-0 left-0 w-full h-full z-index-20", "x-show" => $handler],
-        div(["class" => "absolute top-0 left-0 bg-black opacity-90 w-full h-full"]),
-        div(["class" => "rounded-lg w-auto max-h-4/5 bg-white overflow-hidden shadow-md flex flex-col z-index-10"],
-            div(["class" => "flex flex-row py-5 px-2 bg-cool-gray-100 relative"],
-                $header,
-                div(['class' => "flex-1"]),
-                div(['class' => "cursor-pointer z-index-10", "@click" => $handler . "=false"],
-                    '    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>'
-                )
-            ),
-            div(["class" => "flex-1 p-2 container mx-auto flex overflow-auto"], render($config, "content")),
-            $footer
-        )
-    );
-}
-
-
-function render(array $data, $field)
-{
-    if (isset($data[$field])) {
-        $fieldValue = $data[$field];
-        if (is_string($fieldValue)) {
-            if (function_exists($fieldValue)) {
-                return ($fieldValue)();
-            } else {
-                return $fieldValue;
-            }
-        } else if (is_callable($fieldValue)) {
-            return $fieldValue();
-        }
-    }
-    return "";
-}
-
-function mc_get_user_avatar_url()
-{
-    $currentUser = wp_get_current_user();
-    $user_avatar_url = get_user_meta($currentUser->ID, MC_AVATAR_URL, true);
-
-    if (empty($user_avatar_url)) {
-        $user_avatar_url = get_avatar_url($currentUser->ID);
-    }
-
-    return $user_avatar_url;
-}
 
 function render_cft(WP_Post $post)
 {
     $abstract = get_post_meta($post->ID, MC_ABSTRACT, true);
-    $image_url = get_post_meta($post->ID, MC_METABOX_IMAGE, true);
+
+    $image_url = get_post_meta($post->ID, MC_AVATAR_URL, true);
+    $image_url = empty($image_url) ? get_avatar_url(0): $image_url;
+
     $country = get_post_meta($post->ID, MC_COUNTRY, true);
     $city = get_post_meta($post->ID, MC_CITY, true);;
     ?>
     <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1">
-        <?php if (!is_numeric($image_url)): ?>
-            <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= get_avatar_url(0) ?>" alt="blog">
-        <?php else: ?>
-            <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= wp_get_attachment_url($image_url) ?>" alt="blog">
-        <?php endif; ?>
+        <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= $image_url ?>" alt="blog">
         <a class="flex-1 max-w-md " href="<?= get_permalink($post) ?>">
             <p class="text-lg font-bold"><?= $post->post_title ?></p>
             <p class="whitespace-nowrap truncate text-gray-500 "><?= $abstract ?></p>
-            <p><?= $country . ', ' . $city ?></p>
+            <p><?= $city . ', ' . $country ?></p>
         </a>
     </div>
     <?php

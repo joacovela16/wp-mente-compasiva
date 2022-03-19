@@ -5,6 +5,7 @@ const MC_ABSTRACT = "abstract";
 const MC_BIRTHDAY = "birthday";
 const MC_PHONE = "phone";
 const MC_EMAIL = "email";
+const MC_CFT_WHEN_WHERE = 'cft_when_and_where';
 const MC_METABOX_IMAGE = "image";
 const MC_METABOX_PERMISSION = "permission";
 const MC_COUNTRY = "country";

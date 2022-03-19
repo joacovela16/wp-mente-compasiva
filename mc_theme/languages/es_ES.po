@@ -132,3 +132,21 @@ msgstr "Masculino"
 
 msgid "Female"
 msgstr "Femenino"
+
+msgid "Location"
+msgstr "Ubicación"
+
+msgid "undeclared"
+msgstr "No aclara"
+
+msgid "cft_when_and_where"
+msgstr "Donde y cuando cursó CFT"
+
+msgid "CFT Professional"
+msgstr "Profesional de CFT"
+
+msgid "by"
+msgstr "por"
+
+msgid "Results"
+msgstr "Resultados"

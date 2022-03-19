@@ -38,14 +38,15 @@ class MCActions
         }
 
         foreach ($datum as $item) {
-            $name = $item['name'];
-            $country = $item['country'];
-            $location = $item['location'];
-            $description = $item['description'];
-            $email = $item['email'];
-            $phone = $item['phone'];
-            $website = $item['website'];
+            $name = $item['name'] ?? '';
+            $country = $item['country']?? '';
+            $location = $item['location']?? '';
+            $description = $item['description']?? '';
+            $email = $item['email']?? '';
+            $phone = $item['phone']?? '';
+            $website = $item['website']?? '';
             $password = 'QgHTPqkTzg4K6u';
+            $when_and_where = $item['¿Cuándo y dónde completaste el programa CFT-III?'] ?? '';
             $user = wp_create_user($name, $password, $email);
 
             if (is_wp_error($user)) {
@@ -66,6 +67,8 @@ class MCActions
                         if (nonEmpty($email)) $metaInput[MC_EMAIL] = $email;
                         if (nonEmpty($phone)) $metaInput[MC_PHONE] = $phone;
                         if (nonEmpty($website)) $metaInput[MC_WEBSITE] = $website;
+                        if (nonEmpty($website)) $metaInput[MC_WEBSITE] = $website;
+                        if (nonEmpty($when_and_where)) $metaInput[MC_CFT_WHEN_WHERE] = $when_and_where;
 
                         foreach ($metaInput as $k=>$v){
                             update_post_meta($post->ID, $k, $v);

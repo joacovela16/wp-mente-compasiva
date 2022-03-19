@@ -28,6 +28,7 @@
         $user_avatar_url = get_user_meta($ID, MC_AVATAR_URL, true);
         $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($ID) : $user_avatar_url;
         $work_with = get_user_meta($ID, MC_WORKS_WITH);
+        $cft_when_where = get_user_meta($ID, MC_CFT_WHEN_WHERE, true);
         $website = get_user_meta($ID, MC_WEBSITE, true);
         $gender = get_user_meta($ID, MC_GENDER, true);
         $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
@@ -37,12 +38,12 @@
                 <video x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
             </div>
             <div class="flex flex-col ">
-                <div class="p-2  w-full flex-grow-0">
+                <div class="p-2 w-full flex-grow-0">
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20 relative">
                     <div class="text-5xl text-center">
                         <?= $data->display_name ?? "" ?>
                     </div>
-                    <div class=" text-center">
+                    <div class="text-center">
                         <?= $data->user_email ?? "" ?>
                     </div>
                 </div>
@@ -57,7 +58,7 @@
                     <div class="flex flex-row items-center">
                         <div class="font-bold text-3xl flex-1"><?= __('My profile') ?></div>
                         <div class=>
-                            <a href="/" class="btn gap-2 btn-primary">
+                            <a href="#/" class="btn gap-2 btn-primary" onclick="history.back();return -1;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1"></path>
@@ -92,6 +93,13 @@
                                 <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
                                 <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
                             </select>
+                        </div>
+
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text"><?= __('cft_when_and_where') ?></span>
+                            </label>
+                            <input type="text" class="input input-bordered w-full" name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= $cft_when_where ?>">
                         </div>
                     <?php endif; ?>
 
