@@ -5,7 +5,7 @@ $user_avatar_url = get_user_meta($current_user->ID, MC_AVATAR_URL, true);
 $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) : $user_avatar_url;
 
 ?>
-<div class="fixed top-0 left-0 w-full z-index-20 bg-white shadow-lg flex flex-row items-center space-x-2 px-2">
+<div class="fixed top-0 left-0 w-full z-20 bg-white shadow-lg flex flex-row items-center space-x-2 px-2">
     <a class="flex flex-row space-x-1" href="/">
         <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -16,8 +16,11 @@ $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) :
         <div><?= __('Home') ?></div>
     </a>
     <?php
-    $a= wp_nav_menu(['theme_location' => 'header-menu']);
-    $b=1;
+    wp_nav_menu([
+            'theme_location' => 'header-menu',
+    'menu_class'=>'mc_menu'
+    ]);
+
     ?>
     <div class="flex-1"></div>
     <form action="/" method="get" class="flex flex-row items-center border-gray-200 px-2 py-1 border-1 rounded-full bg-white m-0">

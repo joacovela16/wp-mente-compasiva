@@ -106,7 +106,14 @@ $is_person = get_post_meta($post->ID, MC_KIND, true) === MC_PERSON;
         <?php else: ?>
             <article>
                 <div class="space-y-10">
-                    <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center">
+                    <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center gap-2">
+                        <svg class="cursor-pointer" onclick="history.back(); return false;" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M20 15h-8v3.586a1 1 0 0 1 -1.707 .707l-6.586 -6.586a1 1 0 0 1 0 -1.414l6.586 -6.586a1 1 0 0 1 1.707 .707v3.586h8a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1z"></path>
+                        </svg>
+
                         <div><?php the_title() ?></div>
                         <div class="flex-1"></div>
                         <div class="text-base">

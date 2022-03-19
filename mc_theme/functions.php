@@ -46,10 +46,10 @@ add_action('login_header', function () {
         ?>
         <div class="absolute top-0 left-0 w-full h-full flex flex-col sm:flex-row">
             <div class="shapedividers_com-213  flex-1 h-full ">
+                <video class="object-cover absolute top-0 left-0 w-screen h-screen" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4" ?>"></video>
                 <div class="bg-transparent absolute top- left-0 w-full h-full flex ">
                     <p class="text-center my-auto text-white text-6xl w-full text-shadow-lg">Mente Compasiva</p>
                 </div>
-                <video class="" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4" ?>"></video>
             </div>
             <div class="flex-1"></div>
         </div>

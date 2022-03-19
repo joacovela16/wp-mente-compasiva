@@ -54,7 +54,6 @@ class MCActions
             }
 
             if ($user) {
-
                 $post_id = get_user_meta($user, MC_POST_BIND, true);
                 if (!empty($post_id)) {
                     $post = get_post(intval($post_id));

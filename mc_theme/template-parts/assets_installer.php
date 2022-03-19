@@ -20,7 +20,7 @@ function mc_install_styles()
 {
 
     wp_enqueue_style('mc_windicss', get_template_directory_uri() . "/assets/styles/theme.css");
-    wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/windi.css");
+    wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/base-theme.css");
 }
 
 function mc_install_scripts()

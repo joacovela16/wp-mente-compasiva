@@ -19,7 +19,6 @@ class MCPermissionLib
 
     public function query_vars($qvars)
     {
-        $qvars[] = "ptype";
         $qvars[] = "country";
         return $qvars;
     }
@@ -34,7 +33,7 @@ class MCPermissionLib
             $countries = $_GET[MC_COUNTRY] ?? [];
             $countries = is_array($countries) ? $countries : [$countries];
             $countries = array_filter($countries, fn($x) => !empty($x));
-            $country_query = array_map(fn($x) => ['key' => MC_COUNTRY, 'value' => $x, 'compare' => '='], $countries);
+            $country_query = array_map(fn($x) => ['key' => MC_COUNTRY, 'value' => $x, 'compare' => 'like'], $countries);
             if (count($country_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$country_query];
             }
@@ -42,7 +41,7 @@ class MCPermissionLib
             $city = $_GET[MC_CITY] ?? [];
             $city = is_array($city) ? $city : [$city];
             $city = array_filter($city, fn($x) => !empty($x));
-            $city_query = array_map(fn($x) => ['key' => MC_CITY, 'value' => $x, 'compare' => '='], $city);
+            $city_query = array_map(fn($x) => ['key' => MC_CITY, 'value' => $x, 'compare' => 'like'], $city);
             if (count($city_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$city_query];
             }

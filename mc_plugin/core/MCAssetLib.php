@@ -5,10 +5,10 @@ class MCAssetLib
     public function init()
     {
 
-        add_action('wp_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
-        add_action('admin_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
-        add_action('admin_footer', [$this, "mc_plugin_install_app"]);
-        add_action("widgets_init",[$this, "register_widgets"]);
+//        add_action('wp_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
+//        add_action('admin_enqueue_scripts', [$this, "mc_plugin_install_assets"]);
+//        add_action('admin_footer', [$this, "mc_plugin_install_app"]);
+        add_action("widgets_init", [$this, "register_widgets"]);
     }
 
     public function register_widgets()
@@ -37,7 +37,7 @@ class MCAssetLib
 
     public function mc_plugin_install_assets()
     {
-        wp_enqueue_style('mc_plugin_svelte_css', plugins_url() . "/mc_plugin/assets/style.css");
+        wp_enqueue_style('mc_plugin_svelte_css', get_template_directory_uri() . "/assets/styles/base-theme.css");
     }
 
 
@@ -70,7 +70,7 @@ class MCAssetLib
 
         ?>
         <script type="module">
-            import {renderPermissionEditor} from "<?= plugins_url() . "/mc_plugin/assets/mc_svelte_lib.es.js" ?>";
+            import {renderPermissionEditor} from "";
 
             renderPermissionEditor("mc_plugin_setting_panel", <?= wp_json_encode($permissionConfig) ?>);
         </script>

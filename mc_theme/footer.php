@@ -1,5 +1,5 @@
 </div>
-<footer class="body-font w-full bg-zinc-100">
+<footer class="bg-zinc-100">
     <div class="container px-5 py-11 mx-auto flex items-center sm:flex-row flex-col">
         <a class="flex title-font font-medium items-center md:justify-start justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
