@@ -12,6 +12,21 @@ class MCActions
         add_filter('authenticate', [$this, 'authenticate'], 20, 3);
         add_filter('login_redirect', [$this, 'login_redirect'], 10, 3);
         add_filter('init', [$this, 'block_wp_admin_init']);
+        add_filter("bulk_actions-edit-" . CFT_DIRECTORY, [$this, 'user_bulk_actions']);
+    }
+
+    public function template_chooser($template)
+    {
+        if (is_post_type_archive(CFT_DIRECTORY)) {
+            return locate_template('archive-cft.php');  //  redirect to archive-search.php
+        }
+        return $template;
+    }
+
+    public function user_bulk_actions($actions)
+    {
+        unset($actions['trash']);
+        return $actions;
     }
 
     public function csv_handler()
@@ -39,12 +54,12 @@ class MCActions
 
         foreach ($datum as $item) {
             $name = $item['name'] ?? '';
-            $country = $item['country']?? '';
-            $location = $item['location']?? '';
-            $description = $item['description']?? '';
-            $email = $item['email']?? '';
-            $phone = $item['phone']?? '';
-            $website = $item['website']?? '';
+            $country = $item['country'] ?? '';
+            $location = $item['location'] ?? '';
+            $description = $item['description'] ?? '';
+            $email = $item['email'] ?? '';
+            $phone = $item['phone'] ?? '';
+            $website = $item['website'] ?? '';
             $password = 'QgHTPqkTzg4K6u';
             $when_and_where = $item['¿Cuándo y dónde completaste el programa CFT-III?'] ?? '';
             $user = wp_create_user($name, $password, $email);
@@ -70,7 +85,7 @@ class MCActions
                         if (nonEmpty($website)) $metaInput[MC_WEBSITE] = $website;
                         if (nonEmpty($when_and_where)) $metaInput[MC_CFT_WHEN_WHERE] = $when_and_where;
 
-                        foreach ($metaInput as $k=>$v){
+                        foreach ($metaInput as $k => $v) {
                             update_post_meta($post->ID, $k, $v);
                             update_user_meta($user, $k, $v);
                         }

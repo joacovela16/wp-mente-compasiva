@@ -19,13 +19,13 @@ class MCPermissionLib
 
     public function query_vars($qvars)
     {
-        $qvars[] = "country";
+        $qvars[] = "q";
         return $qvars;
     }
 
     public function pre_get_posts(WP_Query $query)
     {
-        if ($query->is_search()) {
+        if (is_post_type_archive(CFT_DIRECTORY) && isset($query->query_vars['q'])) {
 
             $meta_query = ['relation' => 'AND'];
 
@@ -53,6 +53,24 @@ class MCPermissionLib
             if (count($gender_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$gender_query];
             }
+
+            $work_mode = $_GET[MC_MODE] ?? [];
+            $work_mode = is_array($work_mode) ? $work_mode : [$work_mode];
+            $work_mode = array_filter($work_mode, fn($x) => !empty($x));
+            $work_mode_query = array_map(fn($x) => ['key' => MC_MODE, 'value' => $x, 'compare' => '='], $work_mode);
+            if (count($work_mode_query) > 0) {
+                $meta_query[] = ['relation' => 'OR', ...$work_mode_query];
+            }
+
+            $profession = $_GET[MC_PROFESSION] ?? [];
+            $profession = is_array($profession) ? $profession : [$profession];
+            $profession = array_filter($profession, fn($x) => !empty($x));
+            $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '='], $profession);
+            if (count($profession_query) > 0) {
+                $meta_query[] = ['relation' => 'OR', ...$profession_query];
+            }
+
+            $meta_query[]= ['key' => MC_ENABLED, 'value' => 'on', 'compare' => '='];
 
             $works_with = $_GET[MC_WORKS_WITH] ?? [];
             $works_with = is_array($works_with) ? $works_with : [$works_with];
@@ -86,8 +104,9 @@ class MCPermissionLib
 
             $query->set("posts_per_page", 12);
             $query->set("post_status", "publish");
-            $query->set('order', 'DESC');
+            $query->set('order', 'ASC');
             $query->set('post_status', 'publish');
+            $query->set('s', $_GET['q'] ??null);
         }
     }
 

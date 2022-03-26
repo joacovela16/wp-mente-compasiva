@@ -140,7 +140,7 @@ msgid "undeclared"
 msgstr "No aclara"
 
 msgid "cft_when_and_where"
-msgstr "Donde y cuando cursó CFT"
+msgstr "¿Cuándo y dónde completaste el programa CFT-III?"
 
 msgid "CFT Professional"
 msgstr "Prof. formado en CFT"
@@ -157,7 +157,74 @@ msgstr "Últimos Profesionales formados en CFT"
 msgid "Explore"
 msgstr "Explorar"
 
-
 msgid "Login/Register"
 msgstr "Ingresar/Registrarse"
 
+msgid "Professions"
+msgstr "Profesiones"
+
+msgid "Profession"
+msgstr "Profesión"
+
+msgid "delete"
+msgstr "Eliminar"
+
+msgid "select"
+msgstr "Seleccionar"
+
+msgid "Work mode"
+msgstr "Modalidad de trabajo"
+
+msgid "onsite"
+msgstr "Presencial"
+
+msgid "online"
+msgstr "Online"
+
+msgid "both"
+msgstr "Ambos"
+
+msgid "online-onsite"
+msgstr "Online y presencial"
+
+msgid "cft-search-description"
+msgstr "Ingrese cualquier término de búsqueda relevante en el casillero general o bien busque por criterios específicos más abajo"
+
+msgid "previous"
+msgstr "Anterior"
+
+msgid "next"
+msgstr "Siguiente"
+
+msgid "result"
+msgstr "resultado"
+
+msgid "match_with_result"
+msgstr "coinciden con la búsqueda"
+
+msgid "Name"
+msgstr "Nombre con la búsqueda"
+
+msgid "Name and lastname"
+msgstr "Nombre y apellido"
+
+msgid "about_me_placeholder"
+msgstr "Breve descripción de ti y tu trabajo. (Límite 500 caracteres aproximadamente 70 palabras). Incluye al menos tu profesión, población o temáticas con la que trabajas y ámbito laboral (centro, consulta privada, escuela, etc.).  Escríbelo en primera persona en vez de tercera persona."
+
+msgid "DNI or RUT"
+msgstr "DNI o RUT"
+
+msgid "Contact email"
+msgstr "Email de contacto"
+
+msgid "phone_enter_and_show"
+msgstr "Solo si quieres que aparezca en el listado"
+
+msgid "agreement_policy"
+msgstr "Acuerdo de privacidad y datos"
+
+msgid "Upload profile picture"
+msgstr "Subo tu foto"
+
+msgid "picture_desc"
+msgstr "Sube tu foto (de uso profesional, retrato solo de tu rostro, no cuerpo completo o medio cuerpo, imagen cuadrada, no rectangular, b/n o color, no más de 5 mb)"

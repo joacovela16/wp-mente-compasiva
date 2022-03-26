@@ -23,15 +23,26 @@
         $description = get_user_meta($ID, MC_ABSTRACT, true);
         $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
         $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
+        $dni = get_user_meta($ID, MC_DNI, true) ?? '';
         $city = get_user_meta($ID, MC_CITY, true) ?? '';
         $phone = get_user_meta($ID, MC_PHONE, true) ?? '';
+        $email = get_user_meta($ID, MC_EMAIL, true);
+        $email = empty($email) ? $data->user_email : $email;
         $user_avatar_url = get_user_meta($ID, MC_AVATAR_URL, true);
         $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($ID) : $user_avatar_url;
         $work_with = get_user_meta($ID, MC_WORKS_WITH);
         $cft_when_where = get_user_meta($ID, MC_CFT_WHEN_WHERE, true);
         $website = get_user_meta($ID, MC_WEBSITE, true);
         $gender = get_user_meta($ID, MC_GENDER, true);
+        $profession = get_user_meta($ID, MC_PROFESSION, true);
+        $mode = get_user_meta($ID, MC_MODE, true);
         $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
+        $policy1 = get_user_meta($ID, MC_POLICY_1, true) === 'on';
+        $policy2 = get_user_meta($ID, MC_POLICY_2, true) === 'on';
+        $policy3 = get_user_meta($ID, MC_POLICY_3, true) === 'on';
+        $professions = get_option(MC_PROFESSION_OPTIONS, []);
+
+        $showCFT = $is_cft || current_user_can('administrator')
         ?>
         <div class="mx-auto relative">
             <div class="h-48 w-full overflow-hidden ">
@@ -43,15 +54,12 @@
                     <div class="text-5xl text-center">
                         <?= $data->display_name ?? "" ?>
                     </div>
-                    <div class="text-center">
-                        <?= $data->user_email ?? "" ?>
-                    </div>
                 </div>
 
                 <form
                         action="<?= admin_url('admin-post.php') ?>"
                         method="post"
-                        class="card mx-auto px-5 w-full md:w-2/3 flow-grow-0 p-3 bg-white shadow-xl   "
+                        class="card mx-auto px-5 w-full md:w-2/3 flow-grow-0 p-3 bg-white shadow-xl space-y-3"
                         enctype="multipart/form-data"
                 >
                     <input type="hidden" name="action" value="update_user">
@@ -61,7 +69,7 @@
                             <a href="#/" class="btn gap-2 btn-primary" onclick="history.back();return -1;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1"></path>
+                                    <polyline points="15 6 9 12 15 18"></polyline>
                                 </svg>
                                 <span><?= __('Back') ?></span>
                             </a>
@@ -70,31 +78,11 @@
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('Name') ?></span>
+                            <span class="label-text"><?= __('Name and lastname') ?></span>
                         </label>
                         <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $data->display_name ?>">
                     </div>
-
-                    <div class="form-control w-full">
-                        <label class="label">
-                            <span class="label-text"><?= __('About me') ?></span>
-                        </label>
-                        <textarea placeholder="<?= __('Write about you') ?>" type="text" class="textarea textarea-bordered w-full" name="<?= MC_ABSTRACT ?>" value="<?= $data->display_name ?>"><?= $description ?? '' ?></textarea>
-                    </div>
-
-                    <?php if ($is_cft): ?>
-                        <div class="form-control w-full ">
-                            <label class="label">
-                                <span class="label-text"><?= __('Works with') ?></span>
-                            </label>
-                            <select class="select select-bordered w-full h-auto" name="<?= MC_WORKS_WITH ?>[]" multiple>
-                                <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                                <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                                <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                                <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
-                            </select>
-                        </div>
-
+                    <?php if ($showCFT): ?>
                         <div class="form-control w-full">
                             <label class="label">
                                 <span class="label-text"><?= __('cft_when_and_where') ?></span>
@@ -102,17 +90,6 @@
                             <input type="text" class="input input-bordered w-full" name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= $cft_when_where ?>">
                         </div>
                     <?php endif; ?>
-
-                    <div class="form-control w-full">
-                        <label class="label">
-                            <span class="label-text"><?= __('Gender') ?></span>
-                        </label>
-                        <select class="select select-bordered w-full h-18 overflow-hidden " name="<?= MC_GENDER ?>">
-                            <option disabled></option>
-                            <option value="female" <?= $gender === "female" ? 'selected' : '' ?> ><?= __('Female') ?></option>
-                            <option value="male" <?= $gender === "male" ? 'selected' : '' ?>><?= __('Male') ?></option>
-                        </select>
-                    </div>
 
                     <div class="flex flex-row items-center space-x-3">
                         <div class="form-control w-full">
@@ -131,16 +108,90 @@
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('Birthdate') ?></span>
+                            <span class="label-text"><?= __('DNI or RUT') ?></span>
                         </label>
-                        <input type="date" class="input input-bordered w-full" name="<?= MC_BIRTHDAY ?>" value="<?= $birthday ?>">
+                        <input type="text" class="input input-bordered w-full" name="<?= MC_DNI ?>" value="<?= $dni ?>">
+                    </div>
+
+                    <div class="form-control w-full ">
+                        <label class="label">
+                            <span class="label-text"><?= __('Profession') ?></span>
+                        </label>
+                        <select class="select select-bordered w-full" name="<?= MC_PROFESSION ?>">
+                            <option value="" disabled> <?= __('select') ?></option>
+                            <?php foreach ($professions as $item): ?>
+                                <option value="<?= $item ?>" <?= $item === $profession ? 'selected' : '' ?>><?= $item ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-control w-full ">
+                        <label class="label">
+                            <span class="label-text"><?= __('Work mode') ?></span>
+                        </label>
+                        <select class="select select-bordered w-full" name="<?= MC_MODE ?>">
+                            <option value="" <?= $mode === '' ? 'selected' : '' ?> disabled> <?= __('select') ?></option>
+                            <option <?= $mode === 'onsite' ? 'selected' : '' ?> value="onsite"> <?= __('onsite') ?></option>
+                            <option <?= $mode === 'online' ? 'selected' : '' ?> value="online"> <?= __('online') ?></option>
+                            <option <?= $mode === 'online-onsite' ? 'selected' : '' ?> value="online-onsite"> <?= __('online-onsite') ?></option>
+                        </select>
+                    </div>
+
+                    <?php if ($showCFT): ?>
+                        <div class="form-control w-full ">
+                            <label class="label">
+                                <span class="label-text"><?= __('Works with') ?></span>
+                            </label>
+                            <select class="select select-bordered w-full h-auto" name="<?= MC_WORKS_WITH ?>[]" multiple>
+                                <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
+                                <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
+                                <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
+                                <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text"><?= __('About me') ?></span>
+                        </label>
+                        <textarea maxlength="500"
+                                  rows="4"
+                                  placeholder="<?= __('about_me_placeholder') ?>"
+                                  type="text"
+                                  class="textarea textarea-bordered w-full"
+                                  name="<?= MC_ABSTRACT ?>"
+                                  value="<?= $data->display_name ?>"><?= $description ?? '' ?></textarea>
                     </div>
 
                     <div class="form-control w-full">
                         <label class="label">
+                            <span class="label-text"><?= __('Gender') ?></span>
+                        </label>
+                        <select class="select select-bordered w-full h-18 overflow-hidden " name="<?= MC_GENDER ?>">
+                            <option disabled></option>
+                            <option value="female" <?= $gender === "female" ? 'selected' : '' ?> ><?= __('Female') ?></option>
+                            <option value="male" <?= $gender === "male" ? 'selected' : '' ?>><?= __('Male') ?></option>
+                        </select>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text"><?= __('Birthdate') ?></span>
+                        </label>
+                        <input type="date" class="input input-bordered w-full" name="<?= MC_BIRTHDAY ?>" value="<?= $birthday ?>">
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text"><?= __('Contact email') ?></span>
+                        </label>
+                        <input type="email" class="input input-bordered w-full" name="<?= MC_EMAIL ?>" value="<?= $email ?>">
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label">
                             <span class="label-text"><?= __('Phone') ?></span>
                         </label>
-                        <input type="text" class="input input-bordered w-full" name="<?= MC_PHONE ?>" value="<?= $phone ?>">
+                        <input type="text" class="input input-bordered w-full" name="<?= MC_PHONE ?>" value="<?= $phone ?>" placeholder="<?= __('phone_enter_and_show') ?>">
                     </div>
 
                     <div class="form-control w-full">
@@ -150,21 +201,27 @@
                         <input type="text" class="input input-bordered w-full" name="<?= MC_WEBSITE ?>" value="<?= $website ?>">
                     </div>
 
-                    <div class="form-control w-full">
-                        <label class="label">
-                            <span class="label-text"><?= __('Change picture') ?></span>
-                        </label>
-                        <input class="px-3" name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg"  placeholder="<?= __('Change picture') ?>" >
+                    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                        <input type="checkbox">
+                        <div class="collapse-title font-medium">
+                            <?= __('Upload profile picture') ?>
+                        </div>
+                        <div class="collapse-content">
+                            <p class="text-sm font-bold"><?= __('picture_desc') ?></p>
+                            <input class="mt-3" name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" placeholder="<?= __('Change picture') ?>">
+                        </div>
                     </div>
 
-                    <details class="my-3">
-                        <summary class="font-bold"><?= __("Security") ?></summary>
-                        <div class="flex flow-row gap-2">
+
+                    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                        <input type="checkbox">
+                        <div class="collapse-title font-medium"><?= __("Security") ?></div>
+                        <div class="collapse-content flex flow-row gap-2">
                             <div class="form-control w-full">
                                 <label class="label">
                                     <span class="label-text"><?= __('New password') ?></span>
                                 </label>
-                                <input type="text" class="input input-bordered w-full" name="<?= MC_PASSWORD_1 ?>" >
+                                <input type="text" class="input input-bordered w-full" name="<?= MC_PASSWORD_1 ?>">
                             </div>
 
                             <div class="form-control w-full">
@@ -174,21 +231,54 @@
                                 <input type="text" class="input input-bordered w-full" name="<?= MC_PASSWORD_2 ?>">
                             </div>
                         </div>
-                    </details>
+                    </div>
+
+                    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                        <input type="checkbox">
+                        <div class="collapse-title font-medium">
+                            <?= __('agreement_policy') ?>
+                        </div>
+                        <div class="collapse-content">
+                            <div class="form-control">
+                                <label class="label cursor-pointer space-x-2">
+                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_1 ?>" <?= $policy1 ?'checked':'' ?>>
+                                    <span class="label-text">Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
+                                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.</span>
+                                </label>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label cursor-pointer space-x-2">
+                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_2 ?>" <?= $policy2 ?'checked':'' ?>>
+                                    <span class="label-text">Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
+                                        posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label cursor-pointer space-x-2">
+                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_3 ?>" <?= $policy3 ?'checked':'' ?>>
+                                    <span class="label-text">Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
+                                        praxis o problemas de ética profesional.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="flex flex-row">
                         <button type="submit" class="btn btn-primary"><?= __('Save changes') ?></button>
                         <div class="flex-1"></div>
                         <a class="btn btn-error gap-1" href="<?= wp_logout_url(site_url()) ?>">
 
-                                <span>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                        <path d="M7 12h14l-3 -3m0 6l3 -3"></path>
-                                    </svg>
-                                </span>
-                                <span><?= __('Logout') ?></span>
+                            <span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                    <path d="M7 12h14l-3 -3m0 6l3 -3"></path>
+                                </svg>
+                            </span>
+                            <span><?= __('Logout') ?></span>
 
                         </a>
                     </div>

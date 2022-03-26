@@ -9,6 +9,10 @@ get_template_part("template-parts/loader");
         <?php dynamic_sidebar(2); ?>
     </div>
 <?php else: ?>
+    <?php if (is_post_type_archive(CFT_DIRECTORY)): ?>
+        <?php get_template_part(locate_template('archive-cft.php')) ?>
+    <?php else: ?>
         <?php get_template_part("template-parts/content", get_post_type()); ?>
+    <?php endif; ?>
 <?php endif; ?>
 <?php get_footer() ?>

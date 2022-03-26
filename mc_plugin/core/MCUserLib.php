@@ -10,7 +10,6 @@ class MCUserLib
         add_action("edit_user_profile", [$this, "addExtraFields"]);
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
-//        add_action("profile_update", [$this, "mc_user_profile_updated"]);
         add_action('delete_user', [$this, 'delete_user']);
     }
 
@@ -27,6 +26,10 @@ class MCUserLib
     {
         $is_cft = get_user_meta($user->ID, MC_CFT, true) === "on";
         $work_with = get_user_meta($user->ID, MC_WORKS_WITH);
+        $profession = get_user_meta($user->ID, MC_PROFESSION, true);
+        $mode = get_user_meta($user->ID, MC_MODE, true);
+        $professions = get_option(MC_PROFESSION_OPTIONS, []);
+        $is_enable = get_user_meta($user->ID, MC_ENABLED, true) === 'on';
         ?>
         <table class="form-table">
             <tr>
@@ -35,7 +38,7 @@ class MCUserLib
                     <label>
                         <input
                                 type="checkbox"
-                                name="<?= MC_ENABLED ?>" <?= get_user_meta($user->ID, MC_ENABLED, true) === 'on' ? 'checked' : '' ?>>
+                                name="<?= MC_ENABLED ?>" <?= $is_enable ? 'checked' : '' ?>>
                     </label>
                 </td>
             </tr>
@@ -46,7 +49,7 @@ class MCUserLib
                     <label>
                         <input
                                 type="checkbox"
-                                name="<?= MC_CFT ?>" <?= get_user_meta($user->ID, MC_CFT, true) === 'on' ? 'checked' : '' ?>>
+                                name="<?= MC_CFT ?>" <?= $is_cft ? 'checked' : '' ?>>
                     </label>
                 </td>
             </tr>
@@ -60,32 +63,55 @@ class MCUserLib
                 </td>
             </tr>
 
-            <?php if ($is_cft): ?>
-
-                <tr>
-                    <th>
-                        <?= __('Works with') ?>
-                    </th>
-                    <td>
-                        <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
-                            <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                            <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                            <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                            <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?= __('cft_when_and_where') ?></th>
-                    <td>
-                        <label>
-                            <input
-                                    type="text"
-                                    name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= get_user_meta($user->ID, MC_CFT_WHEN_WHERE, true) ?>">
-                        </label>
-                    </td>
-                </tr>
-            <?php endif; ?>
+            <tr>
+                <th>
+                    <?= __('Profession') ?>
+                </th>
+                <td>
+                    <select name="<?= MC_PROFESSION ?>">
+                        <option value="" <?= $profession === "" ? 'selected' : '' ?> disabled><?= __('select') ?></option>
+                        <?php foreach ($professions as $item): ?>
+                            <option value="<?= $item ?>" <?= $item === $profession ? 'selected' : '' ?>><?= $item ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <?= __('Works with') ?>
+                </th>
+                <td>
+                    <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
+                        <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
+                        <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
+                        <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
+                        <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <?= __('Work mode') ?>
+                </th>
+                <td>
+                    <select class="select select-bordered w-full" name="<?= MC_MODE ?>">
+                        <option value="" <?= $mode === '' ? 'selected' : '' ?> disabled> <?= __('select') ?></option>
+                        <option <?= $mode === 'onsite' ? 'selected' : '' ?> value="onsite"> <?= __('onsite') ?></option>
+                        <option <?= $mode === 'online' ? 'selected' : '' ?> value="online"> <?= __('online') ?></option>
+                        <option <?= $mode === 'online-onsite' ? 'selected' : '' ?> value="online-onsite"> <?= __('online-onsite') ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><?= __('cft_when_and_where') ?></th>
+                <td>
+                    <label>
+                        <input
+                                type="text"
+                                name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= get_user_meta($user->ID, MC_CFT_WHEN_WHERE, true) ?>">
+                    </label>
+                </td>
+            </tr>
             <tr>
                 <th>
                     <?= __('Birthday') ?>
@@ -194,7 +220,7 @@ class MCUserLib
     function mc_user_profile_updated($user_id)
     {
 
-        update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
+        //update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
         $user = get_userdata($user_id);
         if ($user) {
             MCUserLib::update_user_data($user);
@@ -213,29 +239,33 @@ class MCUserLib
             $meta_input = [];
 
             if (isset($_FILES[MC_PICTURE]) && !empty($_FILES[MC_PICTURE])) {
-                require_once(ABSPATH . 'wp-admin/includes/image.php');
-                require_once(ABSPATH . 'wp-admin/includes/file.php');
-                require_once(ABSPATH . 'wp-admin/includes/media.php');
-                $lastAttachment = get_user_meta($ID, MC_AVATAR_ID, true);
+                if ($_FILES[MC_PICTURE]['size'] < 5242880) {
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+                    require_once(ABSPATH . 'wp-admin/includes/file.php');
+                    require_once(ABSPATH . 'wp-admin/includes/media.php');
+                    $lastAttachment = get_user_meta($ID, MC_AVATAR_ID, true);
 
-                if (!is_wp_error($lastAttachment)) {
-                    $attachmentID = media_handle_upload(MC_PICTURE, null);
-                }
-
-                if (!is_null($attachmentID) && !is_wp_error($attachmentID)) {
-
-                    $id = intval($lastAttachment);
-                    $wp_delete_attachment_result = wp_delete_attachment($id);
-
-                    if (!is_wp_error($wp_delete_attachment_result)) {
-                        $avatarURL = wp_get_attachment_url($attachmentID);
-
-                        if (nonEmpty($avatarURL)) $meta_input[MC_AVATAR_URL] = $avatarURL;
-                        if (nonEmpty($attachmentID)) $meta_input[MC_AVATAR_ID] = $attachmentID;
-
-                        update_user_meta($ID, MC_AVATAR_URL, $avatarURL);
-                        update_user_meta($ID, MC_AVATAR_ID, $attachmentID);
+                    if (!is_wp_error($lastAttachment)) {
+                        $attachmentID = media_handle_upload(MC_PICTURE, null);
                     }
+
+                    if (!is_null($attachmentID) && !is_wp_error($attachmentID)) {
+
+                        $id = intval($lastAttachment);
+                        $wp_delete_attachment_result = wp_delete_attachment($id);
+
+                        if (!is_wp_error($wp_delete_attachment_result)) {
+                            $avatarURL = wp_get_attachment_url($attachmentID);
+
+                            if (nonEmpty($avatarURL)) $meta_input[MC_AVATAR_URL] = $avatarURL;
+                            if (nonEmpty($attachmentID)) $meta_input[MC_AVATAR_ID] = $attachmentID;
+
+                            update_user_meta($ID, MC_AVATAR_URL, $avatarURL);
+                            update_user_meta($ID, MC_AVATAR_ID, $attachmentID);
+                        }
+                    }
+                } else {
+                    $a = 1;
                 }
             }
             $post_id = get_user_meta($ID, MC_POST_BIND, true);
@@ -243,51 +273,47 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
-            if (isset($_POST[MC_COUNTRY]) && nonEmpty($_POST[MC_COUNTRY])) {
-                $mc_country = $_POST[MC_COUNTRY];
-                $meta_input[MC_COUNTRY] = $mc_country;
-                update_user_meta($ID, MC_COUNTRY, $mc_country);
+            if (!isset($_POST[MC_ENABLED]) && !(isset($_POST[MC_POLICY_1]) && isset($_POST[MC_POLICY_2]) && isset($_POST[MC_POLICY_3]))) {
+                $_POST[MC_ENABLED] = 'off';
             }
 
-            if (isset($_POST[MC_CITY]) && nonEmpty($_POST[MC_CITY])) {
-                $mc_city = $_POST[MC_CITY];
-                $meta_input[MC_CITY] = $mc_city;
-                update_user_meta($ID, MC_CITY, $mc_city);
+            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY_1] ?? '') === 'on' && ($_POST[MC_POLICY_2] ?? '') === 'on' && ($_POST[MC_POLICY_3] ?? '') === 'on') {
+                $_POST[MC_ENABLED] = 'on';
             }
 
+            if (!isset($_POST[MC_POLICY_1])) $_POST[MC_POLICY_1] = "off";
+            if (!isset($_POST[MC_POLICY_2])) $_POST[MC_POLICY_2] = "off";
+            if (!isset($_POST[MC_POLICY_3])) $_POST[MC_POLICY_3] = "off";
+
+            $meta_fields = [
+                MC_COUNTRY,
+                MC_ENABLED,
+                MC_CITY,
+                MC_BIRTHDAY,
+                MC_MODE,
+                MC_PHONE,
+                MC_PROFESSION,
+                MC_CFT,
+                MC_GENDER,
+                MC_CFT_WHEN_WHERE,
+                MC_NAME,
+                MC_ABSTRACT,
+                MC_WEBSITE,
+                MC_POLICY_1,
+                MC_POLICY_2,
+                MC_POLICY_3,
+            ];
+
+            foreach ($meta_fields as $field) {
+                if (isset($_POST[$field]) && nonEmpty($_POST[$field])) {
+                    $value = $_POST[$field];
+                    $meta_input[$field] = $value;
+                    update_user_meta($ID, $field, $value);
+                }
+            }
 
             if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
-                $meta_input[MC_ABSTRACT] = $_POST[MC_ABSTRACT];
                 $post_data['post_content'] = $_POST[MC_ABSTRACT];
-                update_user_meta($ID, MC_ABSTRACT, $_POST[MC_ABSTRACT]);
-            }
-
-
-            if (isset($_POST[MC_BIRTHDAY]) && nonEmpty($_POST[MC_BIRTHDAY])) {
-                update_user_meta($ID, MC_BIRTHDAY, $_POST[MC_BIRTHDAY]);
-                $meta_input[MC_BIRTHDAY] = $_POST[MC_BIRTHDAY];
-            }
-
-            if (isset($_POST[MC_PHONE]) && nonEmpty($_POST[MC_PHONE])) {
-                update_user_meta($ID, MC_PHONE, $_POST[MC_PHONE]);
-                $meta_input[MC_PHONE] = $_POST[MC_PHONE];
-            }
-
-            if (isset($_POST[MC_CFT]) && nonEmpty($_POST[MC_CFT])) {
-                update_user_meta($ID, MC_CFT, $_POST[MC_CFT]);
-                $meta_input[MC_CFT] = $_POST[MC_CFT];
-            }
-
-            if (isset($_POST[MC_GENDER])) {
-                $value = $_POST[MC_GENDER] ?? "";
-                update_user_meta($ID, MC_GENDER, $value);
-                $meta_input[MC_GENDER] = $value;
-            }
-
-            if (isset($_POST[MC_CFT_WHEN_WHERE])) {
-                $value = $_POST[MC_CFT_WHEN_WHERE] ?? "";
-                update_user_meta($ID, MC_CFT_WHEN_WHERE, $value);
-                $meta_input[MC_CFT_WHEN_WHERE] = $value;
             }
 
             if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {
@@ -303,15 +329,8 @@ class MCUserLib
                 }
             }
 
-            if (isset($_POST[MC_NAME]) && nonEmpty($_POST[MC_NAME])) {
-                $user_data['display_name'] = $_POST[MC_NAME];
-                $meta_input[MC_NAME] = $_POST[MC_NAME];
-            }
-
             if (isset($_POST[MC_WEBSITE]) && nonEmpty($_POST[MC_WEBSITE])) {
                 $user_data['user_url'] = $_POST[MC_WEBSITE];
-                update_user_meta($ID, MC_WEBSITE, $_POST[MC_WEBSITE]);
-                $meta_input[MC_WEBSITE] = $_POST[MC_WEBSITE];
             }
 
             if (isset($_POST[MC_PASSWORD_1]) && isset($_POST[MC_PASSWORD_2])) {
