@@ -2,7 +2,11 @@ module.exports = {
 
     content: ['./**/*.php', '../mc_plugin/**/*.php'],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                'roboto': "'Roboto', sans-serif"
+            }
+        },
     },
     daisyui: {
         themes: [

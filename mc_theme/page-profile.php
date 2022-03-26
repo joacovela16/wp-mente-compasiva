@@ -5,10 +5,13 @@
     <title><?= __('MC') ?></title>
 
     <?php wp_head(); ?>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+    </style>
 </head>
 
 
-<body x-data="mc_app" class="text-gray-600">
+<body x-data="mc_app" class="text-gray-600 font-roboto">
 <?php if (is_user_logged_in()): ?>
     <?php
 

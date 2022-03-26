@@ -8,8 +8,10 @@
 
     <?php wp_head(); ?>
 </head>
-
-<body x-data="mc_app" class="text-gray-600">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+</style>
+<body x-data="mc_app" class="text-gray-600 font-roboto">
 <div class="">
 <?php
 get_template_part("template-parts/navbar");

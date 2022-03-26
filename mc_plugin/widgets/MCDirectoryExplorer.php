@@ -43,7 +43,7 @@ class MCDirectoryExplorer extends WP_Widget
                 <div class="flex-1"></div>
                 <a href="/directorio-cft" class="text-blue-500 font-bold underline"><?= __('Explore') ?></a>
             </div>
-            <div class="grid grid-cols-2 gap-4 mt-5">
+            <div class="grid md:grid-cols-2 gap-4 mt-5">
                 <?php
                 $query = new WP_Query($query_args);
                 $posts = $query->posts;

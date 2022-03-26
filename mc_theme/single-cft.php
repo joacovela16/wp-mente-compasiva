@@ -63,7 +63,7 @@ $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_W
             </div>
 
             <div class="text-center ">
-                <span class="font-bold"><?= __('cft_when_and_where') ?>:</span>
+                <span class="font-bold"><?= __('cft_when_and_where2') ?>:</span>
                 <span>
                     <?php if (empty($cft_when_where)): ?>
                         <?= __('undeclared') ?>

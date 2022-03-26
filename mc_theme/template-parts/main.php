@@ -2,14 +2,13 @@
 
 $index = random_int(1, 7);
 $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
-
+$logo_cm =get_template_directory_uri() . "/assets/images/cultivar_la_mente.jpeg";
 ?>
 
-<div class="relative max-h-screen overflow-hidden">
+<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">
 
     <video x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
-
 
     <div class="custom-shape-divider-bottom-1637812056">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -22,9 +21,13 @@ $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
         </svg>
     </div>
 
-
     <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
-        <div class="text-6xl text-white text-shadow-lg lg:-mt-30">MENTE COMPASIVA</div>
+        <div class="text-white text-shadow-lg ">
+            <div class="text-6xl">MENTE COMPASIVA</div>
+            <div>
+                <img src="<?= $logo_cm ?>" alt="logo" class="h-24">
+            </div>
+        </div>
     </div>
 </div>
 

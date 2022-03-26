@@ -142,6 +142,9 @@ msgstr "No aclara"
 msgid "cft_when_and_where"
 msgstr "¿Cuándo y dónde completaste el programa CFT-III?"
 
+msgid "cft_when_and_where2"
+msgstr "Cuándo y dónde completó el programa CFT-III"
+
 msgid "CFT Professional"
 msgstr "Prof. formado en CFT"
 
