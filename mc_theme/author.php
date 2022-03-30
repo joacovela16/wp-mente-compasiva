@@ -2,7 +2,7 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= __('MC') ?></title>
+    <title><?= __('Mente Compasiva') ?></title>
 
     <?php wp_head(); ?>
 </head>

@@ -2,12 +2,12 @@
 
 $index = random_int(1, 7);
 $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
-$logo_cm =get_template_directory_uri() . "/assets/images/cultivar_la_mente.jpeg";
+$logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
 ?>
 
 <div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">
 
-    <video x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
+    <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
     <div class="custom-shape-divider-bottom-1637812056">
@@ -22,10 +22,15 @@ $logo_cm =get_template_directory_uri() . "/assets/images/cultivar_la_mente.jpeg"
     </div>
 
     <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
-        <div class="text-white text-shadow-lg ">
-            <div class="text-6xl">MENTE COMPASIVA</div>
-            <div>
-                <img src="<?= $logo_cm ?>" alt="logo" class="h-24">
+        <div class="text-white  text-shadow-lg justify-center flex flex-col">
+            <div class="text-7xl mx-auto">MENTE COMPASIVA</div>
+            <div class="flex flex-row items-center justify-center space-x-3 mt-20">
+                <img src="<?= $logo_cm ?>" alt="logo" class=" h-24">
+                <div >
+                    <div class="italic">Un proyecto de</div>
+                    <div class="font-bold text-2xl">CULTIVAR LA MENTE</div>
+                    <div class="italic">Salud mental y prácticas contemplativas</div>
+                </div>
             </div>
         </div>
     </div>

@@ -32,7 +32,7 @@ msgid "Confirm password"
 msgstr "Confirmar contraseña"
 
 msgid "Security"
-msgstr "Seguridad"
+msgstr "Seguridad - Cambiar contraseña"
 
 msgid "My profile"
 msgstr "Mi perfil"
@@ -227,7 +227,10 @@ msgid "agreement_policy"
 msgstr "Acuerdo de privacidad y datos"
 
 msgid "Upload profile picture"
-msgstr "Subo tu foto"
+msgstr "Sube tu foto"
 
 msgid "picture_desc"
 msgstr "Sube tu foto (de uso profesional, retrato solo de tu rostro, no cuerpo completo o medio cuerpo, imagen cuadrada, no rectangular, b/n o color, no más de 5 mb)"
+
+msgid "Set value"
+msgstr "Ingrese este campo"

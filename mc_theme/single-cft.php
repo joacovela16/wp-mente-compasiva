@@ -16,6 +16,7 @@ $website = get_post_meta($post->ID, MC_WEBSITE, true);
 $phone = get_post_meta($post->ID, MC_PHONE, true);
 $profession = get_post_meta($post->ID, MC_PROFESSION, true);
 $work_mode = get_post_meta($post->ID, MC_MODE, true);
+$website_mode = get_post_meta($post->ID, MC_WEBSITE_MODE, true);
 $cft_when_where = get_post_meta($post->ID, MC_CFT_WHEN_WHERE, true);
 $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_WORKS_WITH));
 
@@ -110,7 +111,17 @@ $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_W
                                 <path d="M3.1 10.75c5 0 9.814 -.38 15.314 -5"></path>
                             </svg>
                             <span>
-                                <a href="<?= $website ?>" target="_blank"><?= $website ?></a>
+                                <?php if ($website_mode === "" || $website_mode === MC_LINK_WEBSITE): ?>
+                                    <a href="<?= $website ?>" target="_blank"><?= $website ?></a>
+                                <?php elseif ($website_mode === MC_LINK_INSTAGRAM): ?>
+                                    <a href="https://www.instagram.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                <?php elseif ($website_mode === MC_LINK_FACEBOOK): ?>
+                                    <a href="https://www.facebook.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                <?php elseif ($website_mode === MC_LINK_LINKEDIN): ?>
+                                    <a href="https://www.linkedin.com/in/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                <?php elseif ($website_mode === MC_LINK_TWITTER): ?>
+                                    <a href="https://twitter.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                <?php endif; ?>
                             </span>
                         </div>
                     <?php endif; ?>

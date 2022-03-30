@@ -43,6 +43,7 @@
         $policy1 = get_user_meta($ID, MC_POLICY_1, true) === 'on';
         $policy2 = get_user_meta($ID, MC_POLICY_2, true) === 'on';
         $policy3 = get_user_meta($ID, MC_POLICY_3, true) === 'on';
+        $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
 
         $showCFT = $is_cft || current_user_can('administrator')
@@ -141,15 +142,14 @@
                     </div>
 
                     <?php if ($showCFT): ?>
-                        <div class="form-control w-full ">
+                        <div class="form-control w-full">
                             <label class="label">
                                 <span class="label-text"><?= __('Works with') ?></span>
                             </label>
                             <select class="select select-bordered w-full h-auto" name="<?= MC_WORKS_WITH ?>[]" multiple>
-                                <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                                <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                                <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                                <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                                <?php foreach (get_option(MC_WORKS_WITH, []) as $item): ?>
+                                    <option value="<?= $item ?>" <?= in_array($item, $work_with) ? 'selected' : '' ?>><?= $item ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     <?php endif; ?>
@@ -196,12 +196,18 @@
                         </label>
                         <input type="text" class="input input-bordered w-full" name="<?= MC_PHONE ?>" value="<?= $phone ?>" placeholder="<?= __('phone_enter_and_show') ?>">
                     </div>
-
                     <div class="form-control w-full">
-                        <label class="label">
-                            <span class="label-text"><?= __('Web site') ?></span>
-                        </label>
-                        <input type="text" class="input input-bordered w-full" name="<?= MC_WEBSITE ?>" value="<?= $website ?>">
+                        <div class="input-group">
+                            <select class="select select-bordered" name="<?= MC_WEBSITE_MODE ?>">
+                                <option disabled <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('Select') ?></option>
+                                <option value="<?= MC_LINK_WEBSITE ?>" <?= $url_mode === MC_LINK_WEBSITE ? 'selected' : '' ?> >Sitio web</option>
+                                <option value="<?= MC_LINK_INSTAGRAM ?>" <?= $url_mode === MC_LINK_INSTAGRAM ? 'selected' : '' ?>>Instagram</option>
+                                <option value="<?= MC_LINK_FACEBOOK ?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
+                                <option value="<?= MC_LINK_LINKEDIN ?>" <?= $url_mode === MC_LINK_LINKEDIN ? 'selected' : '' ?>>Linkedin</option>
+                                <option value="<?= MC_LINK_TWITTER ?>" <?= $url_mode === MC_LINK_TWITTER ? 'selected' : '' ?>>Twitter</option>
+                            </select>
+                            <input type="text" class="input input-bordered w-full" placeholder="<?= __("Set value") ?>" name="<?= MC_WEBSITE ?>" value="<?= $website ?>">
+                        </div>
                     </div>
 
                     <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
@@ -244,7 +250,7 @@
                         <div class="collapse-content">
                             <div class="form-control">
                                 <label class="label cursor-pointer space-x-2">
-                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_1 ?>" <?= $policy1 ?'checked':'' ?>>
+                                    <input type="checkbox" class="checkbox" name="<?= MC_POLICY_1 ?>" <?= $policy1 ? 'checked' : '' ?>>
                                     <span class="label-text">Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
                                         formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.</span>
                                 </label>
@@ -252,7 +258,7 @@
 
                             <div class="form-control">
                                 <label class="label cursor-pointer space-x-2">
-                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_2 ?>" <?= $policy2 ?'checked':'' ?>>
+                                    <input type="checkbox" class="checkbox" name="<?= MC_POLICY_2 ?>" <?= $policy2 ? 'checked' : '' ?>>
                                     <span class="label-text">Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
                                         posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
                                     </span>
@@ -261,7 +267,7 @@
 
                             <div class="form-control">
                                 <label class="label cursor-pointer space-x-2">
-                                    <input type="checkbox"  class="checkbox" name="<?= MC_POLICY_3 ?>" <?= $policy3 ?'checked':'' ?>>
+                                    <input type="checkbox" class="checkbox" name="<?= MC_POLICY_3 ?>" <?= $policy3 ? 'checked' : '' ?>>
                                     <span class="label-text">Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
                                         praxis o problemas de ética profesional.</span>
                                 </label>

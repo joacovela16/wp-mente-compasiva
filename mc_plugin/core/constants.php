@@ -1,5 +1,6 @@
 <?php
 const MC_PAGE_PROFILE = "profile";
+const MC_PAGE_REGISTER = "register";
 const CFT_DIRECTORY = "cft";
 const MC_ABSTRACT = "abstract";
 const MC_BIRTHDAY = "birthday";
@@ -18,6 +19,12 @@ const MC_METABOX_PERMISSION = "permission";
 const MC_COUNTRY = "country";
 const MC_METABOX_GENDER = "gender";
 const MC_WEBSITE = "website";
+const MC_WEBSITE_MODE = "website_mode";
+const MC_LINK_WEBSITE = 'website';
+const MC_LINK_FACEBOOK = 'facebook';
+const MC_LINK_LINKEDIN = 'linkedin';
+const MC_LINK_INSTAGRAM = 'instagram';
+const MC_LINK_TWITTER = 'twitter';
 const MC_WORKS_WITH = "works_with";
 const MC_GENDER = "gender";
 const MC_PICTURE = "picture";

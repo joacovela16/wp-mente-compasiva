@@ -43,12 +43,24 @@ function mc_wp_head()
 
 add_action('login_header', function () {
     if (!is_admin()) {
+        $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
         ?>
         <div class="absolute top-0 left-0 w-full h-full flex flex-col sm:flex-row">
             <div class="shapedividers_com-213  flex-1 h-full ">
-                <video class="object-cover absolute top-0 left-0 w-screen h-screen" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4" ?>"></video>
+                <video class="object-cover absolute top-0 left-0 w-screen h-screen filter blur-sm" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4"
+                ?>"></video>
                 <div class="bg-transparent absolute top- left-0 w-full h-full flex ">
-                    <p class="text-center my-auto text-white text-6xl w-full text-shadow-lg">Mente Compasiva</p>
+                    <div class="text-center my-auto text-white w-full text-shadow-lg space-x-5">
+                        <div class="text-6xl mx-auto">MENTE COMPASIVA</div>
+                        <div class="flex flex-row items-center justify-center space-x-3 mt-20">
+                            <img src="<?= $logo_cm ?>" alt="logo" class=" h-24">
+                            <div>
+                                <div class="text-left italic">Un proyecto de</div>
+                                <div class="font-bold text-2xl">CULTIVAR LA MENTE</div>
+                                <div class="text-left italic">Salud mental y prácticas contemplativas</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="flex-1"></div>

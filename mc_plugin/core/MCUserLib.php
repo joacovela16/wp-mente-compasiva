@@ -28,6 +28,7 @@ class MCUserLib
         $work_with = get_user_meta($user->ID, MC_WORKS_WITH);
         $profession = get_user_meta($user->ID, MC_PROFESSION, true);
         $mode = get_user_meta($user->ID, MC_MODE, true);
+        $url_mode = get_user_meta($user->ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
         $is_enable = get_user_meta($user->ID, MC_ENABLED, true) === 'on';
         ?>
@@ -160,9 +161,17 @@ class MCUserLib
                 <th>
                     <?= __('Website') ?>
                 </th>
-                <td>
+                <td class="">
+                    <select class="" name="<?= MC_WEBSITE_MODE ?>">
+                        <option disabled <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('Select') ?></option>
+                        <option value="<?= MC_LINK_WEBSITE ?>" <?= $url_mode === MC_LINK_WEBSITE ? 'selected' : '' ?> >Sitio web</option>
+                        <option value="<?= MC_LINK_INSTAGRAM ?>" <?= $url_mode === MC_LINK_INSTAGRAM ? 'selected' : '' ?>>Instagram</option>
+                        <option value="<?= MC_LINK_FACEBOOK?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
+                        <option value="<?= MC_LINK_LINKEDIN ?>" <?= $url_mode === MC_LINK_LINKEDIN ? 'selected' : '' ?>>Linkedin</option>
+                        <option value="<?= MC_LINK_TWITTER ?>" <?= $url_mode === MC_LINK_TWITTER ? 'selected' : '' ?>>Twitter</option>
+                    </select>
                     <input type="text"
-                           class="regular-text ltr"
+                           class=" "
                            id="<?= MC_WEBSITE ?>"
                            name="<?= MC_WEBSITE ?>"
                            value="<?= esc_attr(get_user_meta($user->ID, MC_WEBSITE, true)) ?>"
@@ -298,6 +307,7 @@ class MCUserLib
                 MC_CFT_WHEN_WHERE,
                 MC_NAME,
                 MC_ABSTRACT,
+                MC_WEBSITE_MODE,
                 MC_WEBSITE,
                 MC_POLICY_1,
                 MC_POLICY_2,

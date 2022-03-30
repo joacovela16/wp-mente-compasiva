@@ -18,7 +18,7 @@ function login_scripts()
 
 function mc_install_styles()
 {
-    $current_screen = $GLOBALS['current_screen'];
+    $current_screen = $GLOBALS['current_screen'] ?? '';
     if (empty($current_screen) || $current_screen->id === 'widgets' || $current_screen->id === 'toplevel_page_mc_panel') {
         wp_enqueue_style('mc_theme', get_template_directory_uri() . "/assets/styles/base-theme.css");
         wp_enqueue_style('mc_windicss', get_template_directory_uri() . "/assets/styles/theme.css");

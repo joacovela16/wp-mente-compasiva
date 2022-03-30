@@ -36,14 +36,25 @@ register_deactivation_hook(__FILE__, 'mc_undo_pages');
 
 
 add_action("init", function () {
-    add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+    //add_rewrite_rule("^profile\/?", "index.php?pagename=mc_profile", 'top');
+//    add_rewrite_rule("^register\/?", "index.php?pagename=register", 'top');
 });
 
 function mc_plugin_activated()
 {
 
     mc_do_pages();
-    update_option('users_can_register', true);
+//    update_option('users_can_register', false);
+
+    add_filter('option_users_can_register', function($value) {
+        $script = basename(parse_url($_SERVER['SCRIPT_NAME'], PHP_URL_PATH));
+
+        if ($script == 'wp-login.php') {
+            $value = false;
+        }
+
+        return $value;
+    });
 
     global $wp_rewrite;
     $wp_rewrite->set_permalink_structure("/%postname%/");

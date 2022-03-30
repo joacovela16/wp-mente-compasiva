@@ -57,6 +57,7 @@ function mc_obtain_pages(): array
 {
     return [
         ["post_title" => "Profile", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => MC_PAGE_PROFILE],
+        ["post_title" => "Register", "post_type" => "page", 'public' => true, 'post_status' => 'publish', "post_name" => MC_PAGE_REGISTER],
     ];
 }
 

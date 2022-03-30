@@ -5,7 +5,7 @@ const SORTBY = "orderby";
 const PAFTER = "after";
 const PBEFORE = "before";
 
-$search_fields = [MC_GENDER, MC_COUNTRY, MC_CITY, SORTBY, PBEFORE, PAFTER, 'q', 'post_type', MC_MODE, MC_PROFESSION];
+$search_fields = [MC_GENDER, MC_COUNTRY, MC_CITY, SORTBY, PBEFORE, PAFTER, 'q', 'post_type', MC_MODE, MC_PROFESSION, MC_WORKS_WITH];
 
 $orderby = $_GET[SORTBY] ?? '';
 
@@ -95,10 +95,9 @@ get_header();
                         <span class="label-text"><?= __('Works with') ?></span>
                     </label>
                     <select class="select select-bordered w-full h-auto " name="<?= MC_WORKS_WITH ?>[]" multiple>
-                        <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                        <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                        <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                        <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
+                        <?php foreach (get_option(MC_WORKS_WITH, []) as $item): ?>
+                            <option value="<?= $item ?>" <?= in_array($item, $work_with) ? 'selected' : '' ?>><?= $item ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 

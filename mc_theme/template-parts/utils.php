@@ -20,9 +20,10 @@ function render_cft(WP_Post $post)
     $abstract = get_post_meta($post->ID, MC_ABSTRACT, true);
 
     $image_url = get_post_meta($post->ID, MC_AVATAR_URL, true);
-    $image_url = empty($image_url) ? get_avatar_url(0): $image_url;
+    $image_url = empty($image_url) ? get_avatar_url(0) : $image_url;
 
     $country = get_post_meta($post->ID, MC_COUNTRY, true);
+    $profession = get_post_meta($post->ID, MC_PROFESSION, true);
     $city = get_post_meta($post->ID, MC_CITY, true);;
     ?>
     <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg">
@@ -30,6 +31,9 @@ function render_cft(WP_Post $post)
         <a class="flex-1 max-w-md overflow-hidden" href="<?= get_permalink($post) ?>">
             <p class="text-lg font-bold"><?= $post->post_title ?></p>
             <p class="whitespace-nowrap truncate text-gray-500 " title="<?= $abstract ?>"><?= $abstract ?></p>
+            <?php if (nonEmpty($profession)): ?>
+                <p><?= $profession ?></p>
+            <?php endif; ?>
             <p><?= $city . ', ' . $country ?></p>
         </a>
     </div>
