@@ -1,17 +1,5 @@
 <?php
 
-function mc_get_datetime()
-{
-    return date("Y-m-d H:i:s");
-}
-
-function runQuery(array $q)
-{
-    global $wpdb;
-    foreach ($q as $item) {
-        $wpdb->query($item);
-    }
-}
 
 function array_find(array $array, Closure $test)
 {
@@ -21,16 +9,6 @@ function array_find(array $array, Closure $test)
     } else {
         return array_values($items)[0];
     }
-}
-
-function array_as_map(array $array, Closure $keyBuilder): array
-{
-    $result = [];
-    foreach ($array as $item) {
-        $key = $keyBuilder($item);
-        $result[$key] = $item;
-    }
-    return $result;
 }
 
 function array_exists(array $array, Closure $test)
@@ -62,6 +40,7 @@ function array_forall(array $array, Closure $test): bool
     return true;
 }
 
-function nonEmpty(mixed $obj):bool{
+function nonEmpty(mixed $obj): bool
+{
     return !empty($obj);
 }

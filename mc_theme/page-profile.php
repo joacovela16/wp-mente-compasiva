@@ -41,8 +41,6 @@
         $mode = get_user_meta($ID, MC_MODE, true);
         $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
         $policy1 = get_user_meta($ID, MC_POLICY_1, true) === 'on';
-        $policy2 = get_user_meta($ID, MC_POLICY_2, true) === 'on';
-        $policy3 = get_user_meta($ID, MC_POLICY_3, true) === 'on';
         $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
 
@@ -248,28 +246,21 @@
                             <?= __('agreement_policy') ?>
                         </div>
                         <div class="collapse-content">
+                            <ul>
+                                <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
+                                    formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.</li>
+                                <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
+                                    posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
+                                </li>
+                                <li>
+                                    Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
+                                    praxis o problemas de ética profesional.
+                                </li>
+                            </ul>
                             <div class="form-control">
                                 <label class="label cursor-pointer space-x-2">
                                     <input type="checkbox" class="checkbox" name="<?= MC_POLICY_1 ?>" <?= $policy1 ? 'checked' : '' ?>>
-                                    <span class="label-text">Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
-                                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.</span>
-                                </label>
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label cursor-pointer space-x-2">
-                                    <input type="checkbox" class="checkbox" name="<?= MC_POLICY_2 ?>" <?= $policy2 ? 'checked' : '' ?>>
-                                    <span class="label-text">Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
-                                        posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
-                                    </span>
-                                </label>
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label cursor-pointer space-x-2">
-                                    <input type="checkbox" class="checkbox" name="<?= MC_POLICY_3 ?>" <?= $policy3 ? 'checked' : '' ?>>
-                                    <span class="label-text">Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
-                                        praxis o problemas de ética profesional.</span>
+                                    <span class="label-text">Acepto todos los términos</span>
                                 </label>
                             </div>
                         </div>

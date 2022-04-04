@@ -1,6 +1,9 @@
 <?php
+const MC_MAX_TIMEOUT = 7889400;
 const MC_PAGE_PROFILE = "profile";
 const MC_PAGE_REGISTER = "register";
+const MC_PASSWORD_GEN='mc_pass_gen';
+const MC_ENCRYPT_EMAILS='mc_encrypt_emails';
 const CFT_DIRECTORY = "cft";
 const MC_ABSTRACT = "abstract";
 const MC_BIRTHDAY = "birthday";
@@ -8,8 +11,8 @@ const MC_PHONE = "phone";
 const MC_DNI = "DNI";
 const MC_EMAIL = "email";
 const MC_POLICY_1 = "mc-policy-1";
-const MC_POLICY_2 = "mc-policy-2";
-const MC_POLICY_3 = "mc-policy-3";
+//const MC_POLICY_2 = "mc-policy-2";
+//const MC_POLICY_3 = "mc-policy-3";
 const MC_CFT_WHEN_WHERE = 'cft_when_and_where';
 const MC_PROFESSION = 'profession';
 const MC_PROFESSION_OPTIONS = "mc_professions_options";

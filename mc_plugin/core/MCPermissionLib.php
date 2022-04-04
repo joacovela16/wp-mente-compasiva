@@ -20,6 +20,7 @@ class MCPermissionLib
     public function query_vars($qvars)
     {
         $qvars[] = "q";
+        $qvars[] = "t";
         return $qvars;
     }
 

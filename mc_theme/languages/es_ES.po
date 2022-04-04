@@ -161,7 +161,7 @@ msgid "Explore"
 msgstr "Explorar"
 
 msgid "Login/Register"
-msgstr "Ingresar/Registrarse"
+msgstr "Ingresar"
 
 msgid "Professions"
 msgstr "Profesiones"
@@ -234,3 +234,6 @@ msgstr "Sube tu foto (de uso profesional, retrato solo de tu rostro, no cuerpo c
 
 msgid "Set value"
 msgstr "Ingrese este campo"
+
+msgid "Logout"
+msgstr "Cerrar sesión"

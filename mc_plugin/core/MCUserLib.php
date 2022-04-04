@@ -282,17 +282,15 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
-            if (!isset($_POST[MC_ENABLED]) && !(isset($_POST[MC_POLICY_1]) && isset($_POST[MC_POLICY_2]) && isset($_POST[MC_POLICY_3]))) {
+            if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY_1])) {
                 $_POST[MC_ENABLED] = 'off';
             }
 
-            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY_1] ?? '') === 'on' && ($_POST[MC_POLICY_2] ?? '') === 'on' && ($_POST[MC_POLICY_3] ?? '') === 'on') {
+            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY_1] ?? '') === 'on') {
                 $_POST[MC_ENABLED] = 'on';
             }
 
             if (!isset($_POST[MC_POLICY_1])) $_POST[MC_POLICY_1] = "off";
-            if (!isset($_POST[MC_POLICY_2])) $_POST[MC_POLICY_2] = "off";
-            if (!isset($_POST[MC_POLICY_3])) $_POST[MC_POLICY_3] = "off";
 
             $meta_fields = [
                 MC_COUNTRY,

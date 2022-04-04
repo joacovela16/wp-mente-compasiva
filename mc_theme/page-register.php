@@ -1,4 +1,7 @@
 <?php
-echo "ok!!";
-wp_head();
-wp_login_form();
+
+//wp_enqueue_style( 'login' );
+//wp_head();
+//echo wp_register();
+
+//do_action( 'login_form' );
