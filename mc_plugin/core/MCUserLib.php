@@ -307,9 +307,7 @@ class MCUserLib
                 MC_ABSTRACT,
                 MC_WEBSITE_MODE,
                 MC_WEBSITE,
-                MC_POLICY_1,
-                MC_POLICY_2,
-                MC_POLICY_3,
+                MC_POLICY_1
             ];
 
             foreach ($meta_fields as $field) {

@@ -36,7 +36,8 @@ register_deactivation_hook(__FILE__, 'mc_undo_pages');
 
 
 add_action("init", function () {
-    add_rewrite_rule("^register\/([A-Za-z0-9-=\/\+]+)[\/]?$", 'wp-login.php?action=register&t=\$matches[1]', 'top');
+    //add_rewrite_rule("^profile\/?", "index.php?pagename=profile", 'top');
+    add_rewrite_rule("^register\/([A-Za-z0-9-=\+]+)[\/]?$", 'wp-login.php?action=register&t=$matches[1]', 'top');
 });
 
 add_filter('option_users_can_register', function ($value) {
