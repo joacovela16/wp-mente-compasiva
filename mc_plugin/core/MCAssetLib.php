@@ -24,48 +24,5 @@ class MCAssetLib
         ]);
 
         register_widget("MCDirectoryExplorer");
-//        register_widget("MCPostExplorer");
-    }
-
-    public function mc_plugin_install_assets()
-    {
-        wp_enqueue_style('mc_plugin_svelte_css', get_template_directory_uri() . "/assets/styles/base-theme.css");
-    }
-
-
-    public function mc_plugin_install_app()
-    {
-        $post_types = array_values(get_post_types(["public" => true]));
-        $permissions = get_option(MC_SETTING);
-        $permissionConfig = [
-            "postUrl" => menu_page_url('mc_panel', false),
-            "defaultPermission" => MC_DEFAULT_PERMISSION,
-            "post_types" => $post_types,
-            "permissions" => $permissions['permissions'] ?? [],
-            "defaults" => $permissions['defaults'] ?? null,
-            "countries" => $permissions['countries'] ?? [],
-            "i18n" => [
-                "Permissions" => __("Permissions"),
-                "Name" => __("Name"),
-                "Signed required" => __("Signed required"),
-                "Post types" => __("Post types"),
-                "Posts" => __("Posts"),
-                "Default user settings" => __("Default user settings"),
-                "Capabilities" => __("Capabilities"),
-                "Delete" => __("Delete"),
-                "Save settings" => __("Save settings"),
-                "Add permission" => __("Add permission"),
-                "permission_desc" => __('permission_desc')
-            ]
-        ];
-
-
-        ?>
-        <script type="module">
-            import {renderPermissionEditor} from "";
-
-            renderPermissionEditor("mc_plugin_setting_panel", <?= wp_json_encode($permissionConfig) ?>);
-        </script>
-        <?php
     }
 }

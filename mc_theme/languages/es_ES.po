@@ -237,3 +237,9 @@ msgstr "Ingrese este campo"
 
 msgid "Logout"
 msgstr "Cerrar sesión"
+
+msgid "Profile"
+msgstr "Mí perfil"
+
+msgid "None"
+msgstr "Ninguno"

@@ -31,7 +31,7 @@ function render_cft(WP_Post $post)
         <a class="flex-1 max-w-md overflow-hidden" href="<?= get_permalink($post) ?>">
             <p class="text-lg font-bold"><?= $post->post_title ?></p>
             <p class="whitespace-nowrap truncate text-gray-500 " title="<?= $abstract ?>"><?= $abstract ?></p>
-            <?php if (nonEmpty($profession)): ?>
+            <?php if (!empty($profession)): ?>
                 <p><?= $profession ?></p>
             <?php endif; ?>
             <p><?= $city . ', ' . $country ?></p>

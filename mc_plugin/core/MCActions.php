@@ -15,14 +15,6 @@ class MCActions
         add_filter("bulk_actions-edit-" . CFT_DIRECTORY, [$this, 'user_bulk_actions']);
     }
 
-    public function template_chooser($template)
-    {
-        if (is_post_type_archive(CFT_DIRECTORY)) {
-            return locate_template('archive-cft.php');  //  redirect to archive-search.php
-        }
-        return $template;
-    }
-
     public function user_bulk_actions($actions)
     {
         unset($actions['trash']);
@@ -38,7 +30,6 @@ class MCActions
                 $n = count($data);
                 $header = $data;
 
-
                 while (($data = fgetcsv($stream, 1000, ",")) !== false) {
                     $row = [];
                     for ($c = 0; $c < $n; $c++) {
@@ -46,8 +37,6 @@ class MCActions
                     }
                     $datum[] = $row;
                 }
-
-
             }
             fclose($stream);
         }

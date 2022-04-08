@@ -39,13 +39,14 @@ $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) :
     </form>
     <?php if (is_user_logged_in()): ?>
         <div class="flex-grow-0 cursor-pointer px-3" title="<?= __('Profile') ?>">
-            <a href="<?= site_url('/profile') ?>">
+            <a href="<?= site_url('/profile') ?>" class="flex flex-row items-center space-x-2">
+                <span><?= __('Profile') ?></span>
                 <img src="<?= $user_avatar_url ?>" alt="AV" class="w-[48px] min-w-[48px] h-[48px] rounded-full shadow-lg border-2">
             </a>
         </div>
     <?php else: ?>
         <div class="flex-grow-0 cursor-pointer px-3">
-            <a href="<?= wp_login_url() ?>" class="font-bold">
+            <a href="<?= site_url('/login') ?>" class="font-bold">
                 <?= __('Login/Register') ?>
             </a>
         </div>

@@ -11,6 +11,97 @@ class MCUserLib
         add_action("user_register", [$this, "mc_user_register_interceptor"]);
         add_action("edit_user_profile_update", [$this, "mc_user_profile_updated"]);
         add_action('delete_user', [$this, 'delete_user']);
+
+
+        add_action('register_form', function () {
+            ?>
+            <div class="user-pass1-wrap">
+                <p>
+                    <label for="pass1"><?php _e('Password'); ?></label>
+                </p>
+
+                <div class="wp-pwd">
+                    <input type="password" data-reveal="1" data-pw="<?php echo esc_attr(wp_generate_password(16)); ?>" name="pass1" id="pass1" class="input password-input" size="24" value=""
+                           autocomplete="off" aria-describedby="pass-strength-result"/>
+
+                    <button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e('Hide password'); ?>">
+                        <span class="dashicons dashicons-hidden" aria-hidden="true"></span>
+                    </button>
+                    <div id="pass-strength-result" class="hide-if-no-js" aria-live="polite"><?php _e('Strength indicator'); ?></div>
+                </div>
+                <div class="pw-weak">
+                    <input type="checkbox" name="pw_weak" id="pw-weak" class="pw-checkbox"/>
+                    <label for="pw-weak"><?php _e('Confirm use of weak password'); ?></label>
+                </div>
+            </div>
+
+            <p class="user-pass2-wrap">
+                <label for="pass2"><?php _e('Confirm new password'); ?></label>
+                <input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off"/>
+            </p>
+
+            <p class="description indicator-hint"><?php echo wp_get_password_hint(); ?></p>
+            <?php
+        });
+
+
+        add_filter('registration_errors', function ($errors) {
+            if (empty($_POST['pass1'])) {
+                $errors->add('password-required', '<strong>Error</strong>: Please enter a password.');
+            }
+
+            if (empty($_POST['pass2'])) {
+                $errors->add('password-required', '<strong>Error</strong>: Please enter a password confirmation.');
+            }
+
+            return $errors;
+        });
+
+
+        add_filter('random_password', function ($password) {
+            if ($this->is_on_registration_page() && !empty($_POST['pass1'])) {
+                $password = $_POST['pass1'];
+            }
+
+            return $password;
+        });
+
+
+        add_filter('wp_new_user_notification_email', function ($wp_new_user_notification_email, $user) {
+            $wp_new_user_notification_email['message'] = null;
+            return $wp_new_user_notification_email;
+        }, 10, 2);
+
+        add_action('login_enqueue_scripts', function () {
+            if ($this->is_on_registration_page() && !wp_script_is('user-profile')) {
+                wp_enqueue_script('user-profile');
+            }
+        });
+        add_filter('wp_mail_from_name', function ($original_email_from) {
+            return "Mente Compasiva";
+        });
+        add_action('user_register', function ($user_id) {
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
+            $user_info = get_userdata($user_id);
+
+            $message = "Bienvenido/a a Mente Compasiva.\n";
+            $message .= "Le informamos que su registro al sitio web de Mente Compasiva a sido realizado con éxito.\n\n";
+            $message .= "Usted puede ingresar en cualquier momento a través del siguiente link. \n";
+            $message .= site_url('/login') . "\n\n";
+            $message .= "Muchas gracias.\n\n";
+            $message .= "Gonzalo Brito.\n";
+            $message .= "Equipo de Mente Compasiva.";
+            wp_mail($user_info->user_email, "Registro", $message);
+            wp_redirect(site_url('/profile?a=register'));
+            exit();
+        });
+    }
+
+
+    public function is_on_registration_page(): bool
+    {
+        return $GLOBALS['pagenow'] == 'wp-login.php' && isset($_REQUEST['action']) && $_REQUEST['action'] == 'register';
     }
 
     public function delete_user($user_id)
@@ -166,7 +257,7 @@ class MCUserLib
                         <option disabled <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('Select') ?></option>
                         <option value="<?= MC_LINK_WEBSITE ?>" <?= $url_mode === MC_LINK_WEBSITE ? 'selected' : '' ?> >Sitio web</option>
                         <option value="<?= MC_LINK_INSTAGRAM ?>" <?= $url_mode === MC_LINK_INSTAGRAM ? 'selected' : '' ?>>Instagram</option>
-                        <option value="<?= MC_LINK_FACEBOOK?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
+                        <option value="<?= MC_LINK_FACEBOOK ?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
                         <option value="<?= MC_LINK_LINKEDIN ?>" <?= $url_mode === MC_LINK_LINKEDIN ? 'selected' : '' ?>>Linkedin</option>
                         <option value="<?= MC_LINK_TWITTER ?>" <?= $url_mode === MC_LINK_TWITTER ? 'selected' : '' ?>>Twitter</option>
                     </select>
@@ -220,6 +311,7 @@ class MCUserLib
             } else {
                 update_user_meta($user_id, MC_POST_BIND, $post_linked_to_user);
                 update_user_meta($user_id, MC_ENABLED, 'on');
+                update_user_meta($user_id, MC_CFT, 'on');
             }
         } else {
             error_log("Can't found user " . $user_id);
@@ -229,7 +321,6 @@ class MCUserLib
     function mc_user_profile_updated($user_id)
     {
 
-        //update_user_meta($user_id, MC_ENABLED, $_POST[MC_ENABLED] ?? 'off');
         $user = get_userdata($user_id);
         if ($user) {
             MCUserLib::update_user_data($user);

@@ -78,7 +78,7 @@ $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_W
             </div>
             <div class="mx-auto mb-5">
                 <div class="flex flex-col md:flex-row divide-x-2 flex-1 items-center">
-                    <?php if (nonEmpty($phone)): ?>
+                    <?php if (!empty($phone)): ?>
                         <div class="flex-row flex flex-1 p-3 space-x-3 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                  fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -100,7 +100,7 @@ $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_W
                             <a href="mailto:<?= $email ?>"><?= $email ?></a>
                         </span>
                     </div>
-                    <?php if (nonEmpty($website)): ?>
+                    <?php if (!empty($website)): ?>
                         <div class="flex-row flex flex-1 p-3 space-x-3 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-dribbble" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

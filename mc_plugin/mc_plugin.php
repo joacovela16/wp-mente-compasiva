@@ -23,7 +23,6 @@ add_action("rest_api_init", function () {
 
 (new MCUserLib())->init();
 (new MCAssetLib())->init();
-//(new MCMetaPost())->init();
 (new MCSettingPanel())->init();
 (new MCPermissionLib())->init();
 (new MCActions())->init();
@@ -36,22 +35,20 @@ register_deactivation_hook(__FILE__, 'mc_undo_pages');
 
 
 add_action("init", function () {
-    //add_rewrite_rule("^profile\/?", "index.php?pagename=profile", 'top');
+    add_rewrite_rule("^login\/?", "wp-login.php", 'top');
     add_rewrite_rule("^register\/([A-Za-z0-9-=\+]+)[\/]?$", 'wp-login.php?action=register&t=$matches[1]', 'top');
 });
 
 add_filter('option_users_can_register', function ($value) {
     $script = basename(parse_url($_SERVER['SCRIPT_NAME'], PHP_URL_PATH));
 
-    if (is_user_logged_in()) {
-        wp_safe_redirect(site_url());
-        exit();
+    if ($script == 'wp-login.php' && $_GET['action'] === 'lostpassword') {
+        return false;
     }
 
     if ($script == 'wp-login.php' && ($_GET['action'] ?? '') === 'register') {
         $arr = explode("/", $_SERVER['REQUEST_URI'] ?? "");
         if (isset($arr[2])) {
-
             $token = $arr[2];
             $pending = get_option(MC_PASSWORD_GEN, []);
             $item = array_find($pending, fn($x) => $x['key'] === $token);
@@ -65,6 +62,8 @@ add_filter('option_users_can_register', function ($value) {
                     update_option(MC_PASSWORD_GEN, $pending);
                     return true;
                 }
+            }else{
+                return false;
             }
         }
     }

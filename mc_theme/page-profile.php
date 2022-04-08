@@ -5,9 +5,12 @@
     <title><?= __('MC') ?></title>
 
     <?php wp_head(); ?>
+    <?php wp_dequeue_script('alpine'); ?>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
     </style>
+    <script src="<?= get_template_directory_uri() . "/assets/javascript/alpine.js" ?>"></script>
 </head>
 
 
@@ -44,8 +47,19 @@
         $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
 
-        $showCFT = $is_cft || current_user_can('administrator')
-        ?>
+        $showCFT = $is_cft || current_user_can('administrator');
+        $dataInit = json_encode(
+            [
+                'selection' => null,
+                'values' => [
+                    MC_LINK_WEBSITE => 'Ingresa enlace, ejemplo: https://google.com',
+                    MC_LINK_INSTAGRAM => 'Ingresa tú usuario de instagram , ejemplo: @miusuario',
+                    MC_LINK_FACEBOOK => 'Ingresa enlace a tú perfil',
+                    MC_LINK_LINKEDIN => 'Ingresa enlace a tu perfil'
+                ]
+            ]
+
+        ) ?>
         <div class="mx-auto relative">
             <div class="h-48 w-full overflow-hidden ">
                 <video x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
@@ -53,11 +67,20 @@
             <div class="flex flex-col ">
                 <div class="p-2 w-full flex-grow-0">
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20 relative">
+
                     <div class="text-5xl text-center">
                         <?= $data->display_name ?? "" ?>
                     </div>
                 </div>
-
+                <?php if (isset($_GET['a'])): ?>
+                <div class="card mx-auto md:w-2/3 bg-blue-50 rounded ring-1 ring-blue-500 p-3 my-3">
+                    <p>Bienvenido a Mente Compasiva.</p>
+                    <p>Te agradecemos que te tomes unos minutos para completar los siguientes datos. Esto facilitará tu búsqueda en el
+                        <a class="text-blue-500" href="<?= site_url('/directorio-cft') ?>">Directorio de profesionales CFT</a>.
+                    </p>
+                    <p>Muchas gracias.</p>
+                    <?php endif; ?>
+                </div>
                 <form
                         action="<?= admin_url('admin-post.php') ?>"
                         method="post"
@@ -68,7 +91,7 @@
                     <div class="flex flex-row items-center">
                         <div class="font-bold text-3xl flex-1"><?= __('My profile') ?></div>
                         <div class=>
-                            <a href="#/" class="btn gap-2 btn-primary" onclick="history.back();return -1;">
+                            <a href="<?= site_url('/directorio-cft') ?>" class="btn gap-2 btn-primary">
                                 <svg width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <polyline points="15 6 9 12 15 18"></polyline>
@@ -195,16 +218,24 @@
                         <input type="text" class="input input-bordered w-full" name="<?= MC_PHONE ?>" value="<?= $phone ?>" placeholder="<?= __('phone_enter_and_show') ?>">
                     </div>
                     <div class="form-control w-full">
-                        <div class="input-group">
-                            <select class="select select-bordered" name="<?= MC_WEBSITE_MODE ?>">
-                                <option disabled <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('Select') ?></option>
+                        <div
+                                class="input-group"
+                                x-init="selection='<?= $url_mode ?>'"
+                                x-data="<?= htmlspecialchars($dataInit) ?>"
+
+                        >
+                            <select class="select select-bordered" name="<?= MC_WEBSITE_MODE ?>" x-model="selection">
+                                <option value="" <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('None') ?></option>
                                 <option value="<?= MC_LINK_WEBSITE ?>" <?= $url_mode === MC_LINK_WEBSITE ? 'selected' : '' ?> >Sitio web</option>
                                 <option value="<?= MC_LINK_INSTAGRAM ?>" <?= $url_mode === MC_LINK_INSTAGRAM ? 'selected' : '' ?>>Instagram</option>
                                 <option value="<?= MC_LINK_FACEBOOK ?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
                                 <option value="<?= MC_LINK_LINKEDIN ?>" <?= $url_mode === MC_LINK_LINKEDIN ? 'selected' : '' ?>>Linkedin</option>
-                                <option value="<?= MC_LINK_TWITTER ?>" <?= $url_mode === MC_LINK_TWITTER ? 'selected' : '' ?>>Twitter</option>
                             </select>
-                            <input type="text" class="input input-bordered w-full" placeholder="<?= __("Set value") ?>" name="<?= MC_WEBSITE ?>" value="<?= $website ?>">
+                            <input
+                                    type="text"
+                                    class="input input-bordered w-full"
+                                    x-bind:placeholder="values[selection]" name="<?= MC_WEBSITE ?>" value="<?= $website
+                            ?>">
                         </div>
                     </div>
 
@@ -218,7 +249,6 @@
                             <input class="mt-3" name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" placeholder="<?= __('Change picture') ?>">
                         </div>
                     </div>
-
 
                     <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
                         <input type="checkbox">
@@ -247,9 +277,10 @@
                         </div>
                         <div class="collapse-content">
                             <div>
-                                <ul>
+                                <ul class="list-disc p-8">
                                     <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
-                                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.</li>
+                                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.
+                                    </li>
                                     <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
                                         posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
                                     </li>
