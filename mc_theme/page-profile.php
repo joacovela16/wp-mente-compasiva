@@ -44,7 +44,7 @@
         $profession = get_user_meta($ID, MC_PROFESSION, true);
         $mode = get_user_meta($ID, MC_MODE, true);
         $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
-        $policy1 = get_user_meta($ID, MC_POLICY_1, true) === 'on';
+        $policy1 = get_user_meta($ID, MC_POLICY, true) === 'on';
         $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
 
@@ -299,7 +299,7 @@
                                 </ul>
                                 <div class="form-control">
                                     <label class="label cursor-pointer justify-start space-x-2">
-                                        <input type="checkbox" class="checkbox" name="<?= MC_POLICY_1 ?>" <?= $policy1 ? 'checked' : '' ?>>
+                                        <input type="checkbox" class="checkbox" name="<?= MC_POLICY ?>" <?= $policy1 ? 'checked' : '' ?>>
                                         <span class="label-text">Acepto todos los términos</span>
                                     </label>
                                 </div>

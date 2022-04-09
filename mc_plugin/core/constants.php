@@ -1,18 +1,14 @@
 <?php
 const MC_MAX_TIMEOUT = 7889400;
 const MC_PAGE_PROFILE = "profile";
-const MC_PAGE_REGISTER = "register";
 const MC_PASSWORD_GEN='mc_pass_gen';
-const MC_ENCRYPT_EMAILS='mc_encrypt_emails';
 const CFT_DIRECTORY = "cft";
 const MC_ABSTRACT = "abstract";
 const MC_BIRTHDAY = "birthday";
 const MC_PHONE = "phone";
 const MC_DNI = "DNI";
 const MC_EMAIL = "email";
-const MC_POLICY_1 = "mc-policy-1";
-//const MC_POLICY_2 = "mc-policy-2";
-//const MC_POLICY_3 = "mc-policy-3";
+const MC_POLICY = "mc-policy";
 const MC_CFT_WHEN_WHERE = 'cft_when_and_where';
 const MC_PROFESSION = 'profession';
 const MC_PROFESSION_OPTIONS = "mc_professions_options";
@@ -38,7 +34,6 @@ const MC_AVATAR_ID = "avatar_url_id";
 const MC_METABOX_PERMISSION_RULE = "permission_rule";
 const MC_PERSON = 'person';
 const MC_CFT = 'cft';
-const MC_USER_DETAILS = 'mc-user-details';
 const MC_USER_REF = 'entity_ref';
 const MC_ENABLED = 'enabled';
 const MC_KIND = 'kind';

@@ -373,15 +373,15 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
-            if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY_1])) {
+            if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY])) {
                 $_POST[MC_ENABLED] = 'off';
             }
 
-            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY_1] ?? '') === 'on') {
+            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY] ?? '') === 'on') {
                 $_POST[MC_ENABLED] = 'on';
             }
 
-            if (!isset($_POST[MC_POLICY_1])) $_POST[MC_POLICY_1] = "off";
+            if (!isset($_POST[MC_POLICY])) $_POST[MC_POLICY] = "off";
 
             $meta_fields = [
                 MC_COUNTRY,
@@ -398,7 +398,7 @@ class MCUserLib
                 MC_ABSTRACT,
                 MC_WEBSITE_MODE,
                 MC_WEBSITE,
-                MC_POLICY_1
+                MC_POLICY
             ];
 
             foreach ($meta_fields as $field) {

@@ -26,9 +26,10 @@ $cft_when_where = get_user_meta($ID, MC_CFT_WHEN_WHERE, true);
 $website = get_user_meta($ID, MC_WEBSITE, true);
 $gender = get_user_meta($ID, MC_GENDER, true);
 $profession = get_user_meta($ID, MC_PROFESSION, true);
-$website_mode = get_user_meta($ID, MC_MODE, true);
+$website_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
+$work_mode = get_user_meta($ID, MC_MODE, true);
 $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
-$policy1 = get_user_meta($ID, MC_POLICY_1, true) === 'on';
+$policy1 = get_user_meta($ID, MC_POLICY, true) === 'on';
 $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
 $professions = get_option(MC_PROFESSION_OPTIONS, []);
 
@@ -144,8 +145,6 @@ $showCFT = $is_cft || current_user_can('administrator');
                                     <a href="https://www.facebook.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_LINKEDIN): ?>
                                     <a href="https://www.linkedin.com/in/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
-                                <?php elseif ($website_mode === MC_LINK_TWITTER): ?>
-                                    <a href="https://twitter.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php endif; ?>
                             </span>
                         </div>
