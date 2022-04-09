@@ -6,7 +6,7 @@ $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
 ?>
 
 <!--<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">-->
-<div class="relative max-h-screen overflow-hidden">
+<div class="relative max-h-screen overflow-hidden" >
 
     <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
