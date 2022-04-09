@@ -53,9 +53,3 @@ const MC_ID = "id";
 const MC_POST_TYPES = "post_types";
 const MC_PERMISSIONS = 'permissions';
 
-const MC_DEFAULT_PERMISSION = [
-    MC_NAME => "New item",
-    MC_LOGGED_REQUIRED => true,
-    MC_POST_TYPES => [],
-    MC_CAPABILITIES => []
-];
