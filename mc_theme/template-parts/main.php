@@ -3,12 +3,13 @@
 $index = random_int(1, 7);
 $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
 $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
+$poster =  get_template_directory_uri() . "/assets/images/poster.png";
 ?>
 
 <!--<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">-->
 <div class="relative max-h-screen overflow-hidden" >
 
-    <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
+    <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop poster="<?= $poster ?>"></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
     <div class="custom-shape-divider-bottom-1637812056 hidden sm:block">

@@ -32,7 +32,6 @@ $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
 $policy1 = get_user_meta($ID, MC_POLICY, true) === 'on';
 $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
 $professions = get_option(MC_PROFESSION_OPTIONS, []);
-
 $showCFT = $is_cft || current_user_can('administrator');
 
 ?>
@@ -69,10 +68,10 @@ $showCFT = $is_cft || current_user_can('administrator');
                 <div class="text-center ">
                     <span class="font-bold"><?= __('Works with') ?>:</span>
                     <span>
-                        <?php if (empty($works_with)): ?>
+                        <?php if (empty($work_with)): ?>
                             <?= __('undeclared') ?>
                         <?php else: ?>
-                            <?= implode(", ", $works_with) ?>
+                            <?= implode(", ", $work_with) ?>
                         <?php endif; ?>
                     </span>
                 </div>

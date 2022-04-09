@@ -129,3 +129,11 @@ body.login {
 .mc_menu > .current-menu-item {
   @apply border-b-2 border-b-blue-500;
 }
+/*
+
+.mc-video{
+  background: #70e1f5;  !* fallback for old browsers *!
+  background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  !* Chrome 10-25, Safari 5.1-6 *!
+  background: linear-gradient(to right, #ffd194, #70e1f5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+  @apply w-full h-screen;
+}*/
