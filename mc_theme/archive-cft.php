@@ -15,11 +15,11 @@ $gender = $_GET[MC_GENDER] ?? [];
 $work_with = $_GET[MC_WORKS_WITH] ?? [];
 $work_mode = $_GET[MC_MODE] ?? '';
 $professions = get_option(MC_PROFESSION_OPTIONS, []);
-$profession = $_GET[MC_PROFESSION] ?? '';
+$profession = $_GET[MC_PROFESSION] ?? [];
 get_header();
 ?>
 
-    <div class="container py-4 mt-40 md:mt-24 mx-auto" x-init="loaderOn=false">
+    <div class="container py-4 mx-auto px-2 md:px-8" x-init="loaderOn=false">
         <div class="p-2 rounded bg-blue-50">
             <p class="font-bold">Directorio de Profesionales de Salud Mental Con Formación en Terapia Centrada en la Compasión (CFT)</p>
             <br>
@@ -70,12 +70,14 @@ get_header();
                     <label class="label">
                         <span class="label-text"><?= __('Profession') ?></span>
                     </label>
-                    <select class="select select-bordered w-full" name="<?= MC_PROFESSION ?>">
-                        <option value="" <?= $profession === '' ? 'selected' : '' ?>> <?= __('select') ?></option>
-                        <?php foreach ($professions as $item): ?>
-                            <option <?= $profession === $item ? 'selected' : '' ?> value="<?= $item ?>"> <?= $item ?></option>
+                    <div class="space-y-1">
+                        <?php foreach (get_option(MC_PROFESSION_OPTIONS, []) as $item): ?>
+                            <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                                <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_PROFESSION ?>[]" <?= in_array($item, $profession) ? 'checked' : '' ?>>
+                                <span><?= $item ?></span>
+                            </label>
                         <?php endforeach; ?>
-                    </select>
+                    </div>
                 </div>
 
                 <div class="form-control w-full ">
@@ -94,21 +96,30 @@ get_header();
                     <label class="label">
                         <span class="label-text"><?= __('Works with') ?></span>
                     </label>
-                    <select class="select select-bordered w-full h-auto " name="<?= MC_WORKS_WITH ?>[]" multiple>
+                    <div class="space-y-1">
                         <?php foreach (get_option(MC_WORKS_WITH, []) as $item): ?>
-                            <option value="<?= $item ?>" <?= in_array($item, $work_with) ? 'selected' : '' ?>><?= $item ?></option>
+                            <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                                <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_WORKS_WITH ?>[]" <?= in_array($item, $work_with) ? 'checked' : '' ?>>
+                                <span><?= $item ?></span>
+                            </label>
                         <?php endforeach; ?>
-                    </select>
+                    </div>
                 </div>
 
                 <div class="form-control w-full">
                     <label class="label">
                         <span class="label-text"><?= __('Gender') ?></span>
                     </label>
-                    <select class="select select-bordered w-full h-18 overflow-hidden " name="<?= MC_GENDER ?>[]" multiple>
-                        <option value="female" <?= in_array("female", $gender) ? 'selected' : '' ?>><?= __('Female') ?></option>
-                        <option value="male" <?= in_array("male", $gender) ? 'selected' : '' ?>><?= __('Male') ?></option>
-                    </select>
+                    <div class="space-y-1">
+                        <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                            <input type="checkbox" class="checkbox" value="female" name="<?= MC_GENDER ?>[]" <?= in_array("female", $gender) ? 'checked' : '' ?>>
+                            <span><?= __('Female') ?></span>
+                        </label>
+                        <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                            <input type="checkbox" class="checkbox" value="male" name="<?= MC_GENDER ?>[]" <?= in_array("male", $gender) ? 'checked' : '' ?>>
+                            <span><?= __('Male') ?></span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="form-control w-full">
@@ -131,7 +142,7 @@ get_header();
                     <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Published date') ?></option>
                 </select>
 
-                <button class="mt-3 btn btn-primary"><?= __('Search') ?></button>
+                <button class="mt-3 btn btn-primary btn-sm"><?= __('Search') ?></button>
             </form>
             <div class="flex-1 p-1 space-y-1">
                 <?php
@@ -141,15 +152,16 @@ get_header();
                 $result_text = $found_posts . ' ' . __('result') . ($found_posts > 1 ? 's' : '') . ' ' . __('match_with_result');
                 ?>
 
-                <div class="flex flex-row items-center border-b border-b-blue-500 p-1 space-x-2">
-                    <div><?= $result_text ?></div>
-                    <div class="flex-1"></div>
-                    <?php if (!is_null($previous_link)): ?>
-                        <div class="text-blue-500"><?= $previous_link ?></div>
-                    <?php endif; ?>
-                    <?php if (!is_null($next_link)): ?>
-                        <div class="text-blue-500"><?= $next_link ?></div>
-                    <?php endif; ?>
+                <div class="flex flex-col sm:flex-row items-center border-b border-b-blue-500 p-1 space-x-2">
+                    <div class="flex-1"><?= $result_text ?></div>
+                    <div class="flex flex-row items-center space-x-3">
+                        <?php if (!is_null($previous_link)): ?>
+                            <div class="text-blue-500"><?= $previous_link ?></div>
+                        <?php endif; ?>
+                        <?php if (!is_null($next_link)): ?>
+                            <div class="text-blue-500"><?= $next_link ?></div>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="space-y-2">
                     <?php

@@ -243,3 +243,6 @@ msgstr "Mí perfil"
 
 msgid "None"
 msgstr "Ninguno"
+
+msgid "Website or Social Network"
+msgstr "Sitio Web o Red Social"

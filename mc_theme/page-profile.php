@@ -27,6 +27,7 @@
         $ID = $user->ID;
         $data = $user->data;
         $description = get_user_meta($ID, MC_ABSTRACT, true);
+        $name = get_user_meta($ID, MC_NAME, true);
         $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
         $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
         $dni = get_user_meta($ID, MC_DNI, true) ?? '';
@@ -69,7 +70,7 @@
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20 relative">
 
                     <div class="text-5xl text-center">
-                        <?= $data->display_name ?? "" ?>
+                        <?= $name ?? "" ?>
                     </div>
                 </div>
                 <?php if (isset($_GET['a'])): ?>
@@ -105,7 +106,7 @@
                         <label class="label">
                             <span class="label-text"><?= __('Name and lastname') ?></span>
                         </label>
-                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $data->display_name ?>">
+                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $name ?>">
                     </div>
                     <?php if ($showCFT): ?>
                         <div class="form-control w-full">
@@ -167,11 +168,15 @@
                             <label class="label">
                                 <span class="label-text"><?= __('Works with') ?></span>
                             </label>
-                            <select class="select select-bordered w-full h-auto" name="<?= MC_WORKS_WITH ?>[]" multiple>
+
+                            <div class="space-y-2">
                                 <?php foreach (get_option(MC_WORKS_WITH, []) as $item): ?>
-                                    <option value="<?= $item ?>" <?= in_array($item, $work_with) ? 'selected' : '' ?>><?= $item ?></option>
+                                    <label class="flex flex-row items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_WORKS_WITH ?>[]" <?= in_array($item, $work_with) ? 'checked' : '' ?>>
+                                        <span><?= $item ?></span>
+                                    </label>
                                 <?php endforeach; ?>
-                            </select>
+                            </div>
                         </div>
                     <?php endif; ?>
 
@@ -218,6 +223,9 @@
                         <input type="text" class="input input-bordered w-full" name="<?= MC_PHONE ?>" value="<?= $phone ?>" placeholder="<?= __('phone_enter_and_show') ?>">
                     </div>
                     <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text"><?= __('Website or Social Network') ?></span>
+                        </label>
                         <div
                                 class="input-group"
                                 x-init="selection='<?= $url_mode ?>'"

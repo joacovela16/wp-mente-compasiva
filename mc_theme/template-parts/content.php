@@ -3,7 +3,7 @@ $post = get_post();
 setup_postdata($post);
 
 ?>
-    <div class="mx-auto container md:mt-24 mt-48 h-screen " x-init="loaderOn=false">
+    <div class="mx-auto container px-3 mt-3 h-screen " x-init="loaderOn=false">
         <div class="space-y-10">
             <header class="font-bold text-3xl border-b-blue-500 border-b-2 p-1 flex flex-row items-center gap-2">
                 <svg title="<?= __('Back') ?>" onclick="history.back(); return false;" class="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

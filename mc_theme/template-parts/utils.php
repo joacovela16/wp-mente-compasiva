@@ -34,7 +34,7 @@ function render_cft(WP_Post $post)
             <?php if (!empty($profession)): ?>
                 <p><?= $profession ?></p>
             <?php endif; ?>
-            <p><?= $city . ', ' . $country ?></p>
+            <p class="truncate"><?= $city . ', ' . $country ?></p>
         </a>
     </div>
     <?php

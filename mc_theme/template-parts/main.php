@@ -5,12 +5,13 @@ $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
 $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
 ?>
 
-<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">
+<!--<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">-->
+<div class="relative max-h-screen overflow-hidden">
 
     <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
-    <div class="custom-shape-divider-bottom-1637812056">
+    <div class="custom-shape-divider-bottom-1637812056 hidden sm:block">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
                   opacity=".25" class="shape-fill"></path>
@@ -22,14 +23,14 @@ $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
     </div>
 
     <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
-        <div class="text-white  text-shadow-lg justify-center flex flex-col">
-            <div class="text-7xl mx-auto">MENTE COMPASIVA</div>
-            <div class="flex flex-row items-center justify-center space-x-3 mt-20">
-                <img src="<?= $logo_cm ?>" alt="logo" class=" h-24">
-                <div >
-                    <div class="italic">Un proyecto de</div>
-                    <div class="font-bold text-2xl">CULTIVAR LA MENTE</div>
-                    <div class="italic">Salud mental y prácticas contemplativas</div>
+        <div class="text-white text-shadow-lg justify-center flex flex-col">
+            <div class="hidden sm:block lg:text-7xl sm:text-6xl mx-auto">MENTE COMPASIVA</div>
+            <div class="flex flex-row items-center justify-center space-x-0 sm:space-x-3 sm:mt-20">
+                <img src="<?= $logo_cm ?>" alt="logo" class="w-24">
+                <div class="">
+                    <div class="italic text-sm sm:text-lg">Un proyecto de</div>
+                    <div class="font-bold text-lg sm:text-2xl">CULTIVAR LA MENTE</div>
+                    <div class="italic text-sm sm:text-lg">Salud mental y prácticas contemplativas</div>
                 </div>
             </div>
         </div>

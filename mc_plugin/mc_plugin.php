@@ -42,7 +42,7 @@ add_action("init", function () {
 add_filter('option_users_can_register', function ($value) {
     $script = basename(parse_url($_SERVER['SCRIPT_NAME'], PHP_URL_PATH));
 
-    if ($script == 'wp-login.php' && $_GET['action'] === 'lostpassword') {
+    if ($script == 'wp-login.php' && ($_GET['action'] ?? '') === 'lostpassword') {
         return false;
     }
 
@@ -62,7 +62,7 @@ add_filter('option_users_can_register', function ($value) {
                     update_option(MC_PASSWORD_GEN, $pending);
                     return true;
                 }
-            }else{
+            } else {
                 return false;
             }
         }

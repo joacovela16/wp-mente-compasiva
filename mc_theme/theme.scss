@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html,body{
+html, body {
   @apply m-0 p-0;
 }
+
 .comment {
 }
 
@@ -22,7 +23,7 @@ body.login {
 }
 
 #login {
-  @apply w-96 z-10 place-content-center mb-0 sm:mb-auto sm:mr-3  md:mr-[10%] md:mr-[15%] justify-self-end;
+  @apply px-2 sm:w-64 md:w-96 z-10 place-content-center mb-0 sm:mb-auto sm:mr-3 sm:mr-[6%] md:mr-[7%] lg:mr-[15%] justify-self-end;
 }
 
 #loginform {
@@ -36,10 +37,12 @@ body.login {
 #loginform {
   @apply shadow-lg border-0;
 }
-.language-switcher{
+
+.language-switcher {
   @apply z-10;
 }
-#language-switcher{
+
+#language-switcher {
   @apply flex flex-row items-center z-20 gap-2;
 }
 
@@ -116,13 +119,13 @@ body.login {
 }
 
 .mc_menu {
-  @apply space-x-3 p-0 m-0;
+  @apply menu menu-horizontal text-sm;
 }
 
-.mc_menu > li {
-  @apply cursor-pointer list-none inline-block hover:bg-gray-200 p-6 transition-colors border-b-2 border-transparent hover:border-b-blue-500;
+.mc_menu_mobile {
+  @apply menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52;
 }
 
 .mc_menu > .current-menu-item {
-  @apply list-none inline-block hover:bg-gray-200 p-6 border-b-2 border-b-blue-500;
+  @apply border-b-2 border-b-blue-500;
 }

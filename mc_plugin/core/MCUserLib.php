@@ -173,12 +173,12 @@ class MCUserLib
                     <?= __('Works with') ?>
                 </th>
                 <td>
-                    <select class="w-full field-select" name="<?= MC_WORKS_WITH ?>[]" multiple>
-                        <option value="children" <?= in_array("children", $work_with) ? 'selected' : '' ?>><?= __('Children') ?></option>
-                        <option value="teenager" <?= in_array("teenager", $work_with) ? 'selected' : '' ?>><?= __('Teenager') ?></option>
-                        <option value="adult" <?= in_array("adult", $work_with) ? 'selected' : '' ?>><?= __('Adult') ?></option>
-                        <option value="couple" <?= in_array("couple", $work_with) ? 'selected' : '' ?>><?= __('Couple') ?></option>
-                    </select>
+                    <?php foreach (get_option(MC_WORKS_WITH, []) as $item): ?>
+                        <div>
+                            <input type="checkbox" value="<?= $item ?>" name="<?= MC_WORKS_WITH ?>[]" <?= in_array($item, $work_with) ? 'checked' : '' ?>>
+                            <span><?= $item ?></span>
+                        </div>
+                    <?php endforeach; ?>
                 </td>
             </tr>
             <tr>

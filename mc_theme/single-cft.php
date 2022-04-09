@@ -21,63 +21,68 @@ $cft_when_where = get_post_meta($post->ID, MC_CFT_WHEN_WHERE, true);
 $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_WORKS_WITH));
 
 ?>
-    <div class="mx-auto container md:mt-24 mt-48 h-screen " x-init="loaderOn=false">
-        <div class="mx-auto w-full max-w-4xl card shadow-lg pb-10 gap-2 rounded-box px-4">
-            <img class="mx-auto rounded-full shadow-lg shadow-black ring-8 ring-blue-500 w-64 m-3" src="<?= $image_url ?>" alt="profile image">
-            <div class="text-5xl text-center mt-4"><?= $post->post_title ?></div>
-            <div class="text-lg text-center mt-4">
-                <span class="font-bold"><?= __('Location') ?>: </span>
-                <span><?= $location . ', ' . $country ?></span>
-            </div>
+    <div class="mx-auto container my-5" x-init="loaderOn=false">
+        <div class="mx-auto w-full max-w-4xl card sm:shadow-lg pb-10 gap-2 rounded-box px-4">
 
-            <div class="text-center ">
-                <span class="font-bold"><?= __('Profession') ?>:</span>
-                <span>
-                    <?php if (empty($profession)): ?>
-                        <?= __('undeclared') ?>
-                    <?php else: ?>
-                        <?= $profession ?>
-                    <?php endif; ?>
-                </span>
-            </div>
+            <img class="mask rounded-full shadow-lg w-32 sm:w-48 md:w-64 mx-auto" src="<?= $image_url ?>" alt="profile image">
 
-            <div class="text-center ">
-                <span class="font-bold"><?= __('Works with') ?>:</span>
-                <span>
-                    <?php if (empty($works_with)): ?>
-                        <?= __('undeclared') ?>
-                    <?php else: ?>
-                        <?= implode(", ", $works_with) ?>
-                    <?php endif; ?>
-                </span>
-            </div>
+            <div class="text-3xl md:text-5xl text-center my-4"><?= $post->post_title ?></div>
 
-            <div class="text-center ">
-                <span class="font-bold"><?= __('Work mode') ?>:</span>
-                <span>
-                    <?php if (empty($work_mode)): ?>
-                        <?= __('undeclared') ?>
-                    <?php else: ?>
-                        <?= __($work_mode) ?>
-                    <?php endif; ?>
-                </span>
-            </div>
+            <div class="text-sm">
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('Location') ?>: </span>
+                    <span><?= $location . ', ' . $country ?></span>
+                </div>
 
-            <div class="text-center ">
-                <span class="font-bold"><?= __('cft_when_and_where2') ?>:</span>
-                <span>
-                    <?php if (empty($cft_when_where)): ?>
-                        <?= __('undeclared') ?>
-                    <?php else: ?>
-                        <?= $cft_when_where ?>
-                    <?php endif; ?>
-                </span>
-            </div>
-            <div class="italic">
-                <?= $abstract ?>
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('Profession') ?>:</span>
+                    <span>
+                        <?php if (empty($profession)): ?>
+                            <?= __('undeclared') ?>
+                        <?php else: ?>
+                            <?= $profession ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('Works with') ?>:</span>
+                    <span>
+                        <?php if (empty($works_with)): ?>
+                            <?= __('undeclared') ?>
+                        <?php else: ?>
+                            <?= implode(", ", $works_with) ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('Work mode') ?>:</span>
+                    <span>
+                        <?php if (empty($work_mode)): ?>
+                            <?= __('undeclared') ?>
+                        <?php else: ?>
+                            <?= __($work_mode) ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('cft_when_and_where2') ?>:</span>
+                    <span>
+                        <?php if (empty($cft_when_where)): ?>
+                            <?= __('undeclared') ?>
+                        <?php else: ?>
+                            <?= $cft_when_where ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+                <div class="italic text-center my-3">
+                    <?= $abstract ?>
+                </div>
             </div>
             <div class="mx-auto mb-5">
-                <div class="flex flex-col md:flex-row divide-x-2 flex-1 items-center">
+                <div class="flex flex-col md:flex-row divide-x-0 sm:divide-x-2 flex-1 items-center">
                     <?php if (!empty($phone)): ?>
                         <div class="flex-row flex flex-1 p-3 space-x-3 items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -114,13 +119,13 @@ $works_with = array_map(fn($x) => __(ucfirst($x)), get_post_meta($post->ID, MC_W
                                 <?php if ($website_mode === "" || $website_mode === MC_LINK_WEBSITE): ?>
                                     <a href="<?= $website ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_INSTAGRAM): ?>
-                                    <a href="https://www.instagram.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                    <a href="https://www.instagram.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_FACEBOOK): ?>
-                                    <a href="https://www.facebook.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                    <a href="https://www.facebook.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_LINKEDIN): ?>
-                                    <a href="https://www.linkedin.com/in/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                    <a href="https://www.linkedin.com/in/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_TWITTER): ?>
-                                    <a href="https://twitter.com/<?= str_replace("@","", $website) ?>" target="_blank"><?= $website ?></a>
+                                    <a href="https://twitter.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php endif; ?>
                             </span>
                         </div>

@@ -50,14 +50,14 @@ add_action('login_header', function () {
                 <video class="object-cover absolute top-0 left-0 w-screen h-screen filter blur-sm" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4"
                 ?>"></video>
                 <div class="bg-transparent absolute top- left-0 w-full h-full flex ">
-                    <div class="text-center my-auto text-white w-full text-shadow-lg space-x-5">
-                        <div class="text-6xl mx-auto">MENTE COMPASIVA</div>
-                        <div class="flex flex-row items-center justify-center space-x-3 mt-20">
-                            <img src="<?= $logo_cm ?>" alt="logo" class=" h-24">
-                            <div>
-                                <div class="text-left italic">Un proyecto de</div>
-                                <div class="font-bold text-2xl">CULTIVAR LA MENTE</div>
-                                <div class="text-left italic">Salud mental y prácticas contemplativas</div>
+                    <div class="my-auto text-white w-full text-shadow-lg space-x-5">
+                        <div class="text-center text-4xl sm:text-6xl mx-auto">MENTE COMPASIVA</div>
+                        <div class="flex flex-row items-center justify-center sm:space-x-3 space-x-1 mt-20">
+                            <img src="<?= $logo_cm ?>" alt="logo" class="w-24">
+                            <div class="">
+                                <div class="italic text-sm sm:text-lg">Un proyecto de</div>
+                                <div class="font-bold text-lg sm:text-2xl">CULTIVAR LA MENTE</div>
+                                <div class="italic text-sm sm:text-lg">Salud mental y prácticas contemplativas</div>
                             </div>
                         </div>
                     </div>

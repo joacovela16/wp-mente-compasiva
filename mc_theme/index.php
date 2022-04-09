@@ -6,7 +6,7 @@ get_template_part("template-parts/loader");
 
 <?php if (is_home()): ?>
     <?php get_template_part("template-parts/main"); ?>
-    <div class="mx-auto container py-3">
+    <div class="mx-auto container py-3 px-3 sm:px-8">
         <?php dynamic_sidebar(2); ?>
     </div>
 <?php else: ?>

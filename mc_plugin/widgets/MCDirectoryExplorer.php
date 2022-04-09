@@ -10,7 +10,6 @@ class MCDirectoryExplorer extends WP_Widget
         );
     }
 
-
     public function widget($args, $instance)
     {
         $query_args['s'] = '';
@@ -31,10 +30,10 @@ class MCDirectoryExplorer extends WP_Widget
         }
 
         ?>
-        <div class="shadow rounded p-3">
-            <div class="font-bold p-1 text-lg"><?= __('lastes CFT Professionals') ?></div>
+        <div class="sm:shadow rounded p-3">
+            <div class="font-bold p-1 text-md sm:text-lg"><?= __('lastes CFT Professionals') ?></div>
 
-            <div class="flex flex-row space-x-5 p-3 bg-zinc-100 rounded items-center">
+            <div class="flex flex-col sm:flex-row space-x-3 bg-gray-50 rounded items-center p-1 sm:p-3">
                 <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold' : 'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
                 <a id="most_readed" href="?m=most_readed"
                    class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most readed') ?></a>
@@ -43,7 +42,7 @@ class MCDirectoryExplorer extends WP_Widget
                 <div class="flex-1"></div>
                 <a href="/directorio-cft" class="text-blue-500 font-bold underline"><?= __('Explore') ?></a>
             </div>
-            <div class="grid md:grid-cols-2 gap-4 mt-5">
+            <div class="grid md:grid-cols-2 gap-4 mt-5 overflow-hidden">
                 <?php
                 $query = new WP_Query($query_args);
                 $posts = $query->posts;
