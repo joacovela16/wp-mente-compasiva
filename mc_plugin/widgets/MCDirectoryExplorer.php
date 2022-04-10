@@ -30,18 +30,15 @@ class MCDirectoryExplorer extends WP_Widget
         }
 
         ?>
-        <div class="sm:shadow rounded p-3">
-            <div class="font-bold p-1 text-md sm:text-lg"><?= __('lastes CFT Professionals') ?></div>
 
-            <div class="flex flex-col sm:flex-row space-x-3 bg-gray-50 rounded items-center p-1 sm:p-3">
-                <a id="latest" href="?m=latest" class="border-b-2 <?= $mode === 'latest' ? 'border-blue-500 font-bold' : 'border-transparent' ?> max-w-xs p-1"><?= __('Last posts') ?></a>
-                <a id="most_readed" href="?m=most_readed"
-                   class="max-w-xs p-1 border-b-2 <?= $mode === 'most_readed' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most readed') ?></a>
-                <a id="most_commented" href="?m=most_commented"
-                   class="max-w-xs p-1 border-b-2 <?= $mode === 'most_commented' ? 'border-blue-500 font-bold' : 'border-transparent' ?>"><?= __('Most commented') ?></a>
-                <div class="flex-1"></div>
-                <a href="/directorio-cft" class="text-blue-500 font-bold underline"><?= __('Explore') ?></a>
+        <div class="sm:shadow-lg rounded-lg p-7 my-2">
+            <div class="flex flex-col sm:flex-row items-center">
+                <div class="font-bold p-1 text-md sm:text-lg"><?= __('lastes CFT Professionals') ?></div>
+                <div class="flex-1 text-right">
+                    <a href="/directorio-cft" class="text-blue-500 font-bold underline"><?= __('Explore') ?></a>
+                </div>
             </div>
+
             <div class="grid md:grid-cols-2 gap-4 mt-5 overflow-hidden">
                 <?php
                 $query = new WP_Query($query_args);
