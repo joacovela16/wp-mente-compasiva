@@ -3,7 +3,7 @@
 $index = random_int(1, 7);
 $url = get_template_directory_uri() . "/assets/video/video-$index.mp4";
 $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
-$poster =  get_template_directory_uri() . "/assets/images/poster.png";
+
 ?>
 
 <div class="relative max-h-screen overflow-hidden" >
