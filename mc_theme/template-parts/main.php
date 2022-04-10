@@ -6,10 +6,9 @@ $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
 $poster =  get_template_directory_uri() . "/assets/images/poster.png";
 ?>
 
-<!--<div class="relative max-h-screen overflow-hidden mt-44 sm:mt-32 md:mt-16 lg:mt-0">-->
 <div class="relative max-h-screen overflow-hidden" >
 
-    <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop poster="<?= $poster ?>"></video>
+    <video class="filter blur-sm" x-init="loaderOn=false" src="<?= $url ?>" autoplay muted loop></video>
     <div class="absolute top-0 left-0 bg-dark-500 opacity-20 h-full w-full"></div>
 
     <div class="custom-shape-divider-bottom-1637812056 hidden sm:block">
@@ -25,9 +24,9 @@ $poster =  get_template_directory_uri() . "/assets/images/poster.png";
 
     <div class="absolute top-0 left-0 h-full w-full flex items-center justify-center">
         <div class="text-white text-shadow-lg justify-center flex flex-col">
-            <div class="hidden sm:block lg:text-7xl sm:text-6xl mx-auto">MENTE COMPASIVA</div>
+            <div class="hidden sm:block lg:text-7xl sm:text-6xl text-5xl mx-auto">MENTE COMPASIVA</div>
             <div class="flex flex-row items-center justify-center space-x-0 sm:space-x-3 sm:mt-20">
-                <img src="<?= $logo_cm ?>" alt="logo" class="w-24">
+                <img src="<?= $logo_cm ?>" alt="logo" class="w-20">
                 <div class="">
                     <div class="italic text-sm sm:text-lg">Un proyecto de</div>
                     <div class="font-bold text-lg sm:text-2xl">CULTIVAR LA MENTE</div>

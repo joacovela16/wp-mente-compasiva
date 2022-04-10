@@ -5,7 +5,7 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= __('Mente Compasiva') ?></title>
-
+    <link rel="icon" type="image/x-icon" href="<?= get_stylesheet_directory_uri().'/assets/images/favicon.png' ?>" />
     <?php wp_head(); ?>
 </head>
 <style>

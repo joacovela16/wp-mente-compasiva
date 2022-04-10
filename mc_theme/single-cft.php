@@ -40,7 +40,7 @@ $showCFT = $is_cft || current_user_can('administrator');
 
             <img class="mask rounded-full shadow-lg w-32 sm:w-48 md:w-64 mx-auto" src="<?= $user_avatar_url ?>" alt="profile image">
 
-            <div class="text-3xl md:text-5xl text-center my-4"><?= $post->post_title ?></div>
+            <div class="text-3xl md:text-5xl text-center my-4"><?= $name ?></div>
 
             <div class="text-sm">
                 <div class="text-center ">

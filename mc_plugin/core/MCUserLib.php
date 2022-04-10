@@ -145,6 +145,16 @@ class MCUserLib
                     </label>
                 </td>
             </tr>
+            <tr>
+                <th>
+                    <?= __('Name') ?>
+                </th>
+                <td>
+                    <input
+                            type="text"
+                            name="<?= MC_NAME ?>" value="<?= get_user_meta($user->ID, MC_NAME, true) ?>">
+                </td>
+            </tr>
 
             <tr>
                 <th>
@@ -372,6 +382,11 @@ class MCUserLib
             $post_id = intval($post_id);
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
+
+            $maybe_name =$_POST[MC_NAME] ?? "";
+            if (!empty($maybe_name)){
+                $post_data['post_title'] = $maybe_name;
+            }
 
             if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY])) {
                 $_POST[MC_ENABLED] = 'off';
