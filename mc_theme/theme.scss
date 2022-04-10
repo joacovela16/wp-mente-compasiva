@@ -22,8 +22,17 @@ body.login {
   @apply bg-white flex;
 }
 
+.login {
+  @apply flex flex-col md:flex-row;
+}
+
 #login {
-  @apply px-2 sm:w-64 md:w-96 z-10 place-content-center mb-0 sm:mb-auto sm:mr-3 sm:mr-[6%] md:mr-[7%] lg:mr-[15%] justify-self-end;
+  @apply px-2  z-10 place-content-center justify-self-end;
+}
+
+.login #nav a,
+.login #backtoblog a {
+  @apply text-white sm:text-zinc-700;
 }
 
 #loginform {
@@ -129,6 +138,7 @@ body.login {
 .mc_menu > .current-menu-item {
   @apply border-b-2 border-b-blue-500;
 }
+
 /*
 
 .mc-video{

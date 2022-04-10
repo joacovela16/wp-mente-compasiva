@@ -385,6 +385,7 @@ class MCUserLib
 
             $maybe_name =$_POST[MC_NAME] ?? "";
             if (!empty($maybe_name)){
+                $meta_input[MC_NAME] = $maybe_name;
                 $post_data['post_title'] = $maybe_name;
             }
 
@@ -426,6 +427,7 @@ class MCUserLib
 
             if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
                 $post_data['post_content'] = $_POST[MC_ABSTRACT];
+                $meta_input[MC_ABSTRACT] = $_POST[MC_ABSTRACT];
             }
 
             if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {

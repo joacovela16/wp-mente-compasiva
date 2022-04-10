@@ -87,16 +87,7 @@ $showCFT = $is_cft || current_user_can('administrator');
                     </span>
                 </div>
 
-                <div class="text-center ">
-                    <span class="font-bold"><?= __('cft_when_and_where2') ?>:</span>
-                    <span>
-                        <?php if (empty($cft_when_where)): ?>
-                            <?= __('undeclared') ?>
-                        <?php else: ?>
-                            <?= $cft_when_where ?>
-                        <?php endif; ?>
-                    </span>
-                </div>
+
                 <div class="italic text-center my-3">
                     <?= $description ?>
                 </div>

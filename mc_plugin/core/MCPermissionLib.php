@@ -28,6 +28,7 @@ class MCPermissionLib
     {
         if (is_post_type_archive(CFT_DIRECTORY) && isset($query->query_vars['q'])) {
 
+            $query_term = $_GET['q'] ?? null;
             $meta_query = ['relation' => 'AND'];
 
             // country filter
@@ -35,6 +36,7 @@ class MCPermissionLib
             $countries = is_array($countries) ? $countries : [$countries];
             $countries = array_filter($countries, fn($x) => !empty($x));
             $country_query = array_map(fn($x) => ['key' => MC_COUNTRY, 'value' => $x, 'compare' => 'like'], $countries);
+
             if (count($country_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$country_query];
             }
@@ -43,6 +45,7 @@ class MCPermissionLib
             $city = is_array($city) ? $city : [$city];
             $city = array_filter($city, fn($x) => !empty($x));
             $city_query = array_map(fn($x) => ['key' => MC_CITY, 'value' => $x, 'compare' => 'like'], $city);
+
             if (count($city_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$city_query];
             }
@@ -51,6 +54,7 @@ class MCPermissionLib
             $gender = is_array($gender) ? $gender : [$gender];
             $gender = array_filter($gender, fn($x) => !empty($x));
             $gender_query = array_map(fn($x) => ['key' => MC_METABOX_GENDER, 'value' => $x, 'compare' => '='], $gender);
+
             if (count($gender_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$gender_query];
             }
@@ -59,6 +63,7 @@ class MCPermissionLib
             $work_mode = is_array($work_mode) ? $work_mode : [$work_mode];
             $work_mode = array_filter($work_mode, fn($x) => !empty($x));
             $work_mode_query = array_map(fn($x) => ['key' => MC_MODE, 'value' => $x, 'compare' => '='], $work_mode);
+
             if (count($work_mode_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$work_mode_query];
             }
@@ -67,16 +72,19 @@ class MCPermissionLib
             $profession = is_array($profession) ? $profession : [$profession];
             $profession = array_filter($profession, fn($x) => !empty($x));
             $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '='], $profession);
+
             if (count($profession_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$profession_query];
             }
 
-            $meta_query[]= ['key' => MC_ENABLED, 'value' => 'on', 'compare' => '='];
+            $meta_query[] = ['key' => MC_ENABLED, 'value' => 'on', 'compare' => '='];
 
             $works_with = $_GET[MC_WORKS_WITH] ?? [];
             $works_with = is_array($works_with) ? $works_with : [$works_with];
             $works_with = array_filter($works_with, fn($x) => !empty($x));
+
             $works_with_query = array_map(fn($x) => ['key' => MC_WORKS_WITH, 'value' => $x, 'compare' => '='], $works_with);
+
             if (count($works_with_query) > 0) {
                 $meta_query[] = ['relation' => 'OR', ...$works_with_query];
             }
@@ -99,6 +107,25 @@ class MCPermissionLib
                 $query->set('date_query', [$container]);
             }
 
+            if (!empty($query_term)) {
+
+                $query_tmp = [
+                    ['key' => MC_COUNTRY, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_CITY, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_METABOX_GENDER, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_MODE, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_PROFESSION, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_WORKS_WITH, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_NAME, 'value' => $query_term, 'compare' => 'like'],
+                    ['key' => MC_ABSTRACT, 'value' => $query_term, 'compare' => 'like'],
+                ];
+
+                $meta_query[] = [
+                    'relation' => 'OR',
+                    ...$query_tmp
+                ];
+            }
+
             if (count($meta_query) > 1) {
                 $query->set('meta_query', $meta_query);
             }
@@ -106,8 +133,6 @@ class MCPermissionLib
             $query->set("posts_per_page", 12);
             $query->set("post_status", "publish");
             $query->set('order', 'ASC');
-            $query->set('post_status', 'publish');
-            $query->set('s', $_GET['q'] ??null);
         }
     }
 

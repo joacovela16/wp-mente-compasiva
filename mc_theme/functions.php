@@ -12,6 +12,12 @@ add_action('wp_head', 'mc_inject_favicon');
 add_action("init", 'mc_init_function');
 add_filter('template_include', 'mc_template_include');
 add_action('login_header', 'mc_login_header');
+add_filter('login_display_language_dropdown', 'mc_login_display_language_dropdown');
+
+function mc_login_display_language_dropdown(): bool
+{
+    return false;
+}
 
 function rad_theme_setup()
 {
@@ -55,12 +61,21 @@ function mc_inject_favicon()
     <?php
 }
 
-function mc_login_header(){
+function mc_login_header()
+{
     if (!is_admin()) {
         $logo_cm = get_template_directory_uri() . "/assets/images/logo.png";
         ?>
-        <div class="absolute top-0 left-0 w-full h-full flex flex-col sm:flex-row">
-            <div class="shapedividers_com-213  flex-1 h-full ">
+        <div class="mt-5 text-center md:hidden z-10 text-white text-shadow">
+            <div class="text-4xl sm:text-5xl mx-auto ">MENTE COMPASIVA</div>
+            <div class="">
+                <div class="italic text-sm sm:text-lg">Un proyecto de</div>
+                <div class="text-lg">CULTIVAR LA MENTE</div>
+                <div class="italic text-sm sm:text-lg">Salud mental y prácticas contemplativas</div>
+            </div>
+        </div>
+        <div class="w-full md:w-1/2 h-full md:flex-row hidden md:flex">
+            <div class="shapedividers_com-213 flex-1 h-full">
                 <video class="object-cover absolute top-0 left-0 w-screen h-screen filter blur-sm" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4"
                 ?>"></video>
                 <div class="bg-transparent absolute top- left-0 w-full h-full flex ">
@@ -77,7 +92,6 @@ function mc_login_header(){
                     </div>
                 </div>
             </div>
-            <div class="flex-1"></div>
         </div>
         <?php
     }
@@ -85,3 +99,10 @@ function mc_login_header(){
 }
 
 
+add_action('login_header', function () {
+    ?>
+    <div class="fixed top-0 left-0 w-full h-full z-0 md:hidden">
+        <video class="object-cover absolute top-0 left-0 w-screen h-screen filter blur-sm" autoplay muted loop src="<?= get_template_directory_uri() . "/assets/video/initial-video.mp4" ?>"</div>
+    </div>
+    <?php
+});
