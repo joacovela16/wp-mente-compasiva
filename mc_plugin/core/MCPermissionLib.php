@@ -107,6 +107,15 @@ class MCPermissionLib
                 $query->set('date_query', [$container]);
             }
 
+            $orderby = $_GET['orderby'] ?? "";
+            if (!empty($orderby)){
+                if ($orderby ==='title'){
+                    $query->set('order', 'ASC');
+                }elseif ($orderby ==='date'){
+                    $query->set('order', 'DESC');
+                }
+            }
+
             if (!empty($query_term)) {
 
                 $query_tmp = [
@@ -132,7 +141,7 @@ class MCPermissionLib
 
             $query->set("posts_per_page", 12);
             $query->set("post_status", "publish");
-            $query->set('order', 'ASC');
+
         }
     }
 

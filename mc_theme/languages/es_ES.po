@@ -246,3 +246,6 @@ msgstr "Ninguno"
 
 msgid "Website or Social Network"
 msgstr "Sitio Web o Red Social"
+
+msgid "Anyone"
+msgstr "Cualquiera"

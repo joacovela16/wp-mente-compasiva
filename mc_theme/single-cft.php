@@ -11,7 +11,6 @@ $ID = get_post_meta($post->ID, MC_USER_REF, true);
 $user = get_userdata($ID);
 $data = $user->data;
 $description = get_user_meta($ID, MC_ABSTRACT, true);
-$name = get_user_meta($ID, MC_NAME, true);
 $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
 $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
 $dni = get_user_meta($ID, MC_DNI, true) ?? '';
@@ -40,7 +39,7 @@ $showCFT = $is_cft || current_user_can('administrator');
 
             <img class="mask rounded-full shadow-lg w-32 sm:w-48 md:w-64 mx-auto" src="<?= $user_avatar_url ?>" alt="profile image">
 
-            <div class="text-3xl md:text-5xl text-center my-4"><?= $name ?></div>
+            <div class="text-3xl md:text-5xl text-center my-4"><?= $user->first_name ?></div>
 
             <div class="text-sm">
                 <div class="text-center ">

@@ -13,7 +13,37 @@ class MCUserLib
         add_action('delete_user', [$this, 'delete_user']);
 
 
+        add_filter('registration_errors', function (WP_Error $errors, $sanitized_user_login, $user_email) {
+            if (isset($_POST['token'])) {
+
+                $token = $_POST['token'];
+                $pending = get_option(MC_PASSWORD_GEN, []);
+                $item = array_find($pending, fn($x) => $x['key'] === $token);
+
+                if (!empty($item)) {
+                    $k = $item['key'];
+                    $t = $item['token'];
+                    $keyService = new MCKeyService();
+                    $result = $keyService->validate_recovery_mode_key($t, $k, MC_MAX_TIMEOUT);
+                    if (!is_wp_error($result)) {
+
+                        $pending = array_values(array_filter($pending, fn($x) => $x['token'] !== $t));
+                        update_option(MC_PASSWORD_GEN, $pending);
+                        $keyService->remove_key($t);
+                    } else {
+                        return $result;
+                    }
+                }
+            } else {
+                $errors->add('invalid-token', __('Invalid registration token'));
+            }
+
+            return $errors;
+
+        }, 10, 3);
+
         add_action('register_form', function () {
+            $token = explode('/', $_SERVER['REQUEST_URI']);
             ?>
             <div class="user-pass1-wrap">
                 <p>
@@ -38,6 +68,7 @@ class MCUserLib
             <p class="user-pass2-wrap">
                 <label for="pass2"><?php _e('Confirm new password'); ?></label>
                 <input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off"/>
+                <input type="hidden" name="token" value="<?= is_array($token) && isset($token[2]) ? $token[2] : '' ?>">
             </p>
 
             <p class="description indicator-hint"><?php echo wp_get_password_hint(); ?></p>
@@ -62,7 +93,6 @@ class MCUserLib
             if ($this->is_on_registration_page() && !empty($_POST['pass1'])) {
                 $password = $_POST['pass1'];
             }
-
             return $password;
         });
 
@@ -147,17 +177,6 @@ class MCUserLib
             </tr>
             <tr>
                 <th>
-                    <?= __('Name') ?>
-                </th>
-                <td>
-                    <input
-                            type="text"
-                            name="<?= MC_NAME ?>" value="<?= get_user_meta($user->ID, MC_NAME, true) ?>">
-                </td>
-            </tr>
-
-            <tr>
-                <th>
                     <?= __('About me') ?>
                 </th>
                 <td>
@@ -229,7 +248,6 @@ class MCUserLib
                            required>
                 </td>
             </tr>
-
             <tr>
                 <th>
                     <?= __('Country') ?>
@@ -374,8 +392,6 @@ class MCUserLib
                             update_user_meta($ID, MC_AVATAR_ID, $attachmentID);
                         }
                     }
-                } else {
-                    $a = 1;
                 }
             }
             $post_id = get_user_meta($ID, MC_POST_BIND, true);
@@ -383,10 +399,14 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
-            $maybe_name =$_POST[MC_NAME] ?? "";
-            if (!empty($maybe_name)){
+            $maybe_name = $_POST['first_name'] ?? "";
+            if (!empty($maybe_name)) {
                 $meta_input[MC_NAME] = $maybe_name;
                 $post_data['post_title'] = $maybe_name;
+                wp_update_user([
+                    'first_name' => $maybe_name,
+                ]);
+
             }
 
             if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY])) {
@@ -410,7 +430,6 @@ class MCUserLib
                 MC_CFT,
                 MC_GENDER,
                 MC_CFT_WHEN_WHERE,
-                MC_NAME,
                 MC_ABSTRACT,
                 MC_WEBSITE_MODE,
                 MC_WEBSITE,

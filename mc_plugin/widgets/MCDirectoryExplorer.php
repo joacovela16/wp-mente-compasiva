@@ -18,6 +18,10 @@ class MCDirectoryExplorer extends WP_Widget
         $query_args['posts_per_archive_page'] = 6;
         $query_args['page'] = 1;
         $query_args['order'] = 'DESC';
+        $query_args['meta_query'] = [
+            'relation' => 'AND',
+            ['key' => MC_ENABLED, 'value' => 'on', 'compare' => '=']
+        ];
 
         // MODES
         $mode = $_GET['m'] ?? 'latest';

@@ -25,8 +25,15 @@ get_header();
             <br>
             <p class="text-sm">
                 En este directorio puedes encontrar un listado de profesionales de salud mental (psicólogos y psiquiatras) que utilizan el enfoque de la Terapia Centrada en la Compasión (CFT). Quienes
-                aparecen en esta lista han completado los tres módulos de formación (introductorio, de profundización y avanzado) diseñados e implementados por Gonzalo Brito en diversos países de
-                habla hispana. Puedes ver una descripción de esa formación en este documento.
+                aparecen en esta lista han completado los <a class="text-blue-500 font-bold" href="https://cultivarlamente.com/formacion-cft/">tres módulos de formación</a> (introductorio, de
+                profundización y
+                avanzado)
+                diseñados
+                e implementados por Gonzalo Brito en diversos
+                países de
+                habla hispana. Puedes ver una descripción de esa formación <a class="text-blue-500 font-bold"
+                                                                              href="https://cultivarlamente.com/wp-content/uploads/2019/04/Descripci%C3%B3n-Programa-3-m%C3%B3dulos-CFT.pdf">en este
+                    documento</a>.
             </p>
             <br>
             <p class="text-sm font-bold">
@@ -112,6 +119,10 @@ get_header();
                     </label>
                     <div class="space-y-1">
                         <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                            <input type="checkbox" class="checkbox">
+                            <span><?= __('Anyone') ?></span>
+                        </label>
+                        <label class="flex flex-row space-x-3 items-center cursor-pointer">
                             <input type="checkbox" class="checkbox" value="female" name="<?= MC_GENDER ?>[]" <?= in_array("female", $gender) ? 'checked' : '' ?>>
                             <span><?= __('Female') ?></span>
                         </label>
@@ -121,26 +132,16 @@ get_header();
                         </label>
                     </div>
                 </div>
-
                 <div class="form-control w-full">
                     <label class="label">
-                        <span class="label-text"><?= __('Published before') ?></span>
+                        <span class="label-text"><?= __('Sort by') ?></span>
                     </label>
-                    <input type="date" class="input input-bordered  w-full" name="<?= PBEFORE ?>" value="<?= $_GET[PBEFORE] ?? '' ?>">
+                    <select class="select select-bordered w-full h-18 overflow-hidden" name="<?= SORTBY ?>">
+                        <option <?= $orderby === '' ? 'selected' : '' ?> value=""><?= __('None') ?></option>
+                        <option <?= $orderby === 'title' ? 'selected' : '' ?> value="title"><?= __('Name') ?></option>
+                        <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Date') ?></option>
+                    </select>
                 </div>
-
-                <div class="form-control w-full">
-                    <label class="label">
-                        <span class="label-text"><?= __('Published after') ?></span>
-                    </label>
-                    <input type="date" class="input input-bordered  w-full" name="<?= PAFTER ?>" value="<?= $_GET[PAFTER] ?? '' ?>">
-                </div>
-
-                <select class="mt-3 select select-bordered w-full h-18 overflow-hidden" name="<?= SORTBY ?>">
-                    <option disabled <?= $orderby === '' ? 'selected' : '' ?>><?= __('Sort by') ?></option>
-                    <option <?= $orderby === 'author' ? 'selected' : '' ?> value="title"><?= __('Name') ?></option>
-                    <option <?= $orderby === 'date' ? 'selected' : '' ?> value="date"><?= __('Published date') ?></option>
-                </select>
 
                 <button class="mt-3 btn btn-primary btn-sm"><?= __('Search') ?></button>
             </form>

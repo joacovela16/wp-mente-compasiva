@@ -1,5 +1,5 @@
 <?php
-const MC_MAX_TIMEOUT = 7889400;
+const MC_MAX_TIMEOUT = 604800;
 const MC_PAGE_PROFILE = "profile";
 const MC_PASSWORD_GEN='mc_pass_gen';
 const CFT_DIRECTORY = "cft";

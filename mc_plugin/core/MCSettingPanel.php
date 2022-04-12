@@ -53,13 +53,12 @@ class MCSettingPanel
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
         $works_with = get_option(MC_WORKS_WITH, []);
 
-
         $generateCount = $_POST[MC_PASSWORD_GEN] ?? 0;
         $generateCount = intval($generateCount);
         $tokenGen = [];
 
         if ($generateCount > 0) {
-            $keyService = new WP_Recovery_Mode_Key_Service();
+            $keyService = new MCKeyService();
             $now = time();
             $pending = get_option(MC_PASSWORD_GEN, []);
             $pending = array_values(array_filter($pending , fn($x)=>$x['created']+MC_MAX_TIMEOUT > $now));

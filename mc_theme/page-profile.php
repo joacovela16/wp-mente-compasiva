@@ -27,7 +27,7 @@
         $ID = $user->ID;
         $data = $user->data;
         $description = get_user_meta($ID, MC_ABSTRACT, true);
-        $name = get_user_meta($ID, MC_NAME, true);
+        //$name = get_user_meta($ID, MC_NAME, true);
         $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
         $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
         $dni = get_user_meta($ID, MC_DNI, true) ?? '';
@@ -70,7 +70,7 @@
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20 relative">
 
                     <div class="text-5xl text-center">
-                        <?= $name ?? "" ?>
+                        <?= $user->first_name ?? "" ?>
                     </div>
                 </div>
                 <?php if (isset($_GET['a'])): ?>
@@ -106,7 +106,7 @@
                         <label class="label">
                             <span class="label-text"><?= __('Name and lastname') ?></span>
                         </label>
-                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $name ?>">
+                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $user->first_name ?>">
                     </div>
                     <?php if ($showCFT): ?>
                         <div class="form-control w-full">

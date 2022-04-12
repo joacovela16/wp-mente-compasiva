@@ -8,6 +8,7 @@ include_once "core/constants.php";
 include_once "core/utils.php";
 include_once "core/post_lib.php";
 include_once "core/MCRestAPI.php";
+include_once "core/MCKeyService.php";
 
 include_once "widgets/MCDirectoryExplorer.php";
 
@@ -55,11 +56,11 @@ add_filter('option_users_can_register', function ($value) {
             if (!empty($item)) {
                 $k = $item['key'];
                 $t = $item['token'];
-                $keyService = new WP_Recovery_Mode_Key_Service();
+                $keyService = new MCKeyService();
                 $result = $keyService->validate_recovery_mode_key($t, $k, MC_MAX_TIMEOUT);
                 if (!is_wp_error($result)) {
-                    $pending = array_values(array_filter($pending, fn($x) => $x['token'] !== $t));
-                    update_option(MC_PASSWORD_GEN, $pending);
+//                    $pending = array_values(array_filter($pending, fn($x) => $x['token'] !== $t));
+//                    update_option(MC_PASSWORD_GEN, $pending);
                     return true;
                 }
             } else {
