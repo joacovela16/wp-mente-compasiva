@@ -175,6 +175,7 @@ class MCUserLib
                     </label>
                 </td>
             </tr>
+
             <tr>
                 <th>
                     <?= __('About me') ?>
