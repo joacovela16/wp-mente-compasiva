@@ -2412,8 +2412,8 @@ body[dir="rtl"] .checkbox:checked,
   max-width: 56rem;
 }
 
-.max-w-md {
-  max-width: 28rem;
+.max-w-lg {
+  max-width: 32rem;
 }
 
 .flex-1 {

@@ -26,7 +26,7 @@ class MCPermissionLib
 
     public function pre_get_posts(WP_Query $query)
     {
-        if (is_post_type_archive(CFT_DIRECTORY) && isset($query->query_vars['q'])) {
+        if (!empty($query->query) && ($query->query['post_type'] ?? '') === CFT_DIRECTORY) {
 
             $query_term = $_GET['q'] ?? null;
             $meta_query = ['relation' => 'AND'];
@@ -117,10 +117,10 @@ class MCPermissionLib
             }
 
             $orderby = $_GET['orderby'] ?? "";
-            if (!empty($orderby)){
-                if ($orderby ==='title'){
+            if (!empty($orderby)) {
+                if ($orderby === 'title') {
                     $query->set('order', 'ASC');
-                }elseif ($orderby ==='date'){
+                } elseif ($orderby === 'date') {
                     $query->set('order', 'DESC');
                 }
             }

@@ -452,14 +452,14 @@ class MCUserLib
 
             $post_data = ["ID" => $post_id, "meta_input" => &$meta_input];
 
-            $maybe_name = $_POST['first_name'] ?? "";
+            $maybe_name = $_POST['first_name'] ?? ($_POST[MC_NAME] ?? "");
             if (!empty($maybe_name)) {
                 $meta_input[MC_NAME] = $maybe_name;
                 $post_data['post_title'] = $maybe_name;
                 wp_update_user([
+                    'ID' => $ID,
                     'first_name' => $maybe_name,
                 ]);
-
             }
 
             $meta_fields = [
