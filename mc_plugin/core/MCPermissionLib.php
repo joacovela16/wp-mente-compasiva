@@ -68,6 +68,15 @@ class MCPermissionLib
                 $meta_query[] = ['relation' => 'OR', ...$work_mode_query];
             }
 
+            $lang = $_GET[MC_LANGUAGE] ?? [];
+            $lang = is_array($lang) ? $lang : [$lang];
+            $lang = array_filter($lang, fn($x) => !empty($x));
+            $lang_query = array_map(fn($x) => ['key' => MC_LANGUAGE, 'value' => $x, 'compare' => '='], $lang);
+
+            if (count($lang_query) > 0) {
+                $meta_query[] = ['relation' => 'OR', ...$lang_query];
+            }
+
             $profession = $_GET[MC_PROFESSION] ?? [];
             $profession = is_array($profession) ? $profession : [$profession];
             $profession = array_filter($profession, fn($x) => !empty($x));

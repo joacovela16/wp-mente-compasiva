@@ -47,6 +47,7 @@
         $policy1 = get_user_meta($ID, MC_POLICY, true) === 'on';
         $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
+        $languages = get_user_meta($ID, MC_LANGUAGE, []);
 
         $showCFT = $is_cft || current_user_can('administrator');
         $dataInit = json_encode(
@@ -178,6 +179,21 @@
                                 <?php endforeach; ?>
                             </div>
                         </div>
+
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text"><?= __('which language(s) do you offer therapy?') ?></span>
+                            </label>
+
+                            <div class="space-y-2">
+                                <?php foreach (get_option(MC_LANGUAGE, []) as $item): ?>
+                                    <label class="flex flex-row items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_LANGUAGE ?>[]" <?= in_array($item, $languages) ? 'checked' : '' ?>>
+                                        <span><?= $item ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     <?php endif; ?>
 
                     <div class="form-control w-full">
@@ -274,35 +290,6 @@
                                     <span class="label-text"><?= __('Confirm password') ?></span>
                                 </label>
                                 <input type="text" class="input input-bordered w-full" name="<?= MC_PASSWORD_2 ?>">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                        <input type="checkbox">
-                        <div class="collapse-title font-medium">
-                            <?= __('agreement_policy') ?>
-                        </div>
-                        <div class="collapse-content">
-                            <div>
-                                <ul class="list-disc p-8">
-                                    <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
-                                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.
-                                    </li>
-                                    <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
-                                        posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
-                                    </li>
-                                    <li>
-                                        Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
-                                        praxis o problemas de ética profesional.
-                                    </li>
-                                </ul>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer justify-start space-x-2">
-                                        <input type="checkbox" class="checkbox" name="<?= MC_POLICY ?>" <?= $policy1 ? 'checked' : '' ?>>
-                                        <span class="label-text">Acepto todos los términos</span>
-                                    </label>
-                                </div>
                             </div>
                         </div>
                     </div>

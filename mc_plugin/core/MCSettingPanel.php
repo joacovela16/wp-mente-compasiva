@@ -28,9 +28,11 @@ class MCSettingPanel
     {
         $professions_option = get_option(MC_PROFESSION_OPTIONS, []);
         $works_with_option = get_option(MC_WORKS_WITH, []);
+        $language_option = get_option(MC_LANGUAGE, []);
 
         $professions = $_POST[MC_PROFESSION] ?? null;
         $works_with = $_POST[MC_WORKS_WITH] ?? null;
+        $language = $_POST[MC_LANGUAGE] ?? null;
 
         if (!empty($professions)) {
             $professions_option[] = $professions;
@@ -40,18 +42,24 @@ class MCSettingPanel
             $works_with_option[] = $works_with;
         }
 
+        if (!empty($language)) {
+            $language_option[] = $language;
+        }
+
         $professions = array_values(array_filter($professions_option, fn($x) => ($_POST["delete-pro-" . $x] ?? "off") === "off"));
         $works_with = array_values(array_filter($works_with_option, fn($x) => ($_POST["delete-ww-" . $x] ?? "off") === "off"));
-
+        $language = array_values(array_filter($language_option, fn($x) => ($_POST["delete-lang-" . $x] ?? "off") === "off"));
 
         update_option(MC_PROFESSION_OPTIONS, $professions);
         update_option(MC_WORKS_WITH, $works_with);
+        update_option(MC_LANGUAGE, $language);
     }
 
     public function mc_options_page_html()
     {
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
         $works_with = get_option(MC_WORKS_WITH, []);
+        $languages = get_option(MC_LANGUAGE, []);
 
         $generateCount = $_POST[MC_PASSWORD_GEN] ?? 0;
         $generateCount = intval($generateCount);
@@ -61,12 +69,12 @@ class MCSettingPanel
             $keyService = new MCKeyService();
             $now = time();
             $pending = get_option(MC_PASSWORD_GEN, []);
-            $pending = array_values(array_filter($pending , fn($x)=>$x['created']+MC_MAX_TIMEOUT > $now));
+            $pending = array_values(array_filter($pending, fn($x) => $x['created'] + MC_MAX_TIMEOUT > $now));
 
             for ($i = 0; $i < $generateCount; $i++) {
                 $t = $keyService->generate_recovery_mode_token();
                 $k = $keyService->generate_and_store_recovery_mode_key($t);
-                $pending[] = ['created'=>$now, 'key'=>$k, 'token'=>$t];
+                $pending[] = ['created' => $now, 'key' => $k, 'token' => $t];
                 $tokenGen[] = site_url('/register/' . $k);
             }
             update_option(MC_PASSWORD_GEN, $pending);
@@ -107,6 +115,24 @@ class MCSettingPanel
                     </div>
                     <button class="btn mt-5 btn-sm btn-primary"><?= __('Save') ?></button>
                 </div>
+
+                <div class="space-y-3 shadow-lg rounded p-3 bg-white">
+                    <div class="label-text"><?= __('Language') ?></div>
+                    <div class="space-y-3">
+                        <input type="text" name="<?= MC_LANGUAGE ?>" placeholder="<?= __('Write lenguages') ?>" class="">
+                        <?php foreach ($languages as $item): ?>
+                            <div class="flex flex-row gap-5">
+                                <label>
+                                    <input type="checkbox" class="" name="delete-lang-<?= $item ?>">
+                                    <?= __('delete') ?>
+                                </label>
+                                <div><?= $item ?></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="btn mt-5 btn-sm btn-primary"><?= __('Save') ?></button>
+                </div>
+
                 <div class="space-y-3 shadow-lg rounded p-3 bg-white">
                     <div class="label-text"><?= __('Invitation link generator') ?></div>
                     <div class="flex flex-col space-y-2">

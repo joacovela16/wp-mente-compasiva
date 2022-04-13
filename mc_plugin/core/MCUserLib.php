@@ -38,9 +38,23 @@ class MCUserLib
                 $errors->add('invalid-token', __('Invalid registration token'));
             }
 
+            if (!isset($_POST[MC_POLICY]) || ($_POST[MC_POLICY] ?? '') === 'off') {
+                $errors->add('invalid-policy', __('Debe aceptar las condiciones primero'));
+            }
+
             return $errors;
 
         }, 10, 3);
+
+        add_filter('post_row_actions', function ($actions) {
+            if (get_post_type() === CFT_DIRECTORY) {
+                unset($actions['edit']);
+                unset($actions['view']);
+                unset($actions['trash']);
+                unset($actions['inline hide-if-no-js']);
+            }
+            return $actions;
+        });
 
         add_action('register_form', function () {
             $token = explode('/', $_SERVER['REQUEST_URI']);
@@ -71,7 +85,26 @@ class MCUserLib
                 <input type="hidden" name="token" value="<?= is_array($token) && isset($token[2]) ? $token[2] : '' ?>">
             </p>
 
-            <p class="description indicator-hint"><?php echo wp_get_password_hint(); ?></p>
+
+            <div>
+
+                <ul class="list-disc text-xs px-3">
+                    <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
+                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.
+                    </li>
+                    <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
+                        posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
+                    </li>
+                    <li>
+                        Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
+                        praxis o problemas de ética profesional.
+                    </li>
+                </ul>
+                <label>
+                    <input type="checkbox" name="<?= MC_POLICY ?>">
+                    <span class="font-bold">Aceptar términos y condiciones</span>
+                </label>
+            </div>
             <?php
         });
 
@@ -147,6 +180,7 @@ class MCUserLib
     {
         $is_cft = get_user_meta($user->ID, MC_CFT, true) === "on";
         $work_with = get_user_meta($user->ID, MC_WORKS_WITH);
+        $language = get_user_meta($user->ID, MC_LANGUAGE);
         $profession = get_user_meta($user->ID, MC_PROFESSION, true);
         $mode = get_user_meta($user->ID, MC_MODE, true);
         $url_mode = get_user_meta($user->ID, MC_WEBSITE_MODE, true);
@@ -211,6 +245,21 @@ class MCUserLib
                     <?php endforeach; ?>
                 </td>
             </tr>
+
+            <tr>
+                <th>
+                    <?= __('Language') ?>
+                </th>
+                <td>
+                    <?php foreach (get_option(MC_LANGUAGE, []) as $item): ?>
+                        <div>
+                            <input type="checkbox" value="<?= $item ?>" name="<?= MC_LANGUAGE ?>[]" <?= in_array($item, $language) ? 'checked' : '' ?>>
+                            <span><?= $item ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+
             <tr>
                 <th>
                     <?= __('Work mode') ?>
@@ -352,6 +401,9 @@ class MCUserLib
 
         $user = get_userdata($user_id);
         if ($user) {
+            if (!isset($_POST[MC_ENABLED])) {
+                $_POST[MC_ENABLED] = 'off';
+            }
             MCUserLib::update_user_data($user);
         }
     }
@@ -410,31 +462,20 @@ class MCUserLib
 
             }
 
-            if (!isset($_POST[MC_ENABLED]) && !isset($_POST[MC_POLICY])) {
-                $_POST[MC_ENABLED] = 'off';
-            }
-
-            if (!isset($_POST[MC_ENABLED]) && ($_POST[MC_POLICY] ?? '') === 'on') {
-                $_POST[MC_ENABLED] = 'on';
-            }
-
-            if (!isset($_POST[MC_POLICY])) $_POST[MC_POLICY] = "off";
-
             $meta_fields = [
                 MC_COUNTRY,
-                MC_ENABLED,
                 MC_CITY,
                 MC_BIRTHDAY,
                 MC_MODE,
                 MC_PHONE,
                 MC_PROFESSION,
                 MC_CFT,
+                MC_ENABLED,
                 MC_GENDER,
                 MC_CFT_WHEN_WHERE,
                 MC_ABSTRACT,
                 MC_WEBSITE_MODE,
-                MC_WEBSITE,
-                MC_POLICY
+                MC_WEBSITE
             ];
 
             foreach ($meta_fields as $field) {
@@ -445,9 +486,30 @@ class MCUserLib
                 }
             }
 
+
             if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
                 $post_data['post_content'] = $_POST[MC_ABSTRACT];
                 $meta_input[MC_ABSTRACT] = $_POST[MC_ABSTRACT];
+            }
+
+            $multiple = [
+                MC_LANGUAGE,
+                MC_WORKS_WITH
+            ];
+
+            foreach ($multiple as $field) {
+                if (isset($_POST[$field]) && nonEmpty($_POST[$field])) {
+                    $ww = $_POST[$field] ?? [];
+                    $ww = is_array($ww) ? $ww : [];
+
+                    delete_user_meta($ID, $field);
+                    delete_post_meta($post_id, $field);
+
+                    foreach ($ww as $item) {
+                        add_user_meta($ID, $field, $item);
+                        add_post_meta($post_id, $field, $item);
+                    }
+                }
             }
 
             if (isset($_POST[MC_WORKS_WITH]) && nonEmpty($_POST[MC_WORKS_WITH])) {

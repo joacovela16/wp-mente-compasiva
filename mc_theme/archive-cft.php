@@ -5,7 +5,7 @@ const SORTBY = "orderby";
 const PAFTER = "after";
 const PBEFORE = "before";
 
-$search_fields = [MC_GENDER, MC_COUNTRY, MC_CITY, SORTBY, PBEFORE, PAFTER, 'q', 'post_type', MC_MODE, MC_PROFESSION, MC_WORKS_WITH];
+$search_fields = [MC_GENDER, MC_COUNTRY, MC_CITY, SORTBY, PBEFORE, PAFTER, 'q', 'post_type', MC_MODE, MC_PROFESSION, MC_WORKS_WITH, MC_LANGUAGE];
 
 $orderby = $_GET[SORTBY] ?? '';
 
@@ -13,6 +13,7 @@ $selected_countries = $_GET[MC_COUNTRY] ?? [];
 $selected_countries = is_array($selected_countries) ? $selected_countries : [$selected_countries];
 $gender = $_GET[MC_GENDER] ?? [];
 $work_with = $_GET[MC_WORKS_WITH] ?? [];
+$language = $_GET[MC_LANGUAGE] ?? [];
 $work_mode = $_GET[MC_MODE] ?? '';
 $professions = get_option(MC_PROFESSION_OPTIONS, []);
 $profession = $_GET[MC_PROFESSION] ?? [];
@@ -86,6 +87,21 @@ get_header();
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text"><?= __('Language') ?></span>
+                    </label>
+                    <div class="space-y-1">
+                        <?php foreach (get_option(MC_LANGUAGE, []) as $item): ?>
+                            <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                                <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_LANGUAGE ?>[]" <?= in_array($item, $language) ? 'checked' : '' ?>>
+                                <span><?= $item ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
 
                 <div class="form-control w-full ">
                     <label class="label">
