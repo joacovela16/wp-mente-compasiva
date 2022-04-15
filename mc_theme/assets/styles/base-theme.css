@@ -2272,6 +2272,18 @@ body[dir="rtl"] .checkbox:checked,
   margin-right: 0.25rem;
 }
 
+.-mb-3 {
+  margin-bottom: -0.75rem;
+}
+
+.mt-20 {
+  margin-top: 5rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -2322,6 +2334,10 @@ body[dir="rtl"] .checkbox:checked,
 
 .h-24 {
   height: 6rem;
+}
+
+.h-32 {
+  height: 8rem;
 }
 
 .h-5 {
@@ -3845,8 +3861,28 @@ body.login {
     margin-left: auto;
   }
 
+  .sm\:mt-16 {
+    margin-top: 4rem;
+  }
+
+  .sm\:mt-14 {
+    margin-top: 3.5rem;
+  }
+
+  .sm\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .sm\:mt-10 {
+    margin-top: 2.5rem;
+  }
+
   .sm\:block {
     display: block;
+  }
+
+  .sm\:h-48 {
+    height: 12rem;
   }
 
   .sm\:w-48 {
@@ -3951,6 +3987,10 @@ body.login {
 
   .md\:h-36 {
     height: 9rem;
+  }
+
+  .md\:h-64 {
+    height: 16rem;
   }
 
   .md\:w-1\/2 {

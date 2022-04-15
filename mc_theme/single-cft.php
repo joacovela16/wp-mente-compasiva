@@ -31,13 +31,16 @@ $is_cft = get_user_meta($ID, MC_CFT, true) === 'on';
 $policy1 = get_user_meta($ID, MC_POLICY, true) === 'on';
 $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
 $professions = get_option(MC_PROFESSION_OPTIONS, []);
+
+$langs = get_user_meta($ID, MC_LANGUAGE);
+
 $showCFT = $is_cft || current_user_can('administrator');
 
 ?>
     <div class="mx-auto container my-5" x-init="loaderOn=false">
         <div class="mx-auto w-full max-w-4xl card sm:shadow-lg pb-10 gap-2 rounded-box px-4">
 
-            <img class="mask rounded-full shadow-lg w-32 sm:w-48 md:w-64 mx-auto" src="<?= $user_avatar_url ?>" alt="profile image">
+            <img class="mask rounded-full shadow-lg w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 mx-auto object-cover" src="<?= $user_avatar_url ?>" alt="profile image">
 
             <div class="text-3xl md:text-5xl text-center my-4"><?= $user->first_name ?></div>
 
@@ -82,6 +85,15 @@ $showCFT = $is_cft || current_user_can('administrator');
                             <?= __('undeclared') ?>
                         <?php else: ?>
                             <?= __($work_mode) ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <div class="text-center ">
+                    <span class="font-bold"><?= __('Therapy language') ?>:</span>
+                    <span>
+                        <?php if (!empty($langs)): ?>
+                            <?= implode(", ", $langs) ?>
                         <?php endif; ?>
                     </span>
                 </div>

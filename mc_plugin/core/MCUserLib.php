@@ -467,6 +467,7 @@ class MCUserLib
                 MC_CITY,
                 MC_BIRTHDAY,
                 MC_MODE,
+                MC_EMAIL,
                 MC_PHONE,
                 MC_PROFESSION,
                 MC_CFT,
@@ -527,6 +528,10 @@ class MCUserLib
 
             if (isset($_POST[MC_WEBSITE]) && nonEmpty($_POST[MC_WEBSITE])) {
                 $user_data['user_url'] = $_POST[MC_WEBSITE];
+            }
+
+            if (isset($_POST[MC_EMAIL]) && nonEmpty($_POST[MC_EMAIL])) {
+                $user_data['user_email'] = $_POST[MC_EMAIL];
             }
 
             if (isset($_POST[MC_PASSWORD_1]) && isset($_POST[MC_PASSWORD_2])) {

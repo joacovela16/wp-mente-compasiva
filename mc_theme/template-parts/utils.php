@@ -24,7 +24,14 @@ function render_cft(WP_Post $post)
 
     $country = get_post_meta($post->ID, MC_COUNTRY, true);
     $profession = get_post_meta($post->ID, MC_PROFESSION, true);
-    $city = get_post_meta($post->ID, MC_CITY, true);;
+    $city = get_post_meta($post->ID, MC_CITY, true);
+    $location = [];
+    if (!empty($city)){
+        $location[] =$city;
+    }
+    if (!empty($country)){
+        $location[]=$country;
+    }
     ?>
     <div class="flex flex-row items-center space-x-2 hover:bg-gray-100 p-1 rounded-lg">
         <img class="object-cover object-center w-24 h-24 rounded-full shadow-lg" src="<?= $image_url ?>" alt="blog">
@@ -34,7 +41,7 @@ function render_cft(WP_Post $post)
             <?php if (!empty($profession)): ?>
                 <p><?= $profession ?></p>
             <?php endif; ?>
-            <p class="truncate"><?= $city . ', ' . $country ?></p>
+            <p class="truncate"><?= implode(", ", $location) ?></p>
         </a>
     </div>
     <?php

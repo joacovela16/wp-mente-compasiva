@@ -26,20 +26,6 @@ function array_exists(array $array, Closure $test)
     return $found;
 }
 
-function array_forall(array $array, Closure $test): bool
-{
-
-    $iterator = new ArrayIterator($array);
-    while ($iterator->valid()) {
-        if (!$test($iterator->current())) {
-            return false;
-        }
-        $iterator->next();
-    }
-
-    return true;
-}
-
 function nonEmpty($obj): bool
 {
     return !empty($obj);
