@@ -251,7 +251,7 @@ msgid "Anyone"
 msgstr "Cualquiera"
 
 msgid "Therapy language"
-msgstr "Idioma(s) con la que trabaja"
+msgstr "Idioma(s) con que trabaja"
 
 msgid "which language(s) do you offer therapy?"
 msgstr "¿En qué idioma(s) ofreces terapia?"
