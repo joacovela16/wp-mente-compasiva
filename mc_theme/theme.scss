@@ -31,6 +31,10 @@ body.login {
   @apply px-2  z-10 place-content-center justify-self-end;
 }
 
+#registerform {
+  @apply p-3;
+}
+
 .login #nav a,
 .login #backtoblog a {
   @apply text-white sm:text-zinc-700;

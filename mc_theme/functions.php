@@ -13,7 +13,7 @@ add_action("init", 'mc_init_function');
 add_filter('template_include', 'mc_template_include');
 add_action('login_header', 'mc_login_header');
 add_filter('login_display_language_dropdown', 'mc_login_display_language_dropdown');
-
+;
 function mc_login_display_language_dropdown(): bool
 {
     return false;

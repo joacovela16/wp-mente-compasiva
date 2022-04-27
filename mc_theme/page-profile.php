@@ -27,7 +27,6 @@
         $ID = $user->ID;
         $data = $user->data;
         $description = get_user_meta($ID, MC_ABSTRACT, true);
-        //$name = get_user_meta($ID, MC_NAME, true);
         $birthday = get_user_meta($ID, MC_BIRTHDAY, true);
         $country = get_user_meta($ID, MC_COUNTRY, true) ?? '';
         $dni = get_user_meta($ID, MC_DNI, true) ?? '';
@@ -258,8 +257,7 @@
                             <input
                                     type="text"
                                     class="input input-bordered w-full"
-                                    x-bind:placeholder="values[selection]" name="<?= MC_WEBSITE ?>" value="<?= $website
-                            ?>">
+                                    x-bind:placeholder="values[selection]" name="<?= MC_WEBSITE ?>" value="<?= $website ?>">
                         </div>
                     </div>
 

@@ -8,6 +8,7 @@ const MC_BIRTHDAY = "birthday";
 const MC_PHONE = "phone";
 const MC_DNI = "DNI";
 const MC_EMAIL = "email";
+const MC_MENU_LINK = "mc_menu_link";
 const MC_POLICY = "mc-policy";
 const MC_LANGUAGE = 'mc_lang';
 const MC_CFT_WHEN_WHERE = 'cft_when_and_where';

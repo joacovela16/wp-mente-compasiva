@@ -38,9 +38,10 @@ class MCUserLib
                 $errors->add('invalid-token', __('Invalid registration token'));
             }
 
-            if (!isset($_POST[MC_POLICY]) || ($_POST[MC_POLICY] ?? '') === 'off') {
-                $errors->add('invalid-policy', __('Debe aceptar las condiciones primero'));
-            }
+            $_POST[MC_POLICY] = "on";
+//            if (!isset($_POST[MC_POLICY]) || ($_POST[MC_POLICY] ?? '') === 'off') {
+//                $errors->add('invalid-policy', __('Debe aceptar las condiciones primero'));
+//            }
 
             return $errors;
 
@@ -84,30 +85,60 @@ class MCUserLib
                 <input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off"/>
                 <input type="hidden" name="token" value="<?= is_array($token) && isset($token[2]) ? $token[2] : '' ?>">
             </p>
-
-
-            <div>
-
-                <ul class="list-disc text-xs px-3">
-                    <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
-                        formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.
-                    </li>
-                    <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
-                        posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
-                    </li>
-                    <li>
-                        Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
-                        praxis o problemas de ética profesional.
-                    </li>
-                </ul>
-                <label>
-                    <input type="checkbox" name="<?= MC_POLICY ?>">
-                    <span class="font-bold">Aceptar términos y condiciones</span>
-                </label>
-            </div>
             <?php
         });
 
+
+        add_filter('login_message', function ($msg) {
+            $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+            if ($action === 'register') {
+                $result = "<p class='message'>Registro de usuario</p>";
+                $result .= "<div class='message warning'>";
+                $result .= "<p class='font-bold text-blue-800 underline'>¡IMPORTANTE!</p>";
+                $result .= '<div class="px-2">
+                    <ul class="list-disc">
+                        <li>No utilizar caracteres especiales, ni tildes en "Nombre de usuario".</li>
+                        <li>
+                            <a href="' . get_option(MC_MENU_LINK, "") . '" target="_blank" class="text-blue-800 underline">
+                                Ante dudas, siga este manual de registro.
+                            </a>
+                       </li>
+                    </ul>
+                </div>';
+                $result .= "</div>";
+
+                return $result;
+            }
+            return $msg;
+        });
+        add_action('register_form', function () {
+            ?>
+            <div>
+                <details>
+                    <summary class="font-bold">Términos y condiciones</summary>
+                    <div class="px-3">
+                        Al registrarse está aceptando los siguientes términos y condiciones.
+                        <ul class="list-disc text-xs px-3">
+                            <li>Al proporcionar mis datos acepto voluntariamente que estos datos sean publicados en el directorio de profesionales de la salud mental
+                                formados en el modelo CFT gestionado por Cultivar la Mente y Mente Compasiva.
+                            </li>
+                            <li>Comprendo que este directorio cumple con el fin de dar visibilidad a los profesionales con orientación CFT y facilitar el contacto entre
+                                posibles pacientes interesados en seguir un tratamiento centrado en la compasión y profesionales de la salud mental.
+                            </li>
+                            <li>
+                                Cultivar la Mente y Mente Compasiva se reserva el derecho de quitar un registro de este listado ante eventuales quejas o denuncias de mala
+                                praxis o problemas de ética profesional.
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+                <!--<label>
+                    <input type="checkbox" name="<?/*= MC_POLICY */ ?>">
+                    <span class="font-bold">Aceptar términos y condiciones</span>
+                </label>-->
+            </div>
+            <?php
+        });
 
         add_filter('registration_errors', function ($errors) {
             if (empty($_POST['pass1'])) {

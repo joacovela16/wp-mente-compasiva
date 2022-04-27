@@ -35,7 +35,12 @@ $professions = get_option(MC_PROFESSION_OPTIONS, []);
 $langs = get_user_meta($ID, MC_LANGUAGE);
 
 $showCFT = $is_cft || current_user_can('administrator');
-
+function mc_normalize_url($url){
+    $v1 = strtolower($url);
+    $v2 = str_starts_with($v1, "www") ? str_replace("www.", "https://", $v1) : $v1;
+    $v3 = str_starts_with($v2, "http") ? $v2 : 'https://' . $v2;
+    return $v3;
+}
 ?>
     <div class="mx-auto container my-5" x-init="loaderOn=false">
         <div class="mx-auto w-full max-w-4xl card sm:shadow-lg pb-10 gap-2 rounded-box px-4">
@@ -139,7 +144,7 @@ $showCFT = $is_cft || current_user_can('administrator');
                             </svg>
                             <span>
                                 <?php if ($website_mode === "" || $website_mode === MC_LINK_WEBSITE): ?>
-                                    <a href="<?= $website ?>" target="_blank"><?= $website ?></a>
+                                    <a target="_blank" href="<?= mc_normalize_url($website) ?>"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_INSTAGRAM): ?>
                                     <a href="https://www.instagram.com/<?= str_replace("@", "", $website) ?>" target="_blank"><?= $website ?></a>
                                 <?php elseif ($website_mode === MC_LINK_FACEBOOK): ?>
