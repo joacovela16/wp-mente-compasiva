@@ -27,6 +27,7 @@ add_action("rest_api_init", function () {
 (new MCSettingPanel())->init();
 (new MCPermissionLib())->init();
 (new MCActions())->init();
+(new MCKeyService())->clean_expired_keys(MC_MAX_TIMEOUT);
 
 add_action("init", "mc_do_post");
 
