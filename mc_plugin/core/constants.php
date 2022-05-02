@@ -1,4 +1,5 @@
 <?php
+
 const MC_MAX_TIMEOUT = 604800;
 const MC_PAGE_PROFILE = "profile";
 const MC_PASSWORD_GEN='mc_pass_gen';
@@ -49,4 +50,4 @@ const MC_NAME = "name";
 const MC_ID = "id";
 const MC_POST_TYPES = "post_types";
 const MC_PERMISSIONS = 'permissions';
-
+const MC_OTHER = 'other';

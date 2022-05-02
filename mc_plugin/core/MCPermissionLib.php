@@ -30,6 +30,20 @@ class MCPermissionLib
 
             $query_term = $_GET['q'] ?? null;
             $meta_query = ['relation' => 'AND'];
+            // required fields
+
+            $required_fields = [];
+            $required_fields[] = ['key' => MC_AVATAR_ID, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_COUNTRY, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_CITY, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_ABSTRACT, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_MODE, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_LANGUAGE, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_PROFESSION, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_WORKS_WITH, 'compare' => 'EXISTS'];
+            $required_fields[] = ['key' => MC_BIRTHDAY, 'compare' => 'EXISTS'];
+
+            $meta_query[] = ['relation' => 'AND', ...$required_fields];
 
             // country filter
             $countries = $_GET[MC_COUNTRY] ?? [];
@@ -80,10 +94,19 @@ class MCPermissionLib
             $profession = $_GET[MC_PROFESSION] ?? [];
             $profession = is_array($profession) ? $profession : [$profession];
             $profession = array_filter($profession, fn($x) => !empty($x));
-            $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '='], $profession);
 
-            if (count($profession_query) > 0) {
-                $meta_query[] = ['relation' => 'OR', ...$profession_query];
+            if (in_array(MC_OTHER, $profession)) {
+                $professions = get_option(MC_PROFESSION, []);
+                $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '<>'], $professions);
+                $profession_query[] = ['key' => MC_PROFESSION, 'compare' => 'EXISTS'];
+                if (count($profession_query) > 0) {
+                    $meta_query[] = ['relation' => 'AND', ...$profession_query];
+                }
+            } else {
+                $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '='], $profession);
+                if (count($profession_query) > 0) {
+                    $meta_query[] = ['relation' => 'OR', ...$profession_query];
+                }
             }
 
             $meta_query[] = ['key' => MC_ENABLED, 'value' => 'on', 'compare' => '='];

@@ -39,9 +39,6 @@ class MCUserLib
             }
 
             $_POST[MC_POLICY] = "on";
-//            if (!isset($_POST[MC_POLICY]) || ($_POST[MC_POLICY] ?? '') === 'off') {
-//                $errors->add('invalid-policy', __('Debe aceptar las condiciones primero'));
-//            }
 
             return $errors;
 
@@ -66,7 +63,7 @@ class MCUserLib
                 </p>
 
                 <div class="wp-pwd">
-                    <input type="password" data-reveal="1" data-pw="<?php echo esc_attr(wp_generate_password(16)); ?>" name="pass1" id="pass1" class="input password-input" size="24" value=""
+                    <input type="password" data-reveal="1" name="pass1" id="pass1" class="input password-input" size="24" value=""
                            autocomplete="off" aria-describedby="pass-strength-result"/>
 
                     <button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e('Hide password'); ?>">
@@ -132,10 +129,6 @@ class MCUserLib
                         </ul>
                     </div>
                 </details>
-                <!--<label>
-                    <input type="checkbox" name="<?/*= MC_POLICY */ ?>">
-                    <span class="font-bold">Aceptar términos y condiciones</span>
-                </label>-->
             </div>
             <?php
         });
@@ -251,16 +244,32 @@ class MCUserLib
             </tr>
 
             <tr>
+                <th><?= __('Upload profile picture') ?></th>
+                <td>
+                    <input  name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" placeholder="<?= __('Change picture') ?>">
+                </td>
+            </tr>
+
+            <tr>
                 <th>
                     <?= __('Profession') ?>
                 </th>
-                <td>
-                    <select name="<?= MC_PROFESSION ?>">
-                        <option value="" <?= $profession === "" ? 'selected' : '' ?> disabled><?= __('select') ?></option>
-                        <?php foreach ($professions as $item): ?>
-                            <option value="<?= $item ?>" <?= $item === $profession ? 'selected' : '' ?>><?= $item ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                <td x-data="{showOther: '<?= in_array($profession, $professions) ? $profession : MC_OTHER ?>'}">
+                    <div class="flex flex-row space-x-2">
+                        <select name="<?= MC_PROFESSION ?>" x-model="showOther">
+                            <option value="" <?= $profession === "" ? 'selected' : '' ?> disabled><?= __('select') ?></option>
+                            <?php foreach ($professions as $item): ?>
+                                <option value="<?= $item ?>" ><?= $item ?></option>
+                            <?php endforeach; ?>
+                            <option value="<?= MC_OTHER ?>" ><?= __(MC_OTHER) ?></option>
+                        </select>
+                        <input
+                                x-bind:disabled="showOther!=='<?= MC_OTHER ?>'"
+                                type="text"
+                                name="<?= MC_PROFESSION ?>"
+                                value="<?= in_array($profession, $professions) ? '' : $profession ?>"
+                        >
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -517,7 +526,6 @@ class MCUserLib
                     update_user_meta($ID, $field, $value);
                 }
             }
-
 
             if (isset($_POST[MC_ABSTRACT]) && nonEmpty($_POST[MC_ABSTRACT])) {
                 $post_data['post_content'] = $_POST[MC_ABSTRACT];

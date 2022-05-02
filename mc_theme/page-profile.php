@@ -35,6 +35,7 @@
         $email = get_user_meta($ID, MC_EMAIL, true);
         $email = empty($email) ? $data->user_email : $email;
         $user_avatar_url = get_user_meta($ID, MC_AVATAR_URL, true);
+        $has_user_avatar = $user_avatar_url !== "";
         $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($ID) : $user_avatar_url;
         $work_with = get_user_meta($ID, MC_WORKS_WITH);
         $cft_when_where = get_user_meta($ID, MC_CFT_WHEN_WHERE, true);
@@ -47,6 +48,7 @@
         $url_mode = get_user_meta($ID, MC_WEBSITE_MODE, true);
         $professions = get_option(MC_PROFESSION_OPTIONS, []);
         $languages = get_user_meta($ID, MC_LANGUAGE, []);
+        $display_name = empty($user->first_name) ? $user->display_name : $user->first_name;
 
         $showCFT = $is_cft || current_user_can('administrator');
         $dataInit = json_encode(
@@ -70,7 +72,7 @@
                     <img src="<?= $user_avatar_url ?>" alt="AV" class="mx-auto shadow-lg h-64 w-64 -mt-36 rounded-full border-8 border-white z-20 relative">
 
                     <div class="text-5xl text-center">
-                        <?= $user->first_name ?? "" ?>
+                        <?= $display_name ?>
                     </div>
                 </div>
                 <?php if (isset($_GET['a'])): ?>
@@ -88,6 +90,9 @@
                         class="card mx-auto px-5 w-full md:w-2/3 flow-grow-0 p-3 bg-white shadow-xl space-y-3"
                         enctype="multipart/form-data"
                 >
+
+                    <p><b>Importante:</b> Los campos marcados con <span class="!text-red-500 mr-1">*</span> son requeridos. En caso de no completarlos no quedará visible en el directorio.</p>
+
                     <input type="hidden" name="action" value="update_user">
                     <div class="flex flex-row items-center">
                         <div class="font-bold text-3xl flex-1"><?= __('My profile') ?></div>
@@ -104,29 +109,30 @@
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('Name and lastname') ?></span>
+
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Name and lastname') ?></span>
                         </label>
-                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $user->first_name ?>">
+                        <input type="text" class="input input-bordered w-full" name="<?= MC_NAME ?>" value="<?= $display_name ?>" required>
                     </div>
                     <?php if ($showCFT): ?>
                         <div class="form-control w-full">
                             <label class="label">
-                                <span class="label-text"><?= __('cft_when_and_where') ?></span>
+                                <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('cft_when_and_where') ?></span>
                             </label>
-                            <input type="text" class="input input-bordered w-full" name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= $cft_when_where ?>">
+                            <input type="text" class="input input-bordered w-full" name="<?= MC_CFT_WHEN_WHERE ?>" value="<?= $cft_when_where ?>" required>
                         </div>
                     <?php endif; ?>
 
                     <div class="flex flex-row items-center space-x-3">
                         <div class="form-control w-full">
                             <label class="label">
-                                <span class="label-text"><?= __('Country') ?></span>
+                                <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Country') ?></span>
                             </label>
-                            <input type="text" class="input input-bordered w-full" name="<?= MC_COUNTRY ?>" value="<?= $country ?>">
+                            <input type="text" class="input input-bordered w-full" name="<?= MC_COUNTRY ?>" value="<?= $country ?>" required>
                         </div>
                         <div class="form-control w-full">
                             <label class="label">
-                                <span class="label-text"><?= __('City') . '/' . __('Province') ?></span>
+                                <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('City') . '/' . __('Province') ?></span>
                             </label>
                             <input type="text" class="input input-bordered w-full" name="<?= MC_CITY ?>" value="<?= $city ?>">
                         </div>
@@ -139,23 +145,33 @@
                         <input type="text" class="input input-bordered w-full" name="<?= MC_DNI ?>" value="<?= $dni ?>">
                     </div>
 
-                    <div class="form-control w-full ">
+                    <div class="form-control w-full " x-data="{showOther: '<?= in_array($profession, $professions) ? $profession : MC_OTHER ?>'}">
                         <label class="label">
-                            <span class="label-text"><?= __('Profession') ?></span>
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Profession') ?></span>
                         </label>
-                        <select class="select select-bordered w-full" name="<?= MC_PROFESSION ?>">
-                            <option value="" disabled> <?= __('select') ?></option>
-                            <?php foreach ($professions as $item): ?>
-                                <option value="<?= $item ?>" <?= $item === $profession ? 'selected' : '' ?>><?= $item ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="flex flex-row space-x-2">
+                            <select class="select select-bordered w-1/2" name="<?= MC_PROFESSION ?>" x-model="showOther" required>
+                                <option value="" disabled> <?= __('select') ?></option>
+                                <?php foreach ($professions as $item): ?>
+                                    <option value="<?= $item ?>"><?= $item ?></option>
+                                <?php endforeach; ?>
+                                <option value="<?= MC_OTHER ?>"><?= __(MC_OTHER) ?></option>
+                            </select>
+                            <input
+                                    x-bind:disabled="showOther!=='<?= MC_OTHER ?>'"
+                                    type="text"
+                                    class="input input-bordered w-1/2 input-primary"
+                                    name="<?= MC_PROFESSION ?>"
+                                    value="<?= in_array($profession, $professions) ? '' : $profession ?>"
+                            >
+                        </div>
                     </div>
 
                     <div class="form-control w-full ">
                         <label class="label">
-                            <span class="label-text"><?= __('Work mode') ?></span>
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Work mode') ?></span>
                         </label>
-                        <select class="select select-bordered w-full" name="<?= MC_MODE ?>">
+                        <select class="select select-bordered w-full" name="<?= MC_MODE ?>" required>
                             <option value="" <?= $mode === '' ? 'selected' : '' ?> disabled> <?= __('select') ?></option>
                             <option <?= $mode === 'onsite' ? 'selected' : '' ?> value="onsite"> <?= __('onsite') ?></option>
                             <option <?= $mode === 'online' ? 'selected' : '' ?> value="online"> <?= __('online') ?></option>
@@ -166,7 +182,7 @@
                     <?php if ($showCFT): ?>
                         <div class="form-control w-full">
                             <label class="label">
-                                <span class="label-text"><?= __('Works with') ?></span>
+                                <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Works with') ?></span>
                             </label>
 
                             <div class="space-y-2">
@@ -181,7 +197,7 @@
 
                         <div class="form-control w-full">
                             <label class="label">
-                                <span class="label-text"><?= __('which language(s) do you offer therapy?') ?></span>
+                                <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('which language(s) do you offer therapy?') ?></span>
                             </label>
 
                             <div class="space-y-2">
@@ -197,7 +213,7 @@
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('About me') ?></span>
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('About me') ?></span>
                         </label>
                         <textarea maxlength="500"
                                   rows="4"
@@ -205,7 +221,7 @@
                                   type="text"
                                   class="textarea textarea-bordered w-full"
                                   name="<?= MC_ABSTRACT ?>"
-                                  value="<?= $data->display_name ?>"><?= $description ?? '' ?></textarea>
+                                  value="<?= $data->display_name ?>" required><?= $description ?? '' ?></textarea>
                     </div>
 
                     <div class="form-control w-full">
@@ -221,15 +237,15 @@
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('Birthdate') ?></span>
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Birthdate') ?></span>
                         </label>
-                        <input type="date" class="input input-bordered w-full" name="<?= MC_BIRTHDAY ?>" value="<?= $birthday ?>">
+                        <input type="date" class="input input-bordered w-full" name="<?= MC_BIRTHDAY ?>" value="<?= $birthday ?>" required>
                     </div>
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text"><?= __('Contact email') ?></span>
+                            <span class="label-text"><span class="!text-red-500 mr-1">*</span><?= __('Contact email') ?></span>
                         </label>
-                        <input type="email" class="input input-bordered w-full" name="<?= MC_EMAIL ?>" value="<?= $email ?>">
+                        <input type="email" class="input input-bordered w-full" name="<?= MC_EMAIL ?>" value="<?= $email ?>" required>
                     </div>
                     <div class="form-control w-full">
                         <label class="label">
@@ -248,11 +264,10 @@
 
                         >
                             <select class="select select-bordered" name="<?= MC_WEBSITE_MODE ?>" x-model="selection">
-                                <option value="" <?= $url_mode === "" ? 'selected' : '' ?> ><?= __('None') ?></option>
-                                <option value="<?= MC_LINK_WEBSITE ?>" <?= $url_mode === MC_LINK_WEBSITE ? 'selected' : '' ?> >Sitio web</option>
-                                <option value="<?= MC_LINK_INSTAGRAM ?>" <?= $url_mode === MC_LINK_INSTAGRAM ? 'selected' : '' ?>>Instagram</option>
-                                <option value="<?= MC_LINK_FACEBOOK ?>" <?= $url_mode === MC_LINK_FACEBOOK ? 'selected' : '' ?>>Facebook</option>
-                                <option value="<?= MC_LINK_LINKEDIN ?>" <?= $url_mode === MC_LINK_LINKEDIN ? 'selected' : '' ?>>Linkedin</option>
+                                <option value="<?= MC_LINK_WEBSITE ?>">Sitio web</option>
+                                <option value="<?= MC_LINK_INSTAGRAM ?>">Instagram</option>
+                                <option value="<?= MC_LINK_FACEBOOK ?>">Facebook</option>
+                                <option value="<?= MC_LINK_LINKEDIN ?>">Linkedin</option>
                             </select>
                             <input
                                     type="text"
@@ -262,13 +277,13 @@
                     </div>
 
                     <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                        <input type="checkbox">
+                        <input type="checkbox" checked>
                         <div class="collapse-title font-medium">
-                            <?= __('Upload profile picture') ?>
+                            <span class="!text-red-500 mr-1">*</span> <?= __('Upload profile picture') ?>
                         </div>
                         <div class="collapse-content">
                             <p class="text-sm font-bold"><?= __('picture_desc') ?></p>
-                            <input class="mt-3" name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" placeholder="<?= __('Change picture') ?>">
+                            <input class="mt-3" name="<?= MC_PICTURE ?>" type="file" accept="image/png,image/jpeg" placeholder="<?= __('Change picture') ?>" <?= $has_user_avatar ? '' : 'required' ?> >
                         </div>
                     </div>
 

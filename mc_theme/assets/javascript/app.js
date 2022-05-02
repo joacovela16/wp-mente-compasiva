@@ -1,4 +1,7 @@
 document.addEventListener("alpine:init", () => {
+    const profileForm = document.getElementById('your-profile');
+    profileForm && profileForm.setAttribute('enctype', 'multipart/form-data');
+
     let isUnlocked = true;
 
     function isDefined(obj) {
@@ -103,4 +106,6 @@ document.addEventListener("alpine:init", () => {
             }
         };
     });
+
 });
+

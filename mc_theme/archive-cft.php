@@ -74,17 +74,26 @@ get_header();
                         <input type="text" class="input input-bordered  w-full" name="<?= MC_CITY ?>" value="<?= $_GET[MC_CITY] ?? '' ?>">
                     </div>
                 </div>
-                <div class="form-control w-full ">
+                <div class="form-control w-full" >
                     <label class="label">
                         <span class="label-text"><?= __('Profession') ?></span>
                     </label>
-                    <div class="space-y-1">
-                        <?php foreach (get_option(MC_PROFESSION_OPTIONS, []) as $item): ?>
+                    <div class="space-y-1" x-data="{disabled:false}">
+                        <?php foreach ($professions as $item): ?>
                             <label class="flex flex-row space-x-3 items-center cursor-pointer">
-                                <input type="checkbox" class="checkbox" value="<?= $item ?>" name="<?= MC_PROFESSION ?>[]" <?= in_array($item, $profession) ? 'checked' : '' ?>>
+                                <input
+                                        x-bind:disabled="disabled"
+                                        type="checkbox"
+                                        class="checkbox"
+                                        value="<?= $item ?>"
+                                        name="<?= MC_PROFESSION ?>[]" <?= in_array($item, $profession) ? 'checked' : '' ?> >
                                 <span><?= $item ?></span>
                             </label>
                         <?php endforeach; ?>
+                        <label class="flex flex-row space-x-3 items-center cursor-pointer">
+                            <input type="checkbox" class="checkbox" value="<?= MC_OTHER ?>" name="<?= MC_PROFESSION ?>[]" x-model="disabled">
+                            <span><?= __(MC_OTHER) ?></span>
+                        </label>
                     </div>
                 </div>
 
