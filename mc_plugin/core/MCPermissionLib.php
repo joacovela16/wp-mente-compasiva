@@ -96,8 +96,8 @@ class MCPermissionLib
             $profession = array_filter($profession, fn($x) => !empty($x));
 
             if (in_array(MC_OTHER, $profession)) {
-                $professions = get_option(MC_PROFESSION, []);
-                $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '<>'], $professions);
+                $professions = get_option(MC_PROFESSION_OPTIONS, []);
+                $profession_query = array_map(fn($x) => ['key' => MC_PROFESSION, 'value' => $x, 'compare' => '!='], $professions);
                 $profession_query[] = ['key' => MC_PROFESSION, 'compare' => 'EXISTS'];
                 if (count($profession_query) > 0) {
                     $meta_query[] = ['relation' => 'AND', ...$profession_query];

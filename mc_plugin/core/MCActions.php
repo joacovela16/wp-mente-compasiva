@@ -97,7 +97,7 @@ class MCActions
         if (strpos(strtolower($_SERVER['REQUEST_URI']), '/wp-admin/') !== false) {
 
             if (!$this->isAdm()) {
-                wp_redirect(site_url(), 302);
+                wp_redirect(site_url('/profile'), 302);
             }
         }
     }
@@ -105,7 +105,7 @@ class MCActions
 
     public function login_redirect($redirect_to, $requested_redirect_to, $user): string
     {
-        return $this->isAdm($user) ? '/wp-admin' : '/';
+        return home_url();
     }
 
     public function authenticate($user)
@@ -128,13 +128,6 @@ class MCActions
         if (is_page(MC_PAGE_PROFILE) && !is_user_logged_in()) {
             wp_redirect(site_url(), 301);
             exit;
-        }
-    }
-
-    public function getAndSet(array $source, array &$target, $sourceField, $targetField)
-    {
-        if (isset($source[$sourceField]) && !empty($source[$sourceField])) {
-            $target[$targetField] = $source[$sourceField];
         }
     }
 
