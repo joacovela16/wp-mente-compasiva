@@ -85,7 +85,6 @@ class MCUserLib
             <?php
         });
 
-
         add_filter('login_message', function ($msg) {
             $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
             if ($action === 'register') {
@@ -108,6 +107,7 @@ class MCUserLib
             }
             return $msg;
         });
+
         add_action('register_form', function () {
             ?>
             <div>
@@ -175,12 +175,12 @@ class MCUserLib
             $message = "Bienvenido/a a Mente Compasiva.\n";
             $message .= "Le informamos que su registro al sitio web de Mente Compasiva a sido realizado con éxito.\n\n";
             $message .= "Usted puede ingresar en cualquier momento a través del siguiente link. \n";
-            $message .= site_url('/login') . "\n\n";
+            $message .= home_url('/login') . "\n\n";
             $message .= "Muchas gracias.\n\n";
             $message .= "Gonzalo Brito.\n";
             $message .= "Equipo de Mente Compasiva.";
             wp_mail($user_info->user_email, "Registro", $message);
-            wp_redirect(site_url('/profile?a=register'));
+            wp_redirect(home_url('/profile?a=register'));
             exit();
         });
     }

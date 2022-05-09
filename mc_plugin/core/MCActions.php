@@ -10,7 +10,7 @@ class MCActions
         add_action('wp_ajax_nopriv_upload_csv', [$this, 'csv_handler']);
         add_action('template_redirect', [$this, 'secure_profile']);
         add_filter('authenticate', [$this, 'authenticate'], 20, 3);
-        add_filter('login_redirect', [$this, 'login_redirect'], 10, 3);
+        //add_filter('login_redirect', [$this, 'login_redirect'], 10, 3);
         add_filter('init', [$this, 'block_wp_admin_init']);
         add_filter("bulk_actions-edit-" . CFT_DIRECTORY, [$this, 'user_bulk_actions']);
     }
@@ -97,7 +97,7 @@ class MCActions
         if (strpos(strtolower($_SERVER['REQUEST_URI']), '/wp-admin/') !== false) {
 
             if (!$this->isAdm()) {
-                wp_redirect(site_url('/profile'), 302);
+                wp_redirect(home_url('/profile'), 302);
             }
         }
     }
@@ -126,7 +126,7 @@ class MCActions
     public function secure_profile()
     {
         if (is_page(MC_PAGE_PROFILE) && !is_user_logged_in()) {
-            wp_redirect(site_url(), 301);
+            wp_redirect(home_url(), 301);
             exit;
         }
     }

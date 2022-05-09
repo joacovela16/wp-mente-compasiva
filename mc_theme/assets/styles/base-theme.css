@@ -2427,10 +2427,6 @@ body[dir="rtl"] .checkbox:checked,
   width: 2.5rem;
 }
 
-.w-52 {
-  width: 13rem;
-}
-
 .w-24 {
   width: 6rem;
 }
@@ -2489,10 +2485,6 @@ body[dir="rtl"] .checkbox:checked,
 
 .justify-center {
   justify-content: center;
-}
-
-.justify-between {
-  justify-content: space-between;
 }
 
 .gap-5 {

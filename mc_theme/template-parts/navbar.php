@@ -37,24 +37,16 @@ $user_avatar_url = $user_avatar_url === "" ? get_avatar_url($current_user->ID) :
             </form>
         </div>
         <?php if (is_user_logged_in()): ?>
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" class="flex flex-row items-center cursor-pointer">
-                    <label class="btn btn-ghost btn-circle avatar ">
+            <a href="/profile">
+                <div class="flex flex-row items-center cursor-pointer">
+                    <div class="btn btn-ghost btn-circle avatar ">
                         <div class="w-10 rounded-full shadow-lg">
-                            <img src="<?= $user_avatar_url ?>"/>
+                            <img src="<?= $user_avatar_url ?>" alt="avatar"/>
                         </div>
-                    </label>
+                    </div>
                     <div class="font-bold hidden sm:block"><?= __('My profile') ?></div>
                 </div>
-                <ul tabindex="0" class="mt-3 p-2 shadow menu menu-compact  dropdown-content bg-base-100 rounded-box w-52">
-                    <li>
-                        <a class="justify-between" href="<?= site_url('/profile') ?>"><?= __('Profile') ?></a>
-                    </li>
-                    <li>
-                        <a href="<?= wp_logout_url('/') ?>"><?= __('Logout') ?></a>
-                    </li>
-                </ul>
-            </div>
+            </a>
         <?php else: ?>
             <div class="flex-grow-0 cursor-pointer px-3">
                 <a href="<?= site_url('/login') ?>" class="font-bold">
